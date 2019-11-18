@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+ <head>
+  <meta charset="utf-8">
+  <title>Classifica</title>
+ </head>
+ <body>
+   {% extends "template.html" %}
+   {% block content %}
+   
+<form action="/<anno>">
+ <select name="stagione" onchange="location = this.value;">
+  {% for seasons in season %}
+  {% if anno == seasons %}
+  <option value=" {{ seasons }} "SELECTED>{{ seasons }}</option>
+   {% else %}
+  <option value=" {{ seasons }} ">{{ seasons }}</option>
+   {% endif %}
+ {% endfor %}
+ </select>
+</form>
+
+<form action="/<anno>">
+ <select name="giornata" onchange="location = this.value;">
+  {% for day in gio %}
+  <option value=" {{ day }} ">{{ day }}</option>
+ {% endfor %}
+ </select>
+</form>
+
+   {% for table in tables %}
+           {{ table|safe }}
+   {% endfor %}
+
+   {% endblock %}
+ </body>
+</html>

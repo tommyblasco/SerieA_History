@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from plotly.offline import plot
 import plotly.graph_objects as go
 import plotly.express as px
-
+import dateparser
 import flask
 import numpy as np
 import dash
@@ -24,15 +24,82 @@ import dash_bootstrap_components as dbc
 from plotly.subplots import make_subplots
 import dash_table
 
-organigramma=pd.read_excel(r'C:\Users\user\Desktop\Fanta dati db\organigramma.xlsx')
-giocatori=pd.read_excel(r'C:\Users\user\Desktop\Fanta dati db\Gioc.xlsx')
-ruolo=pd.read_excel(r'C:\Users\user\Desktop\Fanta dati db\Ruolo.xlsx')
-squadra_a=pd.read_excel(r'C:\Users\user\Desktop\Fanta dati db\Squadra A.xlsx')
-voti=pd.read_excel(r'C:\Users\user\Desktop\Fanta dati db\Voti.xlsx')
-quotazioni=pd.read_excel(r'C:\Users\user\Desktop\Fanta dati db\Quotazioni.xlsx')
-mercato=pd.read_excel(r'C:\Users\user\Desktop\Fanta dati db\Mercato.xlsx')
-partite=pd.read_excel(r'C:\Users\user\Desktop\Fanta dati db\Partite fanta.xlsx','Campionato')
-coppa=pd.read_excel(r'C:\Users\user\Desktop\Fanta dati db\Partite fanta.xlsx','Coppa')
+
+#from __future__ import print_function
+#import pickle
+#import os.path
+#from googleapiclient.discovery import build
+#from google_auth_oauthlib.flow import InstalledAppFlow
+#from google.auth.transport.requests import Request
+#
+#SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+#
+#SAMPLE_SPREADSHEET_ID = ['1y6pzeMbKg3ssqlxKLTMdqfIARL-x6THsGF_Hu56Ndvw', #gioc
+#'10gDSnddSuaHa1Do28Pin-TmzcJ8hpOdLDU52QMDPQZg', #quotazioni
+#'1JaEZbjCaob8IYioTcNXoFO0v6WuBePrKseXILmSLxHI', #mercato
+#'1TNY-Ps8bdkPyo-wZS9rkzHvbRnCru10vD9LjeaCd83A', #part cup
+#'1Z5s-3KncSmt0IsbWgjNo2VWtG5x97BTzkIvIwl70tTM', #part fanta
+#'1PV9aSp9LVJtyPTNrbNkRRfGgXYiCavXx-cZRZqJKlCg', #voti
+#'1LxD8lUYmH4m6lAd7FVdzVbEUTu1HfIVkmpoAu3DJUE0'] #ruolo
+#SAMPLE_RANGE_NAME = 'Foglio1'
+#
+#def google():
+#    """Shows basic usage of the Sheets API.
+#    Prints values from a sample spreadsheet.
+#    """
+#    creds = None
+#    # The file token.pickle stores the user's access and refresh tokens, and is
+#    # created automatically when the authorization flow completes for the first
+#    # time.
+#    if os.path.exists('token.pickle'):
+#        with open('token.pickle', 'rb') as token:
+#            creds = pickle.load(token)
+#    # If there are no (valid) credentials available, let the user log in.
+#    if not creds or not creds.valid:
+#        if creds and creds.expired and creds.refresh_token:
+#            creds.refresh(Request())
+#        else:
+#            flow = InstalledAppFlow.from_client_secrets_file(
+#                'credentials.json', SCOPES)
+#            creds = flow.run_local_server(port=0)
+#        # Save the credentials for the next run
+#        with open('token.pickle', 'wb') as token:
+#            pickle.dump(creds, token)
+#
+#    service = build('sheets', 'v4', credentials=creds)
+#
+#    # Call the Sheets API
+#    sheet = service.spreadsheets()
+#    df=[]
+#    for i in SAMPLE_SPREADSHEET_ID:
+#        result = sheet.values().get(spreadsheetId=i,
+#                                    range=SAMPLE_RANGE_NAME).execute()
+#        values = result.get('values', [])
+#        df.append(pd.DataFrame(values[1:],columns=values[0]) )   
+#    return df
+import os
+
+giocatori=pd.read_csv(os.path.join('/Users/user/Desktop/Fantacalcio/Flask app','Gioc.csv'),sep=";").drop(['Unnamed: 6','Unnamed: 7'],axis=1)
+ruolo=pd.read_csv(os.path.join('/Users/user/Desktop/Fantacalcio/Flask app','Ruolo.csv'),sep=";")
+coppa=pd.read_csv(os.path.join('/Users/user/Desktop/Fantacalcio/Flask app','Partite cup.csv'),sep=";").iloc[:41,:]
+voti=pd.read_csv(os.path.join('/Users/user/Desktop/Fantacalcio/Flask app','Voti.csv'),sep=";")
+quotazioni=pd.read_csv(os.path.join('/Users/user/Desktop/Fantacalcio/Flask app','Quotazioni.csv'),sep=";")
+mercato=pd.read_csv(os.path.join('/Users/user/Desktop/Fantacalcio/Flask app','Mercato.csv'),sep=";")
+partite=pd.read_csv(os.path.join('/Users/user/Desktop/Fantacalcio/Flask app','Partite fanta.csv'),sep=";")
+partite['Pnt casa']=[float(str(x).replace(',','.')) for x in partite['Pnt casa']]
+partite['Pnt tras']=[float(str(x).replace(',','.')) for x in partite['Pnt tras']]
+coppa['Pnt casa']=[float(str(x).replace(',','.')) for x in coppa['Pnt casa']]
+coppa['Pnt tras']=[float(str(x).replace(',','.')) for x in coppa['Pnt tras']]    
+mercato['Spesa A']=[float(str(x).replace(',','.')) for x in mercato['Spesa A']]
+mercato['Entrata Da']=[float(str(x).replace(',','.')) for x in mercato['Entrata Da']] 
+mercato['Costo contratto']=[float(str(x).replace(',','.')) for x in mercato['Costo contratto']] 
+quotazioni['VI']=[float(str(x).replace(',','.')) for x in quotazioni['VI']] 
+quotazioni['VA']=[float(str(x).replace(',','.')) for x in quotazioni['VA']] 
+voti['Voto']=[float(str(x).replace(',','.')) for x in voti['Voto']] 
+giocatori['Data_nascita']=pd.to_datetime(giocatori['Data_nascita'],format='%Y-%m-%d')
+mercato['Data']=pd.to_datetime(mercato['Data'],format='%d/%m/%Y')
+mercato['TP']=pd.to_datetime(mercato['TP'],format='%d/%m/%Y')
+voti['Data']=pd.to_datetime(voti['Data'],format='%Y-%m-%d')
 
 #print(ruolo)
 #print(voti)
@@ -748,7 +815,6 @@ def fa(rows1):
 
 if __name__ == "__main__":
     FantaPy.run_server()
-
 
 
 

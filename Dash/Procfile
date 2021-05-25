@@ -1,0 +1,1 @@
+web gunicorn FantaApp:server --preload

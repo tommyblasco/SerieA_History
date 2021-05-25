@@ -1,0 +1,1 @@
+web: gunicorn webfanta:server

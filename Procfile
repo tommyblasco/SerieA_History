@@ -1,1 +1,1 @@
-web: gunicorn webfanta:server
+web gunicorn webfanta:server --preload

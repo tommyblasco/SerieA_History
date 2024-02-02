@@ -7,7 +7,7 @@ plotly==4.2.1
 flask
 numpy
 dash_daq
-dash==1.6.1
+dash==2.15.0
 dash_core_components==1.5.1
 dash_html_components==1.0.2
 dash_bootstrap_components==0.7.2

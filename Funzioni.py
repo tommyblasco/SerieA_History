@@ -5,7 +5,7 @@ import streamlit as st
 from github import Github
 
 conn_g=Github(st.secrets['TOKEN'])
-repo_mantra=conn_g.get_user("tommyblasco").get_repo("MantraCevapci")
+repo_mantra=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
 
 @st.cache
 def load_data(df):

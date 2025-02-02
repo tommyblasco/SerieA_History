@@ -65,4 +65,5 @@ def nx_match_rank(s,n):
     rank_a['Home'] = [x + ' (' + str(y) + '.)' for x, y in zip(rank_a['CASA'], rank_a['rank_h'])]
     rank_a['Away'] = [x + ' (' + str(y) + '.)' for x, y in zip(rank_a['TRAS'], rank_a['rank_a'])]
     rank_a = rank_a[['Giornata', 'Data', 'Home', 'Away']]
+    rank_a['Data']=rank_a['Data'].dt.date
     return rank_a

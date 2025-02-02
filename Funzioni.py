@@ -56,7 +56,7 @@ def ranking(seas,st_date=datetime(1900,1,1),en_date=datetime.now()):
 def nx_match_rank(s,n):
     cur_rank = ranking(seas=s)[['Squadra']]
     cur_rank['rank'] = range(1, len(cur_rank) + 1)
-    prox_partite = tbd[tbd['Data']<date.today()+timedelta(days=n)][['Giornata','Data','CASA','TRAS']]
+    prox_partite = tbd[tbd['Data']<datetime.now()+timedelta(days=n)][['Giornata','Data','CASA','TRAS']]
 
     rank_h = prox_partite.merge(cur_rank, left_on='CASA', right_on='Squadra', how='left').drop('Squadra', axis=1)
     rank_h.rename(columns={'rank': 'rank_h'})

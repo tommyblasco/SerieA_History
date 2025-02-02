@@ -47,10 +47,10 @@ def ranking(seas,st_date=datetime(1900,1,1),en_date=datetime.now()):
             new_class=new_class[['Squadra','Pnt','Gio','V','N','P','GF','GS','DR']]
             new_class = new_class.sort_values(by=['Pnt', 'DR'], ascending=False)
         else:
-            new_class=classifica.sort_values(by=['Pnt', 'DR'], ascending=False)
+            new_class=classifica.sort_values(by=['Punti', 'DR'], ascending=False)
     else:
         new_class=classifica[['Squadra','Gio','V','N','P','GF','GS']]
-        new_class = new_class.sort_values(by=['Pnt', 'DR'], ascending=False)
+        new_class = new_class.sort_values(by=['Gio'], ascending=False)
     return new_class
 
 def nx_match_rank(s,n):

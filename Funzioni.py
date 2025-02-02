@@ -59,9 +59,9 @@ def nx_match_rank(s,n):
     prox_partite = tbd[tbd['Data']<datetime.now()+timedelta(days=n)][['Giornata','Data','CASA','TRAS']]
 
     rank_h = prox_partite.merge(cur_rank, left_on='CASA', right_on='Squadra', how='left').drop('Squadra', axis=1)
-    rank_h.rename(columns={'rank': 'rank_h'})
+    rank_h.rename(columns={'rank': 'rank_h'},inplace=True)
     rank_a = rank_h.merge(cur_rank, left_on='TRAS', right_on='Squadra', how='left').drop('Squadra', axis=1)
-    rank_a.rename(columns={'rank': 'rank_a'})
+    rank_a.rename(columns={'rank': 'rank_a'},inplace=True)
     rank_a['Home'] = [x + ' (' + str(y) + '.)' for x, y in zip(rank_a['CASA'], rank_a['rank_h'])]
     rank_a['Away'] = [x + ' (' + str(y) + '.)' for x, y in zip(rank_a['TRAS'], rank_a['rank_a'])]
     rank_a = rank_a[['Giornata', 'Data', 'Home', 'Away']]

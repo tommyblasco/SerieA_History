@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import streamlit as st
 from github import Github
 
@@ -22,7 +22,7 @@ tbd=load_data("TBD")
 penalita=load_data("Penalizzazioni")
 
 #classifica x tutte le stagioni
-def ranking(seas,st_date=date(1900,1,1),en_date=date.today()):
+def ranking(seas,st_date=datetime(1900,1,1),en_date=date.today()):
     if seas=='All':
         db=storico
     else:

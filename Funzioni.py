@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from datetime import date
+from datetime import date, timedelta
 import streamlit as st
 from github import Github
 
@@ -45,8 +45,24 @@ def ranking(seas,st_date=date(1900,1,1),en_date=date.today()):
             new_class = classifica.merge(pen_fil[['Squadra','Pen']], on='Squadra',how='left')
             new_class['Pnt']=new_class['Punti']-new_class['Pen']
             new_class=new_class[['Squadra','Pnt','Gio','V','N','P','GF','GS','DR']]
+            new_class = new_class.sort_values(by=['Pnt', 'DR'], ascending=False)
         else:
-            new_class=classifica
+            new_class=classifica.sort_values(by=['Pnt', 'DR'], ascending=False)
     else:
         new_class=classifica[['Squadra','Gio','V','N','P','GF','GS']]
+        new_class = new_class.sort_values(by=['Pnt', 'DR'], ascending=False)
     return new_class
+
+def nx_match_rank(s,n):
+    cur_rank = ranking(seas=s)[['Squadra']]
+    cur_rank['rank'] = range(1, len(cur_rank) + 1)
+    prox_partite = tbd[tbd['Data']<date.today()+timedelta(days=n)][['Giornata','Data','CASA','TRAS']]
+
+    rank_h = prox_partite.merge(cur_rank, left_on='CASA', right_on='Squadra', how='left').drop('Squadra', axis=1)
+    rank_h.rename(columns={'rank': 'rank_h'})
+    rank_a = rank_h.merge(cur_rank, left_on='TRAS', right_on='Squadra', how='left').drop('Squadra', axis=1)
+    rank_a.rename(columns={'rank': 'rank_a'})
+    rank_a['Home'] = [x + ' (' + str(y) + '.)' for x, y in zip(rank_a['CASA'], rank_a['rank_h'])]
+    rank_a['Away'] = [x + ' (' + str(y) + '.)' for x, y in zip(rank_a['TRAS'], rank_a['rank_a'])]
+    rank_a = rank_a[['Giornata', 'Data', 'Home', 'Away']]
+    return rank_a

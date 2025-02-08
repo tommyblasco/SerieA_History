@@ -14,6 +14,7 @@ st.subheader("Database storico della Serie A a girone unico")
 seas_list = sorted(set(storico['Stagione']),reverse=True) #lista stagioni uniche
 stagione_curr=str(seas_list[0])  #stagione corrente
 
+st.header('Albo d\'oro')
 for i in range(0, len(albo), 10):
     cols = st.columns(10)
     for j, (_, row) in enumerate(albo.iloc[i:i + 10].iterrows()):

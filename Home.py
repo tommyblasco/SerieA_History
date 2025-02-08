@@ -16,7 +16,6 @@ stagione_curr=str(seas_list[0])  #stagione corrente
 
 gen_al=albo(seas_list) #generazione albo d'oro
 df = pd.DataFrame.from_dict(gen_al, orient='index', columns=["Vincitore", "url_Stemma"])
-df = df.reset_index(drop=True)
 st.dataframe(df)
 
 #st.header("Stagione attuale "+stagione_curr)

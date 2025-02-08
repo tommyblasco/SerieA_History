@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 from PIL import Image
 from io import BytesIO
@@ -14,7 +15,7 @@ seas_list = sorted(set(storico['Stagione']),reverse=True) #lista stagioni uniche
 stagione_curr=str(seas_list[0])  #stagione corrente
 
 gen_al=albo(seas_list) #generazione albo d'oro
-st.dataframe(gen_al)
+st.dataframe(pd.DataFrame.from_dict(gen_al, columns=["Stagione", "Vincitore", "url_Stemma"]))
 
 
 #st.header("Stagione attuale "+stagione_curr)

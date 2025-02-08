@@ -6,3 +6,4 @@ plotly
 ipywidgets
 PyGithub
 beautifulsoup4
+Pillow

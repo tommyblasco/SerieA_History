@@ -3,13 +3,10 @@ import numpy as np
 from datetime import date, datetime, timedelta
 import streamlit as st
 from github import Github
-from PIL import Image, ImageDraw, ImageFont
-from io import BytesIO
-import requests
 
 conn_g=Github(st.secrets['TOKEN'])
 repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
-@st.cache
+@st.cache_data
 def load_data(df):
     if df!='Penalizzazioni':
         l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
@@ -18,7 +15,7 @@ def load_data(df):
         l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
                              sep=",", decimal=".", parse_dates=['Da','A'], dayfirst=True)
     return l_data
-@st.cache
+@st.cache_data
 def load_images(team,yyyy):
     stemmi_ava=repo_seriea.get_contents(f"/images/stemmi/{team}")
     file_names = [file.name.split(".")[0] for file in stemmi_ava]

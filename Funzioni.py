@@ -26,6 +26,7 @@ def load_images(team,yyyy):
 storico=load_data("Partite")
 tbd=load_data("TBD")
 penalita=load_data("Penalizzazioni")
+albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=",",decimal='.')
 
 #classifica x tutte le stagioni
 @st.cache_data
@@ -61,15 +62,6 @@ def ranking(seas,st_date=datetime(1900,1,1),en_date=datetime.now()):
     new_class.insert(0,'Rk',range(1,new_class.shape[0]+1))
     return new_class
 
-#gen vincitori
-def albo(sl):
-    vin, stem = [],[]
-    for s in sl:
-        cl_se=ranking(seas=s)
-        team_win=cl_se.iloc[0,1]
-        stem.append(load_images(team_win,s[:4]))
-        vin.append(team_win)
-    return {k:[v1,v2] for k,v1,v2 in zip(sl,vin,stem)}
 
 #prossima giornata avendo anche il rif alla posizione della squadra
 def nx_match_rank(s,n):

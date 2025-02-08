@@ -14,9 +14,11 @@ st.subheader("Database storico della Serie A a girone unico")
 seas_list = sorted(set(storico['Stagione']),reverse=True) #lista stagioni uniche
 stagione_curr=str(seas_list[0])  #stagione corrente
 
-gen_al=albo(seas_list) #generazione albo d'oro
-df = pd.DataFrame.from_dict(gen_al, orient='index', columns=["Vincitore", "url_Stemma"])
-st.dataframe(df)
+for i in range(0, len(albo), 10):
+    cols = st.columns(10)
+    for j, (_, row) in enumerate(albo.iloc[i:i + 10].iterrows()):
+        with cols[j]:
+            st.image(Image.open(BytesIO(requests.get(row['url_Stemma']).content)), caption=f"{row['Vincitore']} ({row['Stagione']})", use_column_width=True)
 
 #st.header("Stagione attuale "+stagione_curr)
 #tm_delta=st.slider("Partite nei prossimi ... giorni",min_value=0,max_value=35,value=7,step=7)

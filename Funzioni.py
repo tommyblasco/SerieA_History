@@ -26,7 +26,7 @@ def load_images(team,yyyy):
 storico=load_data("Partite")
 tbd=load_data("TBD")
 penalita=load_data("Penalizzazioni")
-albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=",",decimal='.')
+albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 
 #classifica x tutte le stagioni
 @st.cache_data

@@ -6,14 +6,22 @@ st.title("Serie A")
 
 st.subheader("Database storico della Serie A a girone unico")
 
-seas_list = sorted(set(storico['Stagione']),reverse=True)
-stagione_curr=str(seas_list[0])
+seas_list = sorted(set(storico['Stagione']),reverse=True) #lista stagioni uniche
+stagione_curr=str(seas_list[0])  #stagione corrente
 
-st.image(Image.open(BytesIO(requests.get(load_images(team='JUVENTUS',yyyy='2015')).content)), caption='JUVENTUS',
-         use_column_width=True)
+gen_al=albo(seas_list) #generazione albo d'oro
+for i in range(0, len(seas_list), 10):
+    # Crea le colonne per la riga
+    cols = st.columns(10)
+    # Itera per le immagini nella riga corrente
+    for j, (stagione, squadra, img) in enumerate(gen_al[i:i + 10]):
+        with cols[j]:
+            st.image(Image.open(BytesIO(requests.get(img).content)), use_column_width=True)
+            st.write(f"**{stagione}**")
+            st.write(squadra)
 
 
-st.header("Stagione attuale "+stagione_curr)
-tm_delta=st.slider("Partite nei prossimi ... giorni",min_value=0,max_value=35,value=7,step=7)
+#st.header("Stagione attuale "+stagione_curr)
+#tm_delta=st.slider("Partite nei prossimi ... giorni",min_value=0,max_value=35,value=7,step=7)
 
-st.dataframe(nx_match_rank(s=stagione_curr,n=tm_delta))
+#st.dataframe(nx_match_rank(s=stagione_curr,n=tm_delta))

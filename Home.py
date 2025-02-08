@@ -14,7 +14,7 @@ for i in range(0, len(seas_list), 10):
     # Crea le colonne per la riga
     cols = st.columns(10)
     # Itera per le immagini nella riga corrente
-    for j, (stagione, squadra, img) in enumerate(list(gen_al.items())[i:i + 10]):
+    for j, (stagione, (squadra, img)) in enumerate(list(gen_al.items())[i:i + 10]):
         with cols[j]:
             st.image(Image.open(BytesIO(requests.get(img).content)), use_column_width=True)
             st.write(f"**{stagione}**")

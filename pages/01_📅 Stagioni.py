@@ -19,8 +19,8 @@ with rc:
         classifica=ranking(seas=sea_sel,st_date=sel_date[0],en_date=sel_date[1])
         stem = []
         for s in classifica['Squadra']:
-            #stem.append(Image.open(BytesIO(requests.get(load_images(team=s, yyyy=sea_sel[:4])).content)))
-            stem.append(load_images(team=s, yyyy=sea_sel[:4]))
+            stem.append(Image.open(BytesIO(requests.get(load_images(team=s, yyyy=sea_sel[:4])).content)))
+            #stem.append(load_images(team=s, yyyy=sea_sel[:4]))
         classifica.insert(1,"Badge",stem)
         st.dataframe(classifica,column_config={"Badge":st.column_config.ImageColumn()},hide_index=True)
     with ris_c:

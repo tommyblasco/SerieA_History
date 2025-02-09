@@ -24,9 +24,9 @@ with part:
     st.text('Partecipazioni Serie A')
     riep_part=pd.DataFrame({'Stagioni':list(storico['Stagione'])+list(storico['Stagione']),'Squadre':list(storico['CASA'])+list(storico['TRAS'])})
     riep_part=riep_part.drop_duplicates()
-    riep_part.groupby('Squadre',as_index=False).agg({'Stagioni':'count'})
-    riep_part = riep_part.sort_values(by=['Stagioni'], ascending=False)
-    st.bar_chart(riep_part,x='Squadre',y='Stagioni')
+    riep_grp=riep_part.groupby('Squadre',as_index=False).agg({'Stagioni':'count'})
+    riep_grp = riep_grp.sort_values(by=['Stagioni'], ascending=False)
+    st.bar_chart(riep_grp,x='Squadre',y='Stagioni')
 
 st.subheader('Albo d\'oro')
 for i in range(0, len(albo), 10):

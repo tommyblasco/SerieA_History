@@ -15,10 +15,10 @@ repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
 def load_data(df):
     if df!='Penalizzazioni':
         l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
-                             sep=",", decimal=".", parse_dates=['Data'], dayfirst=True)
+                             sep=",", decimal=".", parse_dates=['Data'])
     else:
         l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
-                             sep=",", decimal=".", parse_dates=['Da','A'], dayfirst=True)
+                             sep=",", decimal=".", parse_dates=['Da','A'])
     return l_data
 @st.cache_data
 def load_images(team,yyyy):
@@ -29,7 +29,6 @@ def load_images(team,yyyy):
     return url_stemma
 
 storico=load_data("Partite")
-storico['Data'] = pd.to_datetime(storico['Data'], errors='coerce')
 tbd=load_data("TBD")
 penalita=load_data("Penalizzazioni")
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')

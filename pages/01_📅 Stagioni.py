@@ -12,7 +12,7 @@ n_gio=max(df['Giornata'])
 
 rc, ins = st.tabs(['Risultati e classifica','Insights'])
 with rc:
-    class_c, ris_c = st.columns([3, 1])
+    class_c, ris_c = st.columns([2, 1])
     with class_c:
 
         sel_date = st.slider("Seleziona il range di date:", min_value=start_sea, max_value=end_sea,value=(start_sea,end_sea),step=timedelta(days=1),format="DD/MM/YYYY")

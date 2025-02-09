@@ -12,9 +12,8 @@ from Funzioni import *
 st.markdown(
     """
     <style>
-        .main {
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
+        .appview-container .main {
+            max-width: 95% !important;
         }
     </style>
     """,

@@ -25,7 +25,7 @@ def load_images(team,yyyy):
     stemmi_ava=repo_seriea.get_contents(f"/images/stemmi/{team}")
     file_names = [file.name.split(".")[0] for file in stemmi_ava]
     yy_sel=min([x for x in file_names if x>=yyyy])
-    url_stemma=f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/blob/main/images/stemmi/{team}/{yy_sel}.png".replace(' ','%20')
+    url_stemma=f"https://github.com/tommyblasco/SerieA_History/blob/main/images/stemmi/{team}/{yy_sel}.png".replace(' ','%20')
     return url_stemma
 
 storico=load_data("Partite")

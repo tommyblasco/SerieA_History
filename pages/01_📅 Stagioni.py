@@ -86,7 +86,7 @@ with ins:
     with st.expander('Frequenza risultati'):
         df['clus_GC']=[str(x) if x<=4 else '>4' for x in df['GC']]
         df['clus_GT'] = [str(x) if x <= 4 else '>4' for x in df['GT']]
-        df_pivot = df.pivot_table(index='clus_GC', columns='clus_GT', values='Squadra', aggfunc='count')
+        df_pivot = df.pivot_table(index='clus_GC', columns='clus_GT', values='GC', aggfunc='count')
         df_freq = df_pivot/df.shape[0]
         res_gr = px.imshow( df_freq,
             labels=dict(x="Trasferta", y="Casa", color="Frequenza (%)"),

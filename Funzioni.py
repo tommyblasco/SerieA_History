@@ -8,6 +8,7 @@ from io import BytesIO
 import requests
 from raceplotly.plots import barplot
 import plotly.graph_objects as go
+import plotly.express as px
 
 conn_g=Github(st.secrets['TOKEN'])
 repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
@@ -80,18 +81,32 @@ def ranking(seas,st_date=date(1900,1,1),en_date=date.today()):
     new_class.insert(0,'Rk',range(1,new_class.shape[0]+1))
     return new_class
 
-
 #prossima giornata avendo anche il rif alla posizione della squadra
-def nx_match_rank(s,n):
-    team_list = ranking(seas=s)[['Rk','Squadra']]
-    prox_partite = tbd[tbd['Data']<datetime.now()+timedelta(days=n)][['Giornata','Data','CASA','TRAS']]
+def class_cum(seas):
+    db = storico[(storico['Stagione'] == seas)]
+    db['H']=[1 if x>y else 0 for x,y in zip(db['GC'],db['GT'])]
+    db['N']=[1 if x==y else 0 for x,y in zip(db['GC'],db['GT'])]
+    db['A']=[1 if x<y else 0 for x,y in zip(db['GC'],db['GT'])]
+    db['PH']=[x*3+y if z>='1994-95' else x*2+y for x,y,z in zip(db['H'],db['N'],db['Stagione'])]
+    db['PA']=[x*3+y if z>='1994-95' else x*2+y for x,y,z in zip(db['A'],db['N'],db['Stagione'])]
+    new_db_l=pd.DataFrame({'Squadra':list(db['CASA'])+list(db['TRAS']),'Giornata':list(db['Giornata'])+list(db['Giornata']),'Punti':list(db['PH'])+list(db['PA'])})
+    new_db_l = new_db_l.sort_values(by=['Giornata'])
+    new_db_l['CumP'] = new_db_l.groupby(['Squadra'], as_index=False)['Punti'].transform(pd.Series.cumsum)
+    return new_db_l
 
-    rank_h = prox_partite.merge(team_list, left_on='CASA', right_on='Squadra', how='left').drop('Squadra', axis=1)
-    rank_h.rename(columns={'rank': 'rank_h'},inplace=True)
-    rank_a = rank_h.merge(team_list, left_on='TRAS', right_on='Squadra', how='left').drop('Squadra', axis=1)
-    rank_a.rename(columns={'rank': 'rank_a'},inplace=True)
-    rank_a['Home'] = [x + ' (' + str(y) + '.)' for x, y in zip(rank_a['CASA'], rank_a['rank_h'])]
-    rank_a['Away'] = [x + ' (' + str(y) + '.)' for x, y in zip(rank_a['TRAS'], rank_a['rank_a'])]
-    rank_a = rank_a[['Giornata', 'Data', 'Home', 'Away']]
-    rank_a['Data']=rank_a['Data'].dt.date
-    return rank_a
+def class_ct(seas):
+    db = storico[(storico['Stagione'] == seas)]
+    db['H']=[1 if x>y else 0 for x,y in zip(db['GC'],db['GT'])]
+    db['N']=[1 if x==y else 0 for x,y in zip(db['GC'],db['GT'])]
+    db['A']=[1 if x<y else 0 for x,y in zip(db['GC'],db['GT'])]
+    db['PH']=[x*3+y if z>='1994-95' else x*2+y for x,y,z in zip(db['H'],db['N'],db['Stagione'])]
+    db['PA']=[x*3+y if z>='1994-95' else x*2+y for x,y,z in zip(db['A'],db['N'],db['Stagione'])]
+    casa=db.groupby(['CASA'],as_index=False).agg({'PH':'sum','Data':'count','H':'sum','N':'sum','A':'sum','GC':'sum','GT':'sum'})
+    trasferta=db.groupby(['TRAS'],as_index=False).agg({'PA':'sum','Data':'count','A':'sum','N':'sum','H':'sum','GT':'sum','GC':'sum'})
+    casa['DRC']=[x-y for x,y in zip(casa['GC'],casa['GT'])]
+    trasferta['DRT']=[x-y for x,y in zip(trasferta['GT'],trasferta['GC'])]
+    casa.columns=['Squadra','Punti','Gio','V','N','P','GF','GS','DR']
+    trasferta.columns=['Squadra','Punti','Gio','V','N','P','GF','GS','DR']
+    casa = casa.sort_values(by=['Punti','DR'], ascending=False)
+    trasferta = trasferta.sort_values(by=['Punti', 'DR'], ascending=False)
+    return [casa, trasferta]

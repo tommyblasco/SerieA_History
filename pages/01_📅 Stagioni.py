@@ -46,3 +46,33 @@ with rc:
 
 with ins:
     m1, m2, m3 = st.columns(3)
+    with m1:
+        played = df.shape[0]
+        st.metric(label='Partite giocate',value=played)
+    with m2:
+        gol_tot = sum(df['GC'])+sum(df['GT'])
+        st.metric(label='Gol segnati',value=gol_tot)
+    with m3:
+        media_gol = round(gol_tot/played,2)
+        st.metric(label='Media gol',value=media_gol)
+    st.divider()
+    pie1, pie2, pie3 = st.columns(3)
+    with pie1:
+        wh=df[df['GC']>df['GT']].shape[0]
+        wa = df[df['GC'] < df['GT']].shape[0]
+        wh_d_wa = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[wh, played-wh-wa, wa],
+                        labels=["W Casa","Pari", "W Tras"], showlegend=False)
+        st.plotly_chart(go.FigureWidget(data=wh_d_wa), use_container_width=True)
+    with pie2:
+        gca=sum(df['GC'])
+        gtr = sum(df['GT'])
+        gct = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[gca, gtr],
+                        labels=["Gol Casa","Gol Tras"], showlegend=False)
+        st.plotly_chart(go.FigureWidget(data=gct), use_container_width=True)
+    with pie3:
+        un_ov=st.slider("Seleziona la soglia U/O:",min_value=0.5,max_value=5.5,value=2.5,step=1.0)
+        over = [x+y for x,y in zip(df['GC'],df['GT']) if x+y>un_ov]
+        under = [x + y for x, y in zip(df['GC'], df['GT']) if x + y < un_ov]
+        uo_gr = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[under, over],
+                        labels=["Under","Over"], showlegend=False)
+        st.plotly_chart(go.FigureWidget(data=uo_gr), use_container_width=True)

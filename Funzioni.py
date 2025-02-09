@@ -3,6 +3,11 @@ import numpy as np
 from datetime import date, datetime, timedelta
 import streamlit as st
 from github import Github
+from PIL import Image
+from io import BytesIO
+import requests
+from raceplotly.plots import barplot
+import plotly.graph_objects as go
 
 conn_g=Github(st.secrets['TOKEN'])
 repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")

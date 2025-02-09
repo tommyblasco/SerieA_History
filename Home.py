@@ -1,13 +1,6 @@
-import pandas as pd
-import streamlit as st
-from PIL import Image
-from io import BytesIO
-import requests
-from raceplotly.plots import barplot
-import plotly.graph_objects as go
+from Funzioni import *
 
 st.set_page_config(page_title="Serie A")
-from Funzioni import *
 
 st.title("Serie A")
 
@@ -22,6 +15,8 @@ with rpl:
     bcr=barplot(df=clas_rbc,item_column='Squadra',value_column='Scudetti',time_column='Anno')
     rbc = bcr.plot(time_label='Anno', value_label='Scudetti', title='Scudetti vinti', frame_duration=1000)
     st.plotly_chart(rbc)
+
+    st.divider()
 
     st.text('Partecipazioni Serie A')
     riep_part = pd.DataFrame({'Stagioni': list(storico['Stagione']) + list(storico['Stagione']),

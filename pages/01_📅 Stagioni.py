@@ -61,18 +61,18 @@ with ins:
         wh=df[df['GC']>df['GT']].shape[0]
         wa = df[df['GC'] < df['GT']].shape[0]
         wh_d_wa = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[wh, played-wh-wa, wa],
-                        labels=["W Casa","Pari", "W Tras"], showlegend=False)
+                        labels=["W Casa","Pari", "W Tras"])
         st.plotly_chart(go.FigureWidget(data=wh_d_wa), use_container_width=True)
     with pie2:
         gca=sum(df['GC'])
         gtr = sum(df['GT'])
         gct = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[gca, gtr],
-                        labels=["Gol Casa","Gol Tras"], showlegend=False)
+                        labels=["Gol Casa","Gol Tras"])
         st.plotly_chart(go.FigureWidget(data=gct), use_container_width=True)
     with pie3:
-        un_ov=st.slider("Seleziona la soglia U/O:",min_value=0.5,max_value=5.5,value=2.5,step=1.0)
+        un_ov=st.slider("Seleziona la soglia U/O:",min_value=0.5,max_value=5.5,value=2.5)
         over = [x+y for x,y in zip(df['GC'],df['GT']) if x+y>un_ov]
         under = [x + y for x, y in zip(df['GC'], df['GT']) if x + y < un_ov]
-        uo_gr = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[under, over],
-                        labels=["Under","Over"], showlegend=False)
+        uo_gr = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[len(under), len(over)],
+                        labels=["Under","Over"])
         st.plotly_chart(go.FigureWidget(data=uo_gr), use_container_width=True)

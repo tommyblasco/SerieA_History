@@ -9,17 +9,6 @@ import plotly.graph_objects as go
 st.set_page_config(page_title="Serie A")
 from Funzioni import *
 
-st.markdown(
-    """
-    <style>
-        .appview-container .main {
-            max-width: 95% !important;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 st.title("Serie A")
 
 st.subheader("Database storico della Serie A a girone unico")
@@ -34,6 +23,7 @@ with rpl:
     rbc = bcr.plot(time_label='Anno', value_label='Scudetti', title='Scudetti vinti', frame_duration=1000)
     st.plotly_chart(rbc)
 
+with part:
     st.text('Partecipazioni Serie A')
     riep_part = pd.DataFrame({'Stagioni': list(storico['Stagione']) + list(storico['Stagione']),
                               'Squadre': list(storico['CASA']) + list(storico['TRAS'])})
@@ -44,10 +34,9 @@ with rpl:
     part_gr.add_trace(go.Bar(y=riep_grp['Squadre'], x=riep_grp['Stagioni'], orientation='h'))
     st.plotly_chart(go.FigureWidget(data=part_gr), use_container_width=True)
 
-with part:
     st.subheader('Albo d\'oro')
     for i in range(0, len(albo), 5):
-        cols = st.columns(10)
+        cols = st.columns(5)
         for j, (_, row) in enumerate(albo.iloc[i:i + 5].iterrows()):
             with cols[j]:
                 st.image(Image.open(BytesIO(requests.get(row['url_Stemma']).content)), caption=f"{row['Vincitore']} ({row['Stagione']})", use_container_width=True)

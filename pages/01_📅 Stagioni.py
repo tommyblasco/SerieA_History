@@ -90,5 +90,5 @@ with ins:
         df_freq = df_pivot/(gca+gtr)
         res_gr = px.imshow(df_freq,
             labels=dict(x="Gol Trasferta", y="Gol Casa", color="Frequenza"),
-            x=df_freq.columns, y=df_freq.index, text_auto=".2f", color_continuous_scale="coolwarm")
+            x=df_freq.columns, y=df_freq.index, text_auto=".2f", color_continuous_scale="oranges")
         st.plotly_chart(go.FigureWidget(data=res_gr), use_container_width=True)

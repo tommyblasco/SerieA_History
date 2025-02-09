@@ -15,10 +15,10 @@ repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
 def load_data(df):
     if df!='Penalizzazioni':
         l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
-                             sep=",", decimal=".", parse_dates=['Data'])
+                             sep=",", decimal=".", parse_dates=['Data'],dayfirst=True)
     else:
         l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
-                             sep=",", decimal=".", parse_dates=['Da','A'])
+                             sep=",", decimal=".", parse_dates=['Da','A'],dayfirst=True)
     return l_data
 @st.cache_data
 def load_images(team,yyyy):
@@ -33,6 +33,10 @@ tbd=load_data("TBD")
 penalita=load_data("Penalizzazioni")
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')
+
+storico['Data']=[x.date() for x in storico['Data']]
+penalita['Da']=[x.date() for x in penalita['Da']]
+penalita['A']=[x.date() for x in penalita['A']]
 
 seas_list = sorted(set(storico['Stagione']),reverse=True)
 

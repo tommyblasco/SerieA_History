@@ -66,10 +66,10 @@ def ranking(seas,st_date=date(1900,1,1),en_date=date.today()):
             pen_date=max(db['Data'])
         else:
             pen_date=en_date
-        pen_fil=penalita[(penalita['Stagione']==seas) & (penalita['A']>=pen_date)]
+        pen_fil=penalita[(penalita['Stagione']==seas) & (penalita['Da']<=pen_date) & (penalita['A']>=pen_date)]
         if pen_fil.shape[0]>0:
             new_class = classifica.merge(pen_fil[['Squadra','Pen']], on='Squadra',how='left')
-            new_class['Pnt']=[int(x-y) if not np.isnan(y) else int(x)  for x,y in zip(new_class['Punti'],new_class['Pen'])]
+            new_class['Pnt']=[int(x-y) if not np.isnan(y) else int(x) for x,y in zip(new_class['Punti'],new_class['Pen'])]
             new_class=new_class[['Squadra','Pnt','Gio','V','N','P','GF','GS','DR']]
             new_class = new_class.sort_values(by=['Pnt', 'DR'], ascending=False)
         else:

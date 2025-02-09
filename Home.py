@@ -29,7 +29,7 @@ with part:
     riep_grp=riep_part.groupby('Squadre',as_index=False).agg({'Stagioni':'count'})
     riep_grp=riep_grp.sort_values(by='Stagioni',ascending=False)
     part_gr = go.Figure()
-    part_gr.add_trace(go.Bar(y=riep_grp['Squadre'], x=riep_grp['Stagioni']))
+    part_gr.add_trace(go.Bar(y=riep_grp['Squadre'], x=riep_grp['Stagioni'],orientation='v'))
     st.plotly_chart(go.FigureWidget(data=part_gr), use_container_width=True)
 
 st.subheader('Albo d\'oro')

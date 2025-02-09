@@ -14,7 +14,7 @@ rc, ins = st.tabs(['Risultati e classifica','Insights'])
 with rc:
     class_c, ris_c = st.columns([3, 1])
     with class_c:
-        sel_date = st.slider("Seleziona il range di date:", min_value=start_sea, max_value=end_sea,value=(start_sea,end_sea),step=timedelta(days=1),format="DD/MM/YYYY")
+        sel_date = st.slider("Seleziona il range di date:", min_value=start_sea.to_pydatetime().date(), max_value=end_sea.to_pydatetime().date(),value=(start_sea.to_pydatetime().date(),end_sea.to_pydatetime().date()),step=timedelta(days=1),format="DD/MM/YYYY")
         classifica=ranking(seas=sea_sel,st_date=sel_date[0],en_date=sel_date[1])
         stem = []
         for s in classifica['Squadra']:

@@ -17,6 +17,7 @@ stagione_curr=str(seas_list[0])  #stagione corrente
 
 rpl, part = st.columns(2)
 with rpl:
+    clas_rbc['Scudetti']=[int(x) for x in clas_rbc['Scudetti']]
     bcr=barplot(df=clas_rbc,item_column='Squadra',value_column='Scudetti',time_column='Anno')
     rbc = bcr.plot(time_label='Anno', value_label='Scudetti', title='Scudetti vinti', frame_duration=1000)
     st.plotly_chart(rbc, use_container_width=True)
@@ -25,8 +26,8 @@ with part:
     riep_part=pd.DataFrame({'Stagioni':list(storico['Stagione'])+list(storico['Stagione']),'Squadre':list(storico['CASA'])+list(storico['TRAS'])})
     riep_part=riep_part.drop_duplicates()
     riep_grp=riep_part.groupby('Squadre',as_index=False).agg({'Stagioni':'count'})
-    riep_grp = riep_grp.sort_values(by=['Stagioni'], ascending=False)
-    st.bar_chart(riep_grp,x='Squadre',y='Stagioni')
+    riep_grp = riep_grp.sort_values(by='Stagioni', ascending=False)
+    st.bar_chart(riep_grp,x='Squadre',y='Stagioni',horizontal=True,use_container_width=True)
 
 st.subheader('Albo d\'oro')
 for i in range(0, len(albo), 10):

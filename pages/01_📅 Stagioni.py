@@ -56,23 +56,29 @@ with ins:
         media_gol = round(gol_tot/played,2)
         st.metric(label='Media gol',value=media_gol)
     st.divider()
-    pie1, pie2, pie3 = st.columns(3)
+    pie1, pie2 = st.columns(2)
     with pie1:
         wh=df[df['GC']>df['GT']].shape[0]
         wa = df[df['GC'] < df['GT']].shape[0]
         wh_d_wa = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[wh, played-wh-wa, wa],
                         labels=["W Casa","Pari", "W Tras"])
         st.plotly_chart(go.FigureWidget(data=wh_d_wa), use_container_width=True)
+
+        un_ov = st.slider("Seleziona la soglia U/O:", min_value=0.5, max_value=5.5, value=2.5)
+        over = [x + y for x, y in zip(df['GC'], df['GT']) if x + y > un_ov]
+        under = [x + y for x, y in zip(df['GC'], df['GT']) if x + y < un_ov]
+        uo_gr = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[len(under), len(over)],
+                       labels=["Under", "Over"])
+        st.plotly_chart(go.FigureWidget(data=uo_gr), use_container_width=True)
     with pie2:
         gca=sum(df['GC'])
         gtr = sum(df['GT'])
         gct = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[gca, gtr],
                         labels=["Gol Casa","Gol Tras"])
         st.plotly_chart(go.FigureWidget(data=gct), use_container_width=True)
-    with pie3:
-        un_ov=st.slider("Seleziona la soglia U/O:",min_value=0.5,max_value=5.5,value=2.5)
-        over = [x+y for x,y in zip(df['GC'],df['GT']) if x+y>un_ov]
-        under = [x + y for x, y in zip(df['GC'], df['GT']) if x + y < un_ov]
-        uo_gr = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[len(under), len(over)],
-                        labels=["Under","Over"])
-        st.plotly_chart(go.FigureWidget(data=uo_gr), use_container_width=True)
+
+        st.write('Distribuzione gol per match')
+        n_gol = [x + y for x, y in zip(df['GC'], df['GT'])]
+        dis_gol = go.Figure()
+        dis_gol.add_trace(go.Histogram(x=n_gol, name="count"))
+        st.plotly_chart(go.FigureWidget(data=dis_gol), use_container_width=True)

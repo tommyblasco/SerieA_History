@@ -7,3 +7,4 @@ ipywidgets
 PyGithub
 beautifulsoup4
 Pillow
+raceplotly

@@ -88,10 +88,8 @@ with ins:
         df['clus_GT'] = [str(x) if x <= 4 else '>4' for x in df['GT']]
         df_pivot = df.pivot_table(index='clus_GC', columns='clus_GT', values='GC', aggfunc='count')
         df_freq = df_pivot*100/df.shape[0]
-        res_gr = px.imshow( df_freq,
-            labels=dict(x="Trasferta", y="Casa", color="Frequenza (%)"),
-            x=df_freq.columns, y=df_freq.index, text_auto=".1f", color_continuous_scale="blues")
-        res_gr.update_yaxes(tickmode="array", tickvals=list(range(len(df_freq.index))), ticktext=df_freq.index)
-        res_gr.update_xaxes(tickmode="array", tickvals=list(range(len(df_freq.columns))),ticktext=df_freq.columns)
-        res_gr.update_layout( width=600, height=400,margin=dict(l=50, r=50, t=50, b=50) )
+        res_gr = go.Figure(data=go.Heatmap( z=df_freq.values, x=df_freq.columns, y=df_freq.index,
+            text=df_freq.round(1).astype(str) + '%', texttemplate="%{text}",
+            colorscale="blues", showscale=True))
+        res_gr.update_xaxes(side='top')
         st.plotly_chart(go.FigureWidget(data=res_gr), use_container_width=True)

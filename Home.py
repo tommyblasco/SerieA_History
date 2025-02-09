@@ -22,20 +22,22 @@ with rpl:
     bcr=barplot(df=clas_rbc,item_column='Squadra',value_column='Scudetti',time_column='Anno')
     rbc = bcr.plot(time_label='Anno', value_label='Scudetti', title='Scudetti vinti', frame_duration=1000)
     st.plotly_chart(rbc)
-with part:
-    st.text('Partecipazioni Serie A')
-    riep_part=pd.DataFrame({'Stagioni':list(storico['Stagione'])+list(storico['Stagione']),'Squadre':list(storico['CASA'])+list(storico['TRAS'])})
-    riep_part=riep_part.drop_duplicates()
-    riep_grp=riep_part.groupby('Squadre',as_index=False).agg({'Stagioni':'count'})
-    riep_grp=riep_grp.sort_values(by='Stagioni',ascending=False)
-    part_gr = go.Figure()
-    part_gr.add_trace(go.Bar(y=riep_grp['Squadre'], x=riep_grp['Stagioni'],orientation='h'))
-    st.plotly_chart(go.FigureWidget(data=part_gr), use_container_width=True)
 
-st.subheader('Albo d\'oro')
-for i in range(0, len(albo), 10):
-    cols = st.columns(10)
-    for j, (_, row) in enumerate(albo.iloc[i:i + 10].iterrows()):
-        with cols[j]:
-            st.image(Image.open(BytesIO(requests.get(row['url_Stemma']).content)), caption=f"{row['Vincitore']} ({row['Stagione']})", use_container_width=True)
+    st.text('Partecipazioni Serie A')
+    riep_part = pd.DataFrame({'Stagioni': list(storico['Stagione']) + list(storico['Stagione']),
+                              'Squadre': list(storico['CASA']) + list(storico['TRAS'])})
+    riep_part = riep_part.drop_duplicates()
+    riep_grp = riep_part.groupby('Squadre', as_index=False).agg({'Stagioni': 'count'})
+    riep_grp = riep_grp.sort_values(by='Stagioni')
+    part_gr = go.Figure()
+    part_gr.add_trace(go.Bar(y=riep_grp['Squadre'], x=riep_grp['Stagioni'], orientation='h'))
+    st.plotly_chart(go.FigureWidget(data=part_gr))
+
+with part:
+    st.subheader('Albo d\'oro')
+    for i in range(0, len(albo), 5):
+        cols = st.columns(10)
+        for j, (_, row) in enumerate(albo.iloc[i:i + 5].iterrows()):
+            with cols[j]:
+                st.image(Image.open(BytesIO(requests.get(row['url_Stemma']).content)), caption=f"{row['Vincitore']} ({row['Stagione']})", use_container_width=True)
 

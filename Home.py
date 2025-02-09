@@ -4,6 +4,7 @@ from PIL import Image
 from io import BytesIO
 import requests
 from raceplotly.plots import barplot
+import altair as alt
 
 st.set_page_config(page_title="Serie A")
 from Funzioni import *
@@ -26,6 +27,9 @@ with part:
     riep_part=pd.DataFrame({'Stagioni':list(storico['Stagione'])+list(storico['Stagione']),'Squadre':list(storico['CASA'])+list(storico['TRAS'])})
     riep_part=riep_part.drop_duplicates()
     riep_grp=riep_part.groupby('Squadre').agg({'Stagioni':'count'})
+    st.write(alt.Chart(riep_grp).mark_bar().encode(
+        x=alt.X('Stagioni'), y=alt.Y('Squadre', sort=None)
+    ))
     st.bar_chart(riep_grp.sort_values('Stagioni'))
 
 st.subheader('Albo d\'oro')

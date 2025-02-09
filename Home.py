@@ -6,7 +6,6 @@ st.title("Serie A")
 
 st.subheader("Database storico della Serie A a girone unico")
 
-seas_list = sorted(set(storico['Stagione']),reverse=True) #lista stagioni uniche
 stagione_curr=str(seas_list[0])  #stagione corrente
 
 rpl, part = st.columns(2)

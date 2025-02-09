@@ -34,6 +34,8 @@ penalita=load_data("Penalizzazioni")
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')
 
+seas_list = sorted(set(storico['Stagione']),reverse=True)
+
 #classifica x tutte le stagioni
 @st.cache_data
 def ranking(seas,st_date=datetime(1900,1,1),en_date=datetime.now()):

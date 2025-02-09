@@ -1,7 +1,6 @@
 import streamlit
 
 from Funzioni import *
-from Home import seas_list
 st.header('Le stagioni')
 
 sea_sel=st.selectbox('Seleziona una stagione',seas_list)

@@ -82,3 +82,13 @@ with ins:
         dis_gol = go.Figure()
         dis_gol.add_trace(go.Histogram(x=n_gol, name="count"))
         st.plotly_chart(go.FigureWidget(data=dis_gol), use_container_width=True)
+
+    with st.expander('Frequenza risultati'):
+        df['clus_GC']=[str(x) if x<=4 else '>4' for x in df['GC']]
+        df['clus_GT'] = [str(x) if x <= 4 else '>4' for x in df['GT']]
+        df_pivot = df.pivot_table(index='clus_GC', columns='clus_GT', values='GC', aggfunc='count')
+        df_freq = df_pivot/(gca+gtr)
+        res_gr = px.imshow(df_freq,
+            labels=dict(x="Gol Trasferta", y="Gol Casa", color="Frequenza"),
+            x=df_freq.columns, y=df_freq.index, text_auto=".2f", color_continuous_scale="coolwarm")
+        st.plotly_chart(go.FigureWidget(data=res_gr), use_container_width=True)

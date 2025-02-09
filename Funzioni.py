@@ -57,15 +57,19 @@ def ranking(seas,st_date=date(1900,1,1),en_date=date.today()):
     casa=db.groupby(['CASA'],as_index=False).agg({'PH':'sum','Data':'count','H':'sum','N':'sum','A':'sum','GC':'sum','GT':'sum'})
     trasferta=db.groupby(['TRAS'],as_index=False).agg({'PA':'sum','Data':'count','A':'sum','N':'sum','H':'sum','GT':'sum','GC':'sum'})
     casa['DRC']=[x-y for x,y in zip(casa['GC'],casa['GT'])]
-    trasferta['DRT']=[x-y for x,y in zip(casa['GT'],casa['GC'])]
+    trasferta['DRT']=[x-y for x,y in zip(trasferta['GT'],trasferta['GC'])]
     casa.columns=['Squadra','Punti','Gio','V','N','P','GF','GS','DR']
     trasferta.columns=['Squadra','Punti','Gio','V','N','P','GF','GS','DR']
     classifica=pd.concat([casa,trasferta],ignore_index=True).groupby(['Squadra'],as_index=False).agg({'Punti':'sum','Gio':'sum','V':'sum','N':'sum','P':'sum','GF':'sum','GS':'sum','DR':'sum'})
     if seas!='All':
-        pen_fil=penalita[(penalita['Stagione']==seas) & (penalita['A']>=en_date)]
+        if en_date==date.today():
+            pen_date=max(db['Data'])
+        else:
+            pen_date=en_date
+        pen_fil=penalita[(penalita['Stagione']==seas) & (penalita['A']>=pen_date)]
         if pen_fil.shape[0]>0:
             new_class = classifica.merge(pen_fil[['Squadra','Pen']], on='Squadra',how='left')
-            new_class['Pnt']=new_class['Punti']-new_class['Pen']
+            new_class['Pnt']=[int(x-y) if not np.isnan(y) else int(x)  for x,y in zip(new_class['Punti'],new_class['Pen'])]
             new_class=new_class[['Squadra','Pnt','Gio','V','N','P','GF','GS','DR']]
             new_class = new_class.sort_values(by=['Pnt', 'DR'], ascending=False)
         else:

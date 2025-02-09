@@ -30,7 +30,7 @@ with rpl:
     riep_grp = riep_part.groupby('Squadre', as_index=False).agg({'Stagioni': 'count'})
     riep_grp = riep_grp.sort_values(by='Stagioni')
     part_gr = go.Figure()
-    part_gr.add_trace(go.Bar(y=riep_grp['Squadre'], x=riep_grp['Stagioni'], orientation='h'))
+    part_gr.add_trace(go.Bar(y=riep_grp['Squadre'], x=riep_grp['Stagioni'], text=riep_grp['Stagioni'],orientation='h'))
     part_gr.update_layout(height=1200)
     st.plotly_chart(go.FigureWidget(data=part_gr))
 

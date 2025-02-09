@@ -19,14 +19,16 @@ with rc:
         classifica=ranking(seas=sea_sel,st_date=sel_date[0],en_date=sel_date[1])
         stem = []
         for s in classifica['Squadra']:
-            stem.append(load_images(team=s, yyyy=sea_sel[:4]))
-        classifica.insert(1,"Stemmi",stem)
-        st.dataframe(classifica,column_config={"Stemmi":st.column_config.ImageColumn()})
+            stem.append(Image.open(BytesIO(requests.get(load_images(team=s, yyyy=sea_sel[:4])).content)))
+            #stem.append(load_images(team=s, yyyy=sea_sel[:4]))
+        classifica.insert(1,"Badge",stem)
+        st.dataframe(classifica,column_config={"Badge":st.column_config.ImageColumn()},hide_index=True)
     with ris_c:
         sel_gio = st.slider("Seleziona la giornata:",1,n_gio,n_gio)
         df['Giorno'] = pd.to_datetime(df['Data']).dt.strftime('%b %d, %Y')
         df['Risultato']=[str(x)+'-'+str(y) for x,y in zip(df['GC'],df['GT'])]
-        st.dataframe(df[['Giorno','CASA','TRAS','Risultato']])
+        df_fil_gio=df[df['Giornata']==sel_gio]
+        st.dataframe(df_fil_gio[['Giorno','CASA','TRAS','Risultato']],hide_index=True)
 
 #2 tab (1 ris e classifica, 2 insights su partite e gol, distribuzione gol ecc)
 #2 colonne una prende il 70 (classifica con slider tempo) l'altra il 30 (sel giornata con partite)

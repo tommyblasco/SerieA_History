@@ -88,7 +88,7 @@ with ins:
         df['clus_GT'] = [str(x) if x <= 4 else '>4' for x in df['GT']]
         df_pivot = df.pivot_table(index='clus_GC', columns='clus_GT', values='GC', aggfunc='count')
         df_freq = df_pivot*100/df.shape[0]
-        res_gr = go.Figure(data=go.Heatmap( z=df_freq.values, x=df_freq.columns, y=df_freq.index,
+        res_gr = go.Figure(data=go.Heatmap( z=df_freq.values, x=df_freq.index, y=df_freq.columns,
             text=df_freq.round(1).astype(str) + '%', texttemplate="%{text}",
             colorscale="blues", showscale=True))
         res_gr.update_xaxes(side='top')

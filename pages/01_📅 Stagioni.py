@@ -87,8 +87,6 @@ with ins:
         df['clus_GC']=[str(x) if x<=4 else '>4' for x in df['GC']]
         df['clus_GT'] = [str(x) if x <= 4 else '>4' for x in df['GT']]
         df_pivot = df.pivot_table(index='clus_GC', columns='clus_GT', values='GC', aggfunc='count')
-        df_freq = df_pivot/(gca+gtr)
-        res_gr = px.imshow(df_freq,
-            labels=dict(x="Gol Trasferta", y="Gol Casa", color="Frequenza"),
-            x=df_freq.columns, y=df_freq.index, text_auto=".2f", color_continuous_scale="oranges")
-        st.plotly_chart(go.FigureWidget(data=res_gr), use_container_width=True)
+        df_freq = df_pivot/df.shape[0]
+        res_gr = fig = px.imshow(df_freq, text_auto=True)
+        st.plotly_chart(go.FigureWidget(data=res_gr), use_container_width=True, theme="streamlit")

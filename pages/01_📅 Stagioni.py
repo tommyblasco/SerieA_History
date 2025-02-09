@@ -91,6 +91,6 @@ with ins:
         res_gr = go.Figure(data=go.Heatmap( z=df_freq.values, x=df_freq.index, y=df_freq.columns,
             text=df_freq.round(1).astype(str) + '%', texttemplate="%{text}",
             colorscale="blues", showscale=True))
-        res_gr.update_layout(xaxis=dict(title="Gol Casa"),yaxis=dict(title="Gol Tras", type="category"))
+        res_gr.update_layout(xaxis=dict(title="Gol Casa", type="category"),yaxis=dict(title="Gol Tras", type="category"))
         res_gr.update_xaxes(side='top')
         st.plotly_chart(go.FigureWidget(data=res_gr), use_container_width=True)

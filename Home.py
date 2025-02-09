@@ -9,6 +9,18 @@ import plotly.graph_objects as go
 st.set_page_config(page_title="Serie A")
 from Funzioni import *
 
+st.markdown(
+    """
+    <style>
+        .main {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("Serie A")
 
 st.subheader("Database storico della Serie A a girone unico")
@@ -31,7 +43,7 @@ with rpl:
     riep_grp = riep_grp.sort_values(by='Stagioni')
     part_gr = go.Figure()
     part_gr.add_trace(go.Bar(y=riep_grp['Squadre'], x=riep_grp['Stagioni'], orientation='h'))
-    st.plotly_chart(go.FigureWidget(data=part_gr))
+    st.plotly_chart(go.FigureWidget(data=part_gr), use_container_width=True)
 
 with part:
     st.subheader('Albo d\'oro')

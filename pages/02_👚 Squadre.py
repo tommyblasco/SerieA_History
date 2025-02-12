@@ -27,13 +27,14 @@ with parcol2:
     stag, pos = [], []
     for s in seas_list:
         cl = ranking(seas=s)
-        if tea_sel in cl['Squadra']:
+        if tea_sel in list(cl['Squadra']):
             pos.append(int(cl.loc[cl['Squadra']==tea_sel,'Rk'].item()))
         else:
             pos.append(np.nan)
         stag.append(s)
     df_pos = pd.DataFrame({'Stagione':seas_list}).merge(pd.DataFrame({'Stagione':stag,'Rank':pos}), on='Stagione', how='left')
     pos_gr = px.line(df_pos, x="Stagione", y="Rank", markers=True)
+    pos_gr.update_yaxes(autorange="reversed")
     pos_gr.update_layout(xaxis_title="Stagione", yaxis_title="Posizione")
     st.plotly_chart(pos_gr)
 

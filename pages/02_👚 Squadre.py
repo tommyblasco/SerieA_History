@@ -12,7 +12,7 @@ with titcol2:
     st.image(Image.open(BytesIO(requests.get(load_images(team=tea_sel,yyyy='2999')).content)))
 
 st.subheader('Partecipazioni e pos finale:')
-parcol1, parcol2 = st.columns([1, 2])
+parcol1, parcol2 = st.columns([1, 3])
 with parcol1:
     n_part = int(riep_grp.loc[riep_grp['Squadre']==tea_sel,'Stagioni'].item())
     last_sea = riep_part.groupby('Squadre', as_index=False).agg({'Stagioni': 'max'})
@@ -34,7 +34,7 @@ with parcol2:
         stag.append(s)
     df_pos = pd.DataFrame({'Stagione':seas_list}).merge(pd.DataFrame({'Stagione':stag,'Rank':pos}), on='Stagione', how='left')
     pos_gr = px.line(df_pos, x="Stagione", y="Rank", markers=True)
-    pos_gr.update_layout(xaxis={'title':'Stagione','type':'category'}, yaxis={'title':'Stagione','autorange':'reversed'})
+    pos_gr.update_layout(xaxis={'title':'Stagione','type':'category','autorange':'reversed'}, yaxis={'title':'Stagione'})
     st.plotly_chart(pos_gr)
 
 st.divider()

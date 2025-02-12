@@ -42,7 +42,7 @@ penalita['Da']=[x.date() for x in penalita['Da']]
 penalita['A']=[x.date() for x in penalita['A']]
 
 seas_list = sorted(set(storico['Stagione']),reverse=True)
-lista_sq=sorted(set(storico[storico['CASA']]+storico[storico['TRAS']]))
+lista_sq=sorted(set(storico['CASA']+storico['TRAS']))
 
 riep_part = pd.DataFrame({'Stagioni': list(storico['Stagione']) + list(storico['Stagione']),
                           'Squadre': list(storico['CASA']) + list(storico['TRAS'])})

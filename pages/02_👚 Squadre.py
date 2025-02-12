@@ -47,18 +47,18 @@ met_casa = [df_casa.shape[0], df_casa[df_casa['GC']>df_casa['GT']].shape[0], df_
 met_tras = [df_tras.shape[0], df_tras[df_tras['GC']<df_tras['GT']].shape[0], df_tras[df_tras['GC']==df_tras['GT']].shape[0],
             df_tras[df_tras['GC']>df_tras['GT']].shape[0], sum(df_tras['GT']), sum(df_tras['GC'])]
 but_tot, but_h, but_a = st.columns(3)
-subc1, subc2, subc3, subc4, subc5 = st.columns(5)
+subc1, subc2, subc3, subc4 = st.columns(4)
 ssc1, ssc2 = st.columns(2)
 if but_tot.button('Totale'):
     subc1.metric(label='Giocate', value=met_casa[0]+met_tras[0],border=True)
-    subc2.metric(label='Bilancio', value=met_casa[1]+met_tras[1] - met_casa[3]-met_tras[3],border=True)
-    subc3.metric(label='Vinte', value=met_casa[1] + met_tras[1],border=True)
-    subc4.metric(label='Pareggiate', value=met_casa[2] + met_tras[2],border=True)
-    subc5.metric(label='Perse', value=met_casa[3] + met_tras[3],border=True)
+    subc2.metric(label='Vinte', value=met_casa[1] + met_tras[1],border=True)
+    subc3.metric(label='Pareggiate', value=met_casa[2] + met_tras[2],border=True)
+    subc4.metric(label='Perse', value=met_casa[3] + met_tras[3],border=True)
     with ssc1:
         tot_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[met_casa[1]+met_tras[1], met_casa[2]+met_tras[2], met_casa[3]+met_tras[3]],
                        labels=["W", "D","L"])
         st.plotly_chart(go.FigureWidget(data=tot_bil_pie), use_container_width=True)
+        st.metric(label='Bilancio', value=met_casa[1] + met_tras[1] - met_casa[3] - met_tras[3], border=True)
     with ssc2:
         tot_g_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                             values=[met_tras[4]+met_casa[4], met_tras[5]+met_casa[5]],
@@ -66,15 +66,15 @@ if but_tot.button('Totale'):
         st.plotly_chart(go.FigureWidget(data=tot_g_pie), use_container_width=True)
 if but_h.button('Casa',icon='🏚️'):
     subc1.metric(label='Giocate',value=met_casa[0],border=True)
-    subc2.metric(label='Bilancio',value=met_casa[1]-met_casa[3],border=True)
-    subc3.metric(label='Vinte', value=met_casa[1],border=True)
-    subc4.metric(label='Pareggiate', value=met_casa[2],border=True)
-    subc5.metric(label='Perse', value=met_casa[3],border=True)
+    subc2.metric(label='Vinte', value=met_casa[1],border=True)
+    subc3.metric(label='Pareggiate', value=met_casa[2],border=True)
+    subc4.metric(label='Perse', value=met_casa[3],border=True)
     with ssc1:
         home_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                              values=[met_casa[1], met_casa[2], met_casa[3]],
                              labels=["W", "D", "L"])
         st.plotly_chart(go.FigureWidget(data=home_bil_pie), use_container_width=True)
+        st.metric(label='Bilancio', value=met_casa[1] - met_casa[3], border=True)
     with ssc2:
         home_g_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                               values=[met_casa[4], met_casa[5]],
@@ -82,15 +82,15 @@ if but_h.button('Casa',icon='🏚️'):
         st.plotly_chart(go.FigureWidget(data=home_g_pie), use_container_width=True)
 if but_a.button('Trasferta',icon='✈️'):
     subc1.metric(label='Giocate',value=met_tras[0],border=True)
-    subc2.metric(label='Bilancio',value=met_tras[1]-met_tras[3],border=True)
-    subc3.metric(label='Vinte', value=met_tras[1],border=True)
-    subc4.metric(label='Pareggiate', value=met_tras[2],border=True)
-    subc5.metric(label='Perse', value=met_tras[3],border=True)
+    subc2.metric(label='Vinte', value=met_tras[1],border=True)
+    subc3.metric(label='Pareggiate', value=met_tras[2],border=True)
+    subc4.metric(label='Perse', value=met_tras[3],border=True)
     with ssc1:
         away_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                              values=[met_tras[1],met_tras[2],met_tras[3]],
                              labels=["W", "D", "L"])
         st.plotly_chart(go.FigureWidget(data=away_bil_pie), use_container_width=True)
+        st.metric(label='Bilancio', value=met_tras[1] - met_tras[3], border=True)
     with ssc2:
         away_g_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                             values=[met_tras[4], met_tras[5]],

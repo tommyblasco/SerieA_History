@@ -108,7 +108,7 @@ with inst:
     df_casa_filt=df_casa[['Stagione','GC','GT']].rename(columns={'GC':'GF','GT':'GS'})
     df_tras_filt=df_tras[['Stagione','GT','GC']].rename(columns={'GT':'GF','GC':'GS'})
     df_casa_filt['C/T']=['C']*df_casa_filt.shape[0]
-    df_tras_filt['C/T'] = ['C'] * df_tras_filt.shape[0]
+    df_tras_filt['C/T'] = ['T'] * df_tras_filt.shape[0]
     df_filt = pd.concat([df_casa_filt,df_tras_filt],ignore_index=True)
     df_filt['Pnt_real']=[3 if (x>y) & (z>='1994-95') else 2 if (x>y) & (z<'1994-95') else 1 if x==y else 0 for x,y,z in zip(df_filt['GF'],df_filt['GS'],df_filt['Stagione'])]
     df_filt['Pnt_hyp']=[3 if (x>y) & (z<'1994-95') else 1 if (x==y) & (z<'1994-95') else 0 if z<'1994-95' else np.nan for x,y,z in zip(df_filt['GF'],df_filt['GS'],df_filt['Stagione'])]

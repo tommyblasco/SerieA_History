@@ -2,7 +2,6 @@ import pandas as pd
 import streamlit
 
 from Funzioni import *
-from Home import riep_grp, riep_part
 
 lista_sq=sorted(list(storico[storico['CASA']]+storico[storico['TRAS']]))
 tea_sel=st.selectbox('Seleziona una squadra',lista_sq)

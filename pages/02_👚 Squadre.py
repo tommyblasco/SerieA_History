@@ -51,8 +51,11 @@ subc1, subc2, subc3 = st.columns(3)
 
 if but_tot.button('Totale'):
     with subc1:
-        st.metric(label='Giocate', value=met_casa[0]+met_tras[0])
-        st.metric(label='Bilancio', value=met_casa[1]+met_tras[1] - met_casa[3]-met_tras[3])
+        st.metric(label='Giocate', value=met_casa[0]+met_tras[0],border=True)
+        st.metric(label='Bilancio', value=met_casa[1]+met_tras[1] - met_casa[3]-met_tras[3],border=True)
+        st.metric(label='Vinte', value=met_casa[1] + met_tras[1],border=True)
+        st.metric(label='Pareggiate', value=met_casa[2] + met_tras[2],border=True)
+        st.metric(label='Perse', value=met_casa[3] + met_tras[3],border=True)
     with subc2:
         tot_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[met_casa[1]+met_tras[1], met_casa[2]+met_tras[2], met_casa[3]+met_tras[3]],
                        labels=["W", "D","L"])
@@ -64,8 +67,11 @@ if but_tot.button('Totale'):
         st.plotly_chart(go.FigureWidget(data=tot_g_pie), use_container_width=True)
 if but_h.button('Casa',icon='🏚️'):
     with subc1:
-        st.metric(label='Giocate',value=met_casa[0])
-        st.metric(label='Bilancio',value=met_casa[1]-met_casa[3])
+        st.metric(label='Giocate',value=met_casa[0],border=True)
+        st.metric(label='Bilancio',value=met_casa[1]-met_casa[3],border=True)
+        st.metric(label='Vinte', value=met_casa[1],border=True)
+        st.metric(label='Pareggiate', value=met_casa[2],border=True)
+        st.metric(label='Perse', value=met_casa[3],border=True)
     with subc2:
         home_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                              values=[met_casa[1], met_casa[2], met_casa[3]],
@@ -78,8 +84,11 @@ if but_h.button('Casa',icon='🏚️'):
         st.plotly_chart(go.FigureWidget(data=home_g_pie), use_container_width=True)
 if but_a.button('Trasferta',icon='✈️'):
     with subc1:
-        st.metric(label='Giocate',value=met_tras[0])
-        st.metric(label='Bilancio',value=met_tras[1]-met_tras[3])
+        st.metric(label='Giocate',value=met_tras[0],border=True)
+        st.metric(label='Bilancio',value=met_tras[1]-met_tras[3],border=True)
+        st.metric(label='Vinte', value=met_tras[1],border=True)
+        st.metric(label='Pareggiate', value=met_tras[2],border=True)
+        st.metric(label='Perse', value=met_tras[3],border=True)
     with subc2:
         away_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                              values=[met_tras[1],met_tras[2],met_tras[3]],

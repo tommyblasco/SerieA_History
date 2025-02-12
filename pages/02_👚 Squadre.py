@@ -47,19 +47,47 @@ met_casa = [df_casa.shape[0], df_casa[df_casa['GC']>df_casa['GT']].shape[0], df_
 met_tras = [df_tras.shape[0], df_tras[df_tras['GC']<df_tras['GT']].shape[0], df_tras[df_tras['GC']==df_tras['GT']].shape[0],
             df_tras[df_tras['GC']>df_tras['GT']].shape[0], sum(df_tras['GT']), sum(df_tras['GC'])]
 but_tot, but_h, but_a = st.columns(3)
+subc1, subc2, subc3 = st.columns(3)
+
 if but_tot.button('Totale'):
-    st.metric(label='Giocate', value=met_casa[0]+met_tras[0])
-    st.metric(label='Bilancio', value=met_casa[1]+met_tras[1] - met_casa[3]-met_tras[3])
+    with subc1:
+        st.metric(label='Giocate', value=met_casa[0]+met_tras[0])
+        st.metric(label='Bilancio', value=met_casa[1]+met_tras[1] - met_casa[3]-met_tras[3])
+    with subc2:
+        tot_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[met_casa[1]+met_tras[1], met_casa[2]+met_tras[2], met_casa[3]+met_tras[3]],
+                       labels=["W", "D","L"])
+        st.plotly_chart(go.FigureWidget(data=tot_bil_pie), use_container_width=True)
+    with subc3:
+        tot_g_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
+                            values=[met_tras[4]+met_casa[4], met_tras[5]+met_casa[5]],
+                            labels=["GF", "GS"])
+        st.plotly_chart(go.FigureWidget(data=tot_g_pie), use_container_width=True)
 if but_h.button('Casa',icon='🏚️'):
-    st.metric(label='Giocate',value=met_casa[0])
-    st.metric(label='Bilancio',value=met_casa[1]-met_casa[3])
+    with subc1:
+        st.metric(label='Giocate',value=met_casa[0])
+        st.metric(label='Bilancio',value=met_casa[1]-met_casa[3])
+    with subc2:
+        home_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
+                             values=[met_casa[1], met_casa[2], met_casa[3]],
+                             labels=["W", "D", "L"])
+        st.plotly_chart(go.FigureWidget(data=home_bil_pie), use_container_width=True)
+    with subc3:
+        home_g_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
+                              values=[met_casa[4], met_casa[5]],
+                              labels=["GF", "GS"])
+        st.plotly_chart(go.FigureWidget(data=home_g_pie), use_container_width=True)
 if but_a.button('Trasferta',icon='✈️'):
-    st.metric(label='Giocate',value=met_tras[0])
-    st.metric(label='Bilancio',value=met_tras[1]-met_tras[3])
+    with subc1:
+        st.metric(label='Giocate',value=met_tras[0])
+        st.metric(label='Bilancio',value=met_tras[1]-met_tras[3])
+    with subc2:
+        away_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
+                             values=[met_tras[1],met_tras[2],met_tras[3]],
+                             labels=["W", "D", "L"])
+        st.plotly_chart(go.FigureWidget(data=away_bil_pie), use_container_width=True)
+    with subc3:
+        away_g_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
+                            values=[met_tras[4], met_tras[5]],
+                            labels=["GF", "GS"])
+        st.plotly_chart(go.FigureWidget(data=away_g_pie), use_container_width=True)
 
-
-
-
-#selezione squadra e stagione
-#risultati stagione
-#andamento punti

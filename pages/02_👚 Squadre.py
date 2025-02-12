@@ -34,7 +34,7 @@ with parcol2:
         stag.append(s)
     df_pos = pd.DataFrame({'Stagione':seas_list}).merge(pd.DataFrame({'Stagione':stag,'Rank':pos}), on='Stagione', how='left')
     pos_gr = px.line(df_pos, x="Stagione", y="Rank", markers=True)
-    pos_gr.update_layout(xaxis={'title':'Stagione','type':'category','autorange':'reversed'}, yaxis={'title':'Stagione'})
+    pos_gr.update_layout(xaxis={'title':'Stagione','type':'category','autorange':'reversed'}, yaxis={'title':'Stagione','autorange':'reversed','range':[0,21]})
     st.plotly_chart(pos_gr)
 
 st.divider()

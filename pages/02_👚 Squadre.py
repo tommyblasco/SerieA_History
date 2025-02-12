@@ -27,7 +27,10 @@ with parcol2:
     stag, pos = [], []
     for s in seas_list:
         cl = ranking(seas=s)
-        pos.append(int(cl.loc[cl['Squadra']==tea_sel,'Rk'].item()))
+        if tea_sel in cl['Squadra']:
+            pos.append(int(cl.loc[cl['Squadra']==tea_sel,'Rk'].item()))
+        else:
+            pos.append(np.nan)
         stag.append(s)
     df_pos = pd.DataFrame({'Stagione':seas_list}).merge(pd.DataFrame({'Stagione':stag,'Rank':pos}), on='Stagione', how='left')
     pos_gr = px.line(df_pos, x="Stagione", y="Rank", markers=True)

@@ -42,10 +42,10 @@ st.divider()
 st.subheader('Bilancio serie A')
 df_casa=storico[storico['CASA']==tea_sel]
 df_tras=storico[storico['TRAS']==tea_sel]
-met_casa = [df_casa.shape[0], sum([df_casa[df_casa['GC']>df_casa['GT']]]), sum([df_casa[df_casa['GC']==df_casa['GT']]]),
-            sum([df_casa[df_casa['GC']<df_casa['GT']]]), sum(df_casa['GC']), sum(df_casa['GT'])]
-met_tras = [df_tras.shape[0], sum([df_tras[df_tras['GC']<df_tras['GT']]]), sum([df_tras[df_tras['GC']==df_tras['GT']]]),
-            sum([df_tras[df_tras['GC']>df_tras['GT']]]), sum(df_tras['GT']), sum(df_tras['GC'])]
+met_casa = [df_casa.shape[0], df_casa[df_casa['GC']>df_casa['GT']].shape[0], df_casa[df_casa['GC']==df_casa['GT']].shape[0],
+            df_casa[df_casa['GC']<df_casa['GT']].shape[0], sum(df_casa['GC']), sum(df_casa['GT'])]
+met_tras = [df_tras.shape[0], df_tras[df_tras['GC']<df_tras['GT']].shape[0], df_tras[df_tras['GC']==df_tras['GT']].shape[0],
+            df_tras[df_tras['GC']>df_tras['GT']].shape[0], sum(df_tras['GT']), sum(df_tras['GC'])]
 but_tot, but_h, but_a = st.columns(3)
 if but_tot.button('Totale'):
     st.metric(label='Giocate', value=met_casa[0]+met_tras[0])

@@ -94,3 +94,10 @@ with ins:
         res_gr.update_layout(xaxis=dict(title="Gol Tras", type="category"),yaxis=dict(title="Gol Casa", type="category"))
         res_gr.update_xaxes(side='top')
         st.plotly_chart(go.FigureWidget(data=res_gr), use_container_width=True)
+
+    with st.expander('Andamento gol per giornata'):
+        df['gol_match'] = [x + y for x, y in zip(df['GC'], df['GT'])]
+        agg_gol_gio=df.groupby(['Giornata'],as_index=False).agg({'gol_match':'mean'})
+        gol_gio_gr = px.line(agg_gol_gio, x="Giornata", y="gol_match", markers=True)
+        gol_gio_gr.update_layout(xaxis_title="Giornata", yaxis_title="Media gol segnati")
+        st.plotly_chart(gol_gio_gr)

@@ -1,3 +1,64 @@
+import pandas as pd
+import streamlit
+
+from Funzioni import *
+from Home import riep_grp, riep_part
+
+lista_sq=sorted(list(storico[storico['CASA']]+storico[storico['TRAS']]))
+tea_sel=st.selectbox('Seleziona una squadra',lista_sq)
+
+titcol1, titcol2 = st.columns([2, 1])
+with titcol1:
+    st.header(tea_sel)
+with titcol2:
+    st.image(Image.open(BytesIO(requests.get(load_images(team=tea_sel,yyyy=2999)).content)))
+
+st.subheader('Partecipazioni e pos finale:')
+parcol1, parcol2 = st.columns([1, 2])
+with parcol1:
+    n_part = int(riep_grp.loc[riep_grp['Squadre']==tea_sel,'Stagioni'].item())
+    last_sea = riep_part.groupby('Squadre', as_index=False).agg({'Stagioni': 'max'})
+    first_sea = riep_part.groupby('Squadre', as_index=False).agg({'Stagioni': 'min'})
+    last_part = int(last_sea.loc[last_sea['Squadre'] == tea_sel, 'Stagioni'].item())
+    first_part = int(first_sea.loc[first_sea['Squadre'] == tea_sel, 'Stagioni'].item())
+    st.metric(label='N. Partecipazioni',value=n_part)
+    st.metric(label='Esordio',value=first_part)
+    st.metric(label='Ultima stagione',value=last_part)
+
+with parcol2:
+    stag, pos = [], []
+    for s in seas_list:
+        cl = ranking(seas=s)
+        pos.append(int(cl.loc[cl['Squadra']==tea_sel,'Rk'].item()))
+        stag.append(s)
+    df_pos = pd.DataFrame({'Stagione':seas_list}).merge(pd.DataFrame({'Stagione':stag,'Rank':pos}), on='Stagione', how='left')
+    pos_gr = px.line(df_pos, x="Stagione", y="Rank", markers=True)
+    pos_gr.update_layout(xaxis_title="Stagione", yaxis_title="Posizione")
+    st.plotly_chart(pos_gr)
+
+st.divider()
+
+st.subheader('Bilancio serie A')
+df_casa=storico[storico['CASA']==tea_sel]
+df_tras=storico[storico['TRAS']==tea_sel]
+met_casa = [df_casa.shape[0], sum([df_casa[df_casa['GC']>df_casa['GT']]]), sum([df_casa[df_casa['GC']==df_casa['GT']]]),
+            sum([df_casa[df_casa['GC']<df_casa['GT']]]), sum(df_casa['GC']), sum(df_casa['GT'])]
+met_tras = [df_tras.shape[0], sum([df_tras[df_tras['GC']<df_tras['GT']]]), sum([df_tras[df_tras['GC']==df_tras['GT']]]),
+            sum([df_tras[df_tras['GC']>df_tras['GT']]]), sum(df_tras['GT']), sum(df_tras['GC'])]
+but_tot, but_h, but_a = st.columns(3)
+if but_tot.button('Totale'):
+    st.metric(label='Giocate', value=met_casa[0]+met_tras[0])
+    st.metric(label='Bilancio', value=met_casa[1]+met_tras[1] - met_casa[3]-met_tras[3])
+if but_h.button('Casa',icon='🏚️'):
+    st.metric(label='Giocate',value=met_casa[0])
+    st.metric(label='Bilancio',value=met_casa[1]-met_casa[3])
+if but_a.button('Trasferta',icon='✈️'):
+    st.metric(label='Giocate',value=met_tras[0])
+    st.metric(label='Bilancio',value=met_tras[1]-met_tras[3])
+
+
+
+
 #selezione squadra e stagione
 #risultati stagione
 #andamento punti

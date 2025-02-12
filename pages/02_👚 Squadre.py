@@ -9,7 +9,7 @@ titcol1, titcol2 = st.columns([2, 1])
 with titcol1:
     st.header(tea_sel)
 with titcol2:
-    st.image(Image.open(BytesIO(requests.get(load_images(team=tea_sel,yyyy=2999)).content)))
+    st.image(Image.open(BytesIO(requests.get(load_images(team=tea_sel,yyyy='2999')).content)))
 
 st.subheader('Partecipazioni e pos finale:')
 parcol1, parcol2 = st.columns([1, 2])

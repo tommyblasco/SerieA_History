@@ -55,11 +55,12 @@ if but_tot.button('Totale'):
     subc3.metric(label='Pareggiate', value=met_casa[2] + met_tras[2],border=True)
     subc4.metric(label='Perse', value=met_casa[3] + met_tras[3],border=True)
     with ssc1:
+        st.metric(label='Bilancio', value=met_casa[1] + met_tras[1] - met_casa[3] - met_tras[3], border=True)
         tot_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[met_casa[1]+met_tras[1], met_casa[2]+met_tras[2], met_casa[3]+met_tras[3]],
                        labels=["W", "D","L"])
         st.plotly_chart(go.FigureWidget(data=tot_bil_pie), use_container_width=True)
-        st.metric(label='Bilancio', value=met_casa[1] + met_tras[1] - met_casa[3] - met_tras[3], border=True)
     with ssc2:
+        st.metric(label='Diff Reti', value=met_casa[4] + met_tras[4] - met_casa[5] - met_tras[5], border=True)
         tot_g_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                             values=[met_tras[4]+met_casa[4], met_tras[5]+met_casa[5]],
                             labels=["GF", "GS"])
@@ -70,12 +71,13 @@ if but_h.button('Casa',icon='🏚️'):
     subc3.metric(label='Pareggiate', value=met_casa[2],border=True)
     subc4.metric(label='Perse', value=met_casa[3],border=True)
     with ssc1:
+        st.metric(label='Bilancio', value=met_casa[1] - met_casa[3], border=True)
         home_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                              values=[met_casa[1], met_casa[2], met_casa[3]],
                              labels=["W", "D", "L"])
         st.plotly_chart(go.FigureWidget(data=home_bil_pie), use_container_width=True)
-        st.metric(label='Bilancio', value=met_casa[1] - met_casa[3], border=True)
     with ssc2:
+        st.metric(label='Diff Reti', value=met_casa[4] - met_casa[5], border=True)
         home_g_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                               values=[met_casa[4], met_casa[5]],
                               labels=["GF", "GS"])
@@ -86,12 +88,13 @@ if but_a.button('Trasferta',icon='✈️'):
     subc3.metric(label='Pareggiate', value=met_tras[2],border=True)
     subc4.metric(label='Perse', value=met_tras[3],border=True)
     with ssc1:
+        st.metric(label='Bilancio', value=met_tras[1] - met_tras[3], border=True)
         away_bil_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                              values=[met_tras[1],met_tras[2],met_tras[3]],
                              labels=["W", "D", "L"])
         st.plotly_chart(go.FigureWidget(data=away_bil_pie), use_container_width=True)
-        st.metric(label='Bilancio', value=met_tras[1] - met_tras[3], border=True)
     with ssc2:
+        st.metric(label='Diff Reti', value=met_tras[4] - met_tras[5], border=True)
         away_g_pie = go.Pie(hole=0.5, sort=False, direction='clockwise',
                             values=[met_tras[4], met_tras[5]],
                             labels=["GF", "GS"])

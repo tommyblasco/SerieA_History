@@ -113,10 +113,10 @@ with inst:
     df_filt['Pnt_real']=[3 if (x>y) & (z>='1994-95') else 2 if (x>y) & (z<'1994-95') else 1 if x==y else 0 for x,y,z in zip(df_filt['GF'],df_filt['GS'],df_filt['Stagione'])]
     df_filt['Pnt_hyp']=[3 if (x>y) & (z<'1994-95') else 1 if (x==y) & (z<'1994-95') else 0 if z<'1994-95' else np.nan for x,y,z in zip(df_filt['GF'],df_filt['GS'],df_filt['Stagione'])]
 
-    tot_h_a = st.pills('Scegli:'["Totale","Casa","Trasferta"])
+    but_tot2, but_h2, but_a2 = st.columns(3)
     col_ins_1, col_ins_2 = st.columns(2)
 
-    if tot_h_a=="Totale":
+    if but_tot2.button("Totale",icon="🏚️+✈️"):
         with col_ins_1:
             st.text('Media punti stagionale reale vs 3 pnt all time')
             avg_pnt=df_filt.groupby('Stagione',as_index=False).agg({'Pnt_real':'mean','Pnt_hyp':'mean'})
@@ -133,7 +133,7 @@ with inst:
             avg_gol_gr.add_trace(go.Scatter(x=avg_gol['Stagione'],y=avg_gol['GS'],line={'color':'blue','mode':'lines+markers'}))
             avg_gol_gr.update_layout(xaxis={'title':'Stagione','type':'category'}, yaxis={'title':'Media Gol'})
             st.plotly_chart(go.FigureWidget(data=avg_gol_gr), use_container_width=True)
-    elif tot_h_a=="Casa":
+    if but_h2.button("Casa",icon='🏚️'):
         with col_ins_1:
             st.text('Media punti stagionale reale vs 3 pnt all time in casa')
             dfh=df_filt[df_filt['C/T']=='C']
@@ -151,7 +151,7 @@ with inst:
             avg_golh_gr.add_trace(go.Scatter(x=avg_golh['Stagione'],y=avg_golh['GS'],line={'color':'blue','mode':'lines+markers'}))
             avg_golh_gr.update_layout(xaxis={'title':'Stagione','type':'category'}, yaxis={'title':'Media Gol'})
             st.plotly_chart(go.FigureWidget(data=avg_golh_gr), use_container_width=True)
-    elif tot_h_a=="Trasferta":
+    if but_a2.button("Trasferta",icon="✈️"):
         with col_ins_1:
             st.text('Media punti stagione per stagione in trasferta')
             dfa=df_filt[df_filt['C/T']=='T']

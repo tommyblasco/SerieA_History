@@ -116,7 +116,7 @@ with inst:
     but_tot2, but_h2, but_a2 = st.columns(3)
     col_ins_1, col_ins_2 = st.columns(2)
 
-    if but_tot2.button("Totale",icon="🏚️+✈️"):
+    if but_tot2.button("Totale"):
         with col_ins_1:
             st.text('Media punti stagionale reale vs 3 pnt all time')
             avg_pnt=df_filt.groupby('Stagione',as_index=False).agg({'Pnt_real':'mean','Pnt_hyp':'mean'})

@@ -3,7 +3,6 @@ import streamlit
 
 from Funzioni import *
 
-lista_sq=sorted(list(storico[storico['CASA']]+storico[storico['TRAS']]))
 tea_sel=st.selectbox('Seleziona una squadra',lista_sq)
 
 titcol1, titcol2 = st.columns([2, 1])

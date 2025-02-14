@@ -169,63 +169,51 @@ with inst:
 with rec:
     but_tot3, but_h3, but_a3 = st.columns(3)
     subc5, subc6 = st.columns(2)
-    db_ser = match_series_tot(team=tea_sel)
+    df1 = match_series_mod(team=tea_sel, choice='Tot')
+    df2 = match_series_mod(team=tea_sel, choice='C')
+    df3 = match_series_mod(team=tea_sel, choice='T')
     if but_tot3.button("Totale", key='tot3'):
-        db_ser_tot=db_ser[0]
-        db_ser_tot['nrow']=list(range(1,db_ser_tot.shape[0]+1))
         with subc5:
-            db_ser_tot_w = db_ser_tot[db_ser_tot['Esito']=='W']
-            db_ser_tot_w = db_ser_tot_w.sort_values(['Single','Data'],ascending=False)
-            db_ser_tot_w.reset_index(drop=True, inplace=True)
-            record_wc = db_ser_tot_w.loc[0,'Single'].item()
-            record_wc_nr = db_ser_tot_w.loc[0,'nrow'].item()
-            df_serie_wc = db_ser_tot.iloc[record_wc_nr-record_wc:record_wc_nr,:]
-
-            st.metric(label='Più lunga striscia di vittorie in totale',value=record_wc)
-            st.dataframe(df_serie_wc[['Stagione','Giorno','CASA','TRAS','Risultato']],hide_index=True)
-
-            db_ser_tot_nl = db_ser_tot.sort_values(['No loss', 'Data'], ascending=False)
-            db_ser_tot_nl.reset_index(drop=True, inplace=True)
-            record_nl = db_ser_tot_nl.loc[0,'No loss'].item()
-            record_nl_nr = db_ser_tot_nl.loc[0,'nrow'].item()
-            df_serie_nl = db_ser_tot.iloc[record_nl_nr-record_nl:record_nl_nr,:]
-
-            st.metric(label='Più lunga striscia di imbattibilità in totale',value=record_nl)
-            st.dataframe(df_serie_nl[['Stagione','Giorno','CASA','TRAS','Risultato']],hide_index=True)
-
-            db_ser_tot_gfc = db_ser_tot.sort_values(['Gf consec', 'Data'], ascending=False)
-            db_ser_tot_gfc.reset_index(drop=True, inplace=True)
-            record_gfc = db_ser_tot_gfc.loc[0, 'Gf consec'].item()
-            record_gfc_nr = db_ser_tot_gfc.loc[0, 'nrow'].item()
-            df_serie_gfc = db_ser_tot.iloc[record_gfc_nr - record_gfc:record_gfc_nr, :]
-
-            st.metric(label='Più lunga striscia di prolificità in totale', value=record_gfc)
-            st.dataframe(df_serie_gfc[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
+            st.metric(label='Più lunga striscia di vittorie in totale',value=df1[1])
+            st.dataframe(df1[0],hide_index=True)
+            st.metric(label='Più lunga striscia di imbattibilità in totale',value=df1[3])
+            st.dataframe(df1[2],hide_index=True)
+            st.metric(label='Più lunga striscia di prolificità in totale', value=df1[5])
+            st.dataframe(df1[4], hide_index=True)
         with subc6:
-            db_ser_tot_l = db_ser_tot[db_ser_tot['Esito'] == 'L']
-            db_ser_tot_l = db_ser_tot_l.sort_values(['Single', 'Data'], ascending=False)
-            db_ser_tot_l.reset_index(drop=True, inplace=True)
-            record_lc = db_ser_tot_l.loc[0, 'Single'].item()
-            record_lc_nr = db_ser_tot_l.loc[0, 'nrow'].item()
-            df_serie_lc = db_ser_tot.iloc[record_lc_nr - record_lc:record_lc_nr, :]
-
-            st.metric(label='Più lunga striscia di sconfitte in totale', value=record_lc)
-            st.dataframe(df_serie_lc[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
-
-            db_ser_tot_nw = db_ser_tot.sort_values(['No win', 'Data'], ascending=False)
-            db_ser_tot_nw.reset_index(drop=True, inplace=True)
-            record_nw = db_ser_tot_nw.loc[0,'No win'].item()
-            record_nw_nr = db_ser_tot_nw.loc[0,'nrow'].item()
-            df_serie_nw = db_ser_tot.iloc[record_nw_nr-record_nw:record_nw_nr,:]
-
-            st.metric(label='Più lunga striscia di non vittorie in totale',value=record_nw)
-            st.dataframe(df_serie_nw[['Stagione','Giorno','CASA','TRAS','Risultato']],hide_index=True)
-
-            db_ser_tot_gsc = db_ser_tot.sort_values(['Clean sheet', 'Data'], ascending=False)
-            db_ser_tot_gsc.reset_index(drop=True, inplace=True)
-            record_gsc = db_ser_tot_gsc.loc[0, 'Clean sheet'].item()
-            record_gsc_nr = db_ser_tot_gsc.loc[0, 'nrow'].item()
-            df_serie_gsc = db_ser_tot.iloc[record_gsc_nr - record_gsc:record_gsc_nr, :]
-
-            st.metric(label='Più lunga striscia di clean sheets in totale', value=record_gsc)
-            st.dataframe(df_serie_gsc[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
+            st.metric(label='Più lunga striscia di sconfitte in totale', value=df1[7])
+            st.dataframe(df1[6], hide_index=True)
+            st.metric(label='Più lunga striscia di non vittorie in totale',value=df1[9])
+            st.dataframe(df1[8],hide_index=True)
+            st.metric(label='Più lunga striscia di clean sheets in totale', value=df1[11])
+            st.dataframe(df1[10], hide_index=True)
+    if but_h3.button("Casa" ,icon='🏚️', key='h3'):
+        with subc5:
+            st.metric(label='Più lunga striscia di vittorie in totale',value=df2[1])
+            st.dataframe(df2[0],hide_index=True)
+            st.metric(label='Più lunga striscia di imbattibilità in totale',value=df2[3])
+            st.dataframe(df2[2],hide_index=True)
+            st.metric(label='Più lunga striscia di prolificità in totale', value=df2[5])
+            st.dataframe(df2[4], hide_index=True)
+        with subc6:
+            st.metric(label='Più lunga striscia di sconfitte in totale', value=df2[7])
+            st.dataframe(df2[6], hide_index=True)
+            st.metric(label='Più lunga striscia di non vittorie in totale',value=df2[9])
+            st.dataframe(df2[8],hide_index=True)
+            st.metric(label='Più lunga striscia di clean sheets in totale', value=df2[11])
+            st.dataframe(df2[10], hide_index=True)
+    if but_a3.button("Trasferta",icon="✈️", key='a3'):
+        with subc5:
+            st.metric(label='Più lunga striscia di vittorie in totale',value=df3[1])
+            st.dataframe(df3[0],hide_index=True)
+            st.metric(label='Più lunga striscia di imbattibilità in totale',value=df3[3])
+            st.dataframe(df3[2],hide_index=True)
+            st.metric(label='Più lunga striscia di prolificità in totale', value=df3[5])
+            st.dataframe(df3[4], hide_index=True)
+        with subc6:
+            st.metric(label='Più lunga striscia di sconfitte in totale', value=df3[7])
+            st.dataframe(df3[6], hide_index=True)
+            st.metric(label='Più lunga striscia di non vittorie in totale',value=df3[9])
+            st.dataframe(df3[8],hide_index=True)
+            st.metric(label='Più lunga striscia di clean sheets in totale', value=df3[11])
+            st.dataframe(df3[10], hide_index=True)

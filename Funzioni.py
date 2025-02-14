@@ -176,3 +176,56 @@ def match_series_tot(team):
     db['Gf consec']=list_gf
     db['Clean sheet']=list_gs
     return [db, home_ser, away_ser]
+
+def match_series_mod(team,choice):
+    col_fin=['Stagione','Giorno','CASA','TRAS','Risultato']
+    if choice=='Tot':
+        db_ser_tot = match_series_tot(team=team)[0]
+    elif choice=='C':
+        db_ser_tot = match_series_tot(team=team)[1]
+    else:
+        db_ser_tot = match_series_tot(team=team)[2]
+    db_ser_tot['nrow'] = list(range(1, db_ser_tot.shape[0] + 1))
+    db_ser_tot_w = db_ser_tot[db_ser_tot['Esito'] == 'W']
+    db_ser_tot_w = db_ser_tot_w.sort_values(['Single', 'Data'], ascending=False)
+    db_ser_tot_w.reset_index(drop=True, inplace=True)
+    record_wc = db_ser_tot_w.loc[0, 'Single'].item()
+    record_wc_nr = db_ser_tot_w.loc[0, 'nrow'].item()
+    df_serie_wc = db_ser_tot.iloc[record_wc_nr - record_wc:record_wc_nr, :]
+
+    db_ser_tot_nl = db_ser_tot.sort_values(['No loss', 'Data'], ascending=False)
+    db_ser_tot_nl.reset_index(drop=True, inplace=True)
+    record_nl = db_ser_tot_nl.loc[0, 'No loss'].item()
+    record_nl_nr = db_ser_tot_nl.loc[0, 'nrow'].item()
+    df_serie_nl = db_ser_tot.iloc[record_nl_nr - record_nl:record_nl_nr, :]
+
+    db_ser_tot_gfc = db_ser_tot.sort_values(['Gf consec', 'Data'], ascending=False)
+    db_ser_tot_gfc.reset_index(drop=True, inplace=True)
+    record_gfc = db_ser_tot_gfc.loc[0, 'Gf consec'].item()
+    record_gfc_nr = db_ser_tot_gfc.loc[0, 'nrow'].item()
+    df_serie_gfc = db_ser_tot.iloc[record_gfc_nr - record_gfc:record_gfc_nr, :]
+
+    db_ser_tot_l = db_ser_tot[db_ser_tot['Esito'] == 'L']
+    db_ser_tot_l = db_ser_tot_l.sort_values(['Single', 'Data'], ascending=False)
+    db_ser_tot_l.reset_index(drop=True, inplace=True)
+    record_lc = db_ser_tot_l.loc[0, 'Single'].item()
+    record_lc_nr = db_ser_tot_l.loc[0, 'nrow'].item()
+    df_serie_lc = db_ser_tot.iloc[record_lc_nr - record_lc:record_lc_nr, :]
+
+    db_ser_tot_nw = db_ser_tot.sort_values(['No win', 'Data'], ascending=False)
+    db_ser_tot_nw.reset_index(drop=True, inplace=True)
+    record_nw = db_ser_tot_nw.loc[0, 'No win'].item()
+    record_nw_nr = db_ser_tot_nw.loc[0, 'nrow'].item()
+    df_serie_nw = db_ser_tot.iloc[record_nw_nr - record_nw:record_nw_nr, :]
+
+    db_ser_tot_gsc = db_ser_tot.sort_values(['Clean sheet', 'Data'], ascending=False)
+    db_ser_tot_gsc.reset_index(drop=True, inplace=True)
+    record_gsc = db_ser_tot_gsc.loc[0, 'Clean sheet'].item()
+    record_gsc_nr = db_ser_tot_gsc.loc[0, 'nrow'].item()
+    df_serie_gsc = db_ser_tot.iloc[record_gsc_nr - record_gsc:record_gsc_nr, :]
+    return [df_serie_wc[col_fin], record_wc,
+            df_serie_nl[col_fin], record_nl,
+            df_serie_gfc[col_fin], record_gfc,
+            df_serie_lc[col_fin], record_lc,
+            df_serie_nw[col_fin], record_nw,
+            df_serie_gsc[col_fin], record_gsc]

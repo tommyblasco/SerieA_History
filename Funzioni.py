@@ -117,3 +117,61 @@ def class_ct(seas):
     casa = casa.sort_values(by=['Punti','DR'], ascending=False)
     trasferta = trasferta.sort_values(by=['Punti', 'DR'], ascending=False)
     return [casa, trasferta]
+
+def match_series(team,c_t):
+    db=storico[(storico[c_t] == team)].sort_values('Data')
+    db['Risultato']=[str(x)+'-'+str(y) for x,y in zip(db['GC'],db['GT'])]
+    if c_t=='CASA':
+        db=db.reanme(columns={'GC':'Gol Fatti','GT':'Gol subiti'})
+    else:
+        db = db.reanme(columns={'GT': 'Gol Fatti', 'GC': 'Gol subiti'})
+    db['Esito']=['W' if x>y else 'N' if x==y else 'L' for x,y in zip(db['Gol Fatti'],db['Gol subiti'])]
+    sin_count = noloss_count = nowin_count = gf_count = gs_count = 0
+    prev_esit = None
+    list_single, list_noloss, list_nowin, list_gf, list_gs = [],[],[],[],[]
+    for e,gf,gs in zip(db['Esito'],db['Gol Fatti'],db['Gol subiti']):
+        sin_count = sin_count + 1 if e == prev_esit else 1
+        noloss_count = noloss_count + 1 if e != 'L' else 0
+        nowin_count = nowin_count + 1 if e != 'W' else 0
+        gf_count = gf_count + 1 if gf != 0 else 0
+        gs_count = gs_count + 1 if gs != 0 else 0
+        list_single.append(sin_count)
+        list_noloss.append(noloss_count)
+        list_nowin.append(nowin_count)
+        list_gf.append(gf_count)
+        list_gs.append(gs_count)
+        prev_esit = e
+    db['Single']=list_single
+    db['No loss']=list_noloss
+    db['No win']=list_nowin
+    db['Gf consec']=list_gf
+    db['Gs consec']=list_gs
+    return db
+
+def match_series_tot(team):
+    home_ser=match_series(team,c_t='CASA')
+    away_ser=match_series(team,c_t='TRAS')
+    home_ser1=home_ser.drop(['Single','No loss','No win','Gf consec','Gs consec'],axis=1)
+    away_ser1 = away_ser.drop(['Single', 'No loss', 'No win', 'Gf consec', 'Gs consec'], axis=1)
+    db=pd.concat([home_ser1,away_ser1],ignore_index=True).sort_values('Data')
+    sin_count = noloss_count = nowin_count = gf_count = gs_count = 0
+    prev_esit = None
+    list_single, list_noloss, list_nowin, list_gf, list_gs = [],[],[],[],[]
+    for e,gf,gs in zip(db['Esito'],db['Gol Fatti'],db['Gol subiti']):
+        sin_count = sin_count + 1 if e == prev_esit else 1
+        noloss_count = noloss_count + 1 if e != 'L' else 0
+        nowin_count = nowin_count + 1 if e != 'W' else 0
+        gf_count = gf_count + 1 if gf != 0 else 0
+        gs_count = gs_count + 1 if gs != 0 else 0
+        list_single.append(sin_count)
+        list_noloss.append(noloss_count)
+        list_nowin.append(nowin_count)
+        list_gf.append(gf_count)
+        list_gs.append(gs_count)
+        prev_esit = e
+    db['Single']=list_single
+    db['No loss']=list_noloss
+    db['No win']=list_nowin
+    db['Gf consec']=list_gf
+    db['Gs consec']=list_gs
+    return [db, home_ser, away_ser]

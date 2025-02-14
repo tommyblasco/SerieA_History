@@ -165,3 +165,29 @@ with inst:
         avg_gola_gr.add_trace(go.Scatter(x=avg_gola['Stagione'],y=avg_gola['GS'],line={'color':'blue'},mode='lines+markers',name='GS'))
         avg_gola_gr.update_layout(xaxis={'title':'Stagione','type':'category'}, yaxis={'title':'Media Gol'})
         st.plotly_chart(go.FigureWidget(data=avg_gola_gr), use_container_width=True)
+
+with rec:
+    but_tot3, but_h3, but_a3 = st.columns(3)
+    subc5, subc6 = st.columns(2)
+    db_ser = match_series_tot(team=tea_sel)
+    if but_tot3.button("Totale", key='tot3'):
+        db_ser_tot=db_ser[0]
+        db_ser_tot['nrow']=list(range(1,db_ser_tot.shape[0]+1))
+        with subc5:
+            db_ser_tot_w = db_ser_tot[db_ser_tot['Esito']=='W']
+            db_ser_tot_w = db_ser_tot_w.sort_values(['Single','Data'],ascending=False)
+            record_wc = db_ser_tot_w.loc[0,'Single'].item()
+            record_wc_nr = db_ser_tot_w.loc[0,'nrow'].item()
+            df_serie_wc = db_ser_tot.iloc[record_wc_nr-record_wc:record_wc_nr,[0,2,3,4,7]]
+
+            st.metric(label='Più lunga striscia di vittorie in totale',value=record_wc)
+            st.dataframe(df_serie_wc,hide_index=True)
+        with subc6:
+            db_ser_tot_l = db_ser_tot[db_ser_tot['Esito'] == 'L']
+            db_ser_tot_l = db_ser_tot_l.sort_values(['Single', 'Data'], ascending=False)
+            record_lc = db_ser_tot_l.loc[0, 'Single'].item()
+            record_lc_nr = db_ser_tot_l.loc[0, 'nrow'].item()
+            df_serie_lc = db_ser_tot.iloc[record_lc_nr - record_lc:record_lc_nr, [0, 2, 3, 4, 7]]
+
+            st.metric(label='Più lunga striscia di vittorie in totale', value=record_wc)
+            st.dataframe(df_serie_lc, hide_index=True)

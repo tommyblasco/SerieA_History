@@ -229,3 +229,18 @@ def match_series_mod(team,choice):
             df_serie_lc[col_fin], record_lc,
             df_serie_nw[col_fin], record_nw,
             df_serie_gsc[col_fin], record_gsc]
+
+def prec(t1,t2):
+    t1h=storico[(storico['CASA']==t1) & (storico['TRAS']==t2)]
+    t2h = storico[(storico['CASA'] == t2) & (storico['TRAS'] == t1)]
+    t1h['WH']=[1 if x>y else 0 for x,y in zip(t1h['GC'],t1h['GT'])]
+    t1h['N'] = [1 if x == y else 0 for x, y in zip(t1h['GC'], t1h['GT'])]
+    t1h['WA'] = [1 if x < y else 0 for x, y in zip(t1h['GC'], t1h['GT'])]
+    t2h['WH'] = [1 if x > y else 0 for x, y in zip(t2h['GC'], t2h['GT'])]
+    t2h['N'] = [1 if x == y else 0 for x, y in zip(t2h['GC'], t2h['GT'])]
+    t2h['WA'] = [1 if x < y else 0 for x, y in zip(t2h['GC'], t2h['GT'])]
+    t1h_gr = t1h.groupby('CASA',as_index=False).agg({'TRAS':'count','WH':'sum','N':'sum','WA':'sum','GC':'sum','GT':'sum'})
+    t1h_gr['Bil']=[x-y for x,y in zip(t1h_gr['WH'],t1h_gr['WA'])]
+    t2h_gr = t2h.groupby('CASA',as_index=False).agg({'TRAS':'count','WH':'sum','N':'sum','WA':'sum','GC':'sum','GT':'sum'})
+    t2h_gr['Bil'] = [x - y for x, y in zip(t2h_gr['WH'], t2h_gr['WA'])]
+    return [t1h_gr, t2h_gr]

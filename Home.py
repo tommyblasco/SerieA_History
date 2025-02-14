@@ -1,6 +1,6 @@
 from Funzioni import *
 
-st.set_page_config(page_title="Serie A")
+st.set_page_config(page_title="Serie A",layout='wide')
 
 st.title("Serie A")
 

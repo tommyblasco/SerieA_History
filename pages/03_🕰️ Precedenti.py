@@ -79,8 +79,9 @@ with h2h:
         st.subheader('Andamento precedenti nel tempo')
         pre_cum = prec(t1=t1, t2=t2)[2]
         cump_gr = px.line(pre_cum, x="Stagione", y="CumPr", markers=True)
-        cump_gr.add_annotation( x=-0.2, y=max(pre_cum["CumPr"]),
+        cump_gr.update_layout(xaxis=dict(title="Stagione", type="category"))
+        cump_gr.add_annotation( x=-0.2, y=max(pre_cum["CumPr"]),showarrow=False,
             text=f"{t1}", yref="y")
-        cump_gr.add_annotation(x=-0.2, y=min(pre_cum["CumPr"]),
+        cump_gr.add_annotation(x=-0.2, y=min(pre_cum["CumPr"]), showarrow=False,
                                text=f"{t2}", yref="y")
         st.plotly_chart(cump_gr)

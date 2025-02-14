@@ -240,12 +240,12 @@ def prec(t1,t2):
     t2h['WH'] = [1 if x > y else 0 for x, y in zip(t2h['GC'], t2h['GT'])]
     t2h['N'] = [1 if x == y else 0 for x, y in zip(t2h['GC'], t2h['GT'])]
     t2h['WA'] = [1 if x < y else 0 for x, y in zip(t2h['GC'], t2h['GT'])]
-    t2h['Prec cum'] = [1 if x == 1 else -1 if y == 1 else 0 for x, y in zip(t1h['WA'], t1h['WH'])]
+    t2h['Prec cum'] = [1 if x == 1 else -1 if y == 1 else 0 for x, y in zip(t2h['WA'], t2h['WH'])]
     t1h_gr = t1h.groupby('CASA',as_index=False).agg({'TRAS':'count','WH':'sum','N':'sum','WA':'sum','GC':'sum','GT':'sum'})
     t1h_gr['Bil']=[x-y for x,y in zip(t1h_gr['WH'],t1h_gr['WA'])]
     t2h_gr = t2h.groupby('CASA',as_index=False).agg({'TRAS':'count','WH':'sum','N':'sum','WA':'sum','GC':'sum','GT':'sum'})
     t2h_gr['Bil'] = [x - y for x, y in zip(t2h_gr['WH'], t2h_gr['WA'])]
     cum_prec = pd.concat([t1h[['Stagione','Prec cum']],t2h[['Stagione','Prec cum']]])
-    cum_precg = cum_prec.groupby(by=['Stagione']).agg({'Prec cum':'sum'})
-    cum_precg['CumPr'] = cum_precg.groupby(['Stagione'], as_index=False)['Prec cum'].transform(pd.Series.cumsum)
+    cum_prec = cum_prec.groupby('Stagione').agg({'Prec cum':'sum'})
+    cum_prec['CumPr'] = cum_prec['Prec cum'].cumsum()
     return [t1h_gr, t2h_gr, cum_prec]

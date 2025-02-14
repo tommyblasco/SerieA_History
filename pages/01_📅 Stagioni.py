@@ -114,9 +114,9 @@ with sm:
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
     with scol:
         if search_match.shape[0]>0:
-            st.write(f"Data: {search_match['Giorno']}")
-            st.write(f"Giornata: {search_match['Giornata']}")
-            st.subheader(f"Risultato: {search_match['GC']}-{search_match['GT']}")
+            st.write(f"Data: {search_match['Giorno'].item()}")
+            st.write(f"Giornata: {search_match['Giornata'].item()}")
+            st.subheader(f"Risultato: {search_match['GC'].item()}-{search_match['GT'].item()}")
         else:
             st.error('Partita non ancora giocata')
 
@@ -137,11 +137,11 @@ with sm:
                 with acol1:
                     st.image(Image.open(BytesIO(requests.get(load_images(team=and_bm['CASA'], yyyy=sea_sel)).content)))
                     st.write(f"{and_bm['CASA']}")
-                    st.write(f"{and_bm['GC']}")
+                    st.subheader(f"{and_bm['GC']}")
                 with acol2:
                     st.image(Image.open(BytesIO(requests.get(load_images(team=and_bm['TRAS'], yyyy=sea_sel)).content)))
                     st.write(f"{and_bm['TRAS']}")
-                    st.write(f"{and_bm['GT']}")
+                    st.subheader(f"{and_bm['GT']}")
             else:
                 st.error('Andata non ancora giocata')
         with bmcol2:
@@ -153,10 +153,10 @@ with sm:
                 with rcol1:
                     st.image(Image.open(BytesIO(requests.get(load_images(team=rit_bm['CASA'], yyyy=sea_sel)).content)))
                     st.write(f"{rit_bm['CASA']}")
-                    st.write(f"{rit_bm['GC']}")
+                    st.subheader(f"{rit_bm['GC']}")
                 with rcol2:
                     st.image(Image.open(BytesIO(requests.get(load_images(team=rit_bm['TRAS'], yyyy=sea_sel)).content)))
                     st.write(f"{rit_bm['TRAS']}")
-                    st.write(f"{rit_bm['GT']}")
+                    st.subheader(f"{rit_bm['GT']}")
             else:
                 st.error('Ritorno non ancora giocato')

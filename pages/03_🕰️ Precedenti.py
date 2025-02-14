@@ -64,15 +64,15 @@ with h2h:
             st.metric(label='Partite giocate', value=df2['TRAS'].item())
             gauge3 = go.Figure(go.Indicator(
                 domain={'x': [0, 1], 'y': [0, 1]},
-                value=int(df2['Bil'].item()),
+                value=-df2['Bil'].item(),
                 mode="gauge+number",
                 title={'text': "Bilancio"},
                 gauge={'axis': {'range': [-df2['TRAS'].item(), df2['TRAS'].item()]},
                        'steps': [
-                           {'range': [-df2['TRAS'].item(),0], 'color': "blue"},
-                           {'range': [0,df2['TRAS'].item()], 'color': "orange"}]
+                           {'range': [0,-df2['TRAS'].item()], 'color': "blue"},
+                           {'range': [df2['TRAS'].item(),0], 'color': "orange"}]
                        }))
             st.plotly_chart(gauge3, use_container_width=True)
-            wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],
-                                 labels=[f"W {t2}", "Pari", f"W {t1}"])
+            wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WA'].item(), df2['N'].item() ,df2['WH'].item()],
+                                 labels=[f"W {t1}", "Pari", f"W {t2}"])
             st.plotly_chart(go.FigureWidget(data=wh_d_wa2), use_container_width=True)

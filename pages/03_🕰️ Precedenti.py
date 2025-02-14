@@ -44,7 +44,7 @@ with h2h:
             with subcol2:
                 goal1 = go.Pie(hole=0.5, sort=False, direction='clockwise',
                                   values=[df1['GC'].item(), df1['GT'].item() ],
-                                  labels=[f"Gol {t1}", "Pari", f"Gol {t2}"])
+                                  labels=[f"Gol {t1}", f"Gol {t2}"])
                 st.plotly_chart(go.FigureWidget(data=goal1), use_container_width=True)
         with colgc3:
             st.text(f'{t2} home')
@@ -67,5 +67,5 @@ with h2h:
             with subcol4:
                 goal2 = go.Pie(hole=0.5, sort=False, direction='clockwise',
                                   values=[df2['GC'].item(), df2['GT'].item() ],
-                                  labels=[f"Gol {t2}", "Pari", f"Gol {t1}"])
+                                  labels=[f"Gol {t2}", f"Gol {t1}"])
                 st.plotly_chart(go.FigureWidget(data=goal2), use_container_width=True)

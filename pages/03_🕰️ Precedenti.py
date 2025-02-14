@@ -37,16 +37,10 @@ with h2h:
                            {'range': [df1['TRAS'].item(),0], 'color': "blue"}]
                        }))
             st.plotly_chart(gauge1, use_container_width=True)
-            subcol1, subcol2 = st.columns(2)
-            with subcol1:
-                wh_d_wa1 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
+
+            wh_d_wa1 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
                                  labels=[f"W {t1}", "Pari", f"W {t2}"])
-                st.plotly_chart(go.FigureWidget(data=wh_d_wa1), use_container_width=True)
-            with subcol2:
-                goal1 = go.Pie(hole=0.5, sort=False, direction='clockwise',
-                                  values=[df1['GC'].item(), df1['GT'].item() ],
-                                  labels=[f"Gol {t1}", f"Gol {t2}"])
-                st.plotly_chart(go.FigureWidget(data=goal1), use_container_width=True)
+            st.plotly_chart(go.FigureWidget(data=wh_d_wa1), use_container_width=True)
         with colgc2:
             st.text("COMPLESSIVO")
             st.metric(label='Partite giocate in serie A', value=df1['TRAS'].item()+df2['TRAS'].item())
@@ -61,16 +55,10 @@ with h2h:
                            {'range': [df1['TRAS'].item()+df2['TRAS'].item(),0], 'color': "blue"}]
                        }))
             st.plotly_chart(gauge2, use_container_width=True)
-            subcol5, subcol6 = st.columns(2)
-            with subcol5:
-                wh_d_wa3 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item()+df2['WA'].item(), df1['N'].item()+df2['N'].item() ,df1['WA'].item()+df2['WH'].item()],
+
+            wh_d_wa3 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item()+df2['WA'].item(), df1['N'].item()+df2['N'].item() ,df1['WA'].item()+df2['WH'].item()],
                                  labels=[f"W {t1}", "Pari", f"W {t2}"])
-                st.plotly_chart(go.FigureWidget(data=wh_d_wa3), use_container_width=True)
-            with subcol6:
-                goal3 = go.Pie(hole=0.5, sort=False, direction='clockwise',
-                                  values=[df1['GC'].item()+df2['GT'].item(), df1['GT'].item()+df2['GC'].item() ],
-                                  labels=[f"Gol {t1}", f"Gol {t2}"])
-                st.plotly_chart(go.FigureWidget(data=goal3), use_container_width=True)
+            st.plotly_chart(go.FigureWidget(data=wh_d_wa3), use_container_width=True)
         with colgc3:
             st.text(f'{t2} home')
             st.metric(label='Partite giocate', value=df2['TRAS'].item())
@@ -85,13 +73,6 @@ with h2h:
                            {'range': [0,df2['TRAS'].item()], 'color': "orange"}]
                        }))
             st.plotly_chart(gauge3, use_container_width=True)
-            subcol3, subcol4 = st.columns(2)
-            with subcol3:
-                wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],
+            wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],
                                  labels=[f"W {t2}", "Pari", f"W {t1}"])
-                st.plotly_chart(go.FigureWidget(data=wh_d_wa2), use_container_width=True)
-            with subcol4:
-                goal2 = go.Pie(hole=0.5, sort=False, direction='clockwise',
-                                  values=[df2['GC'].item(), df2['GT'].item() ],
-                                  labels=[f"Gol {t2}", f"Gol {t1}"])
-                st.plotly_chart(go.FigureWidget(data=goal2), use_container_width=True)
+            st.plotly_chart(go.FigureWidget(data=wh_d_wa2), use_container_width=True)

@@ -12,7 +12,7 @@ start_sea=min(df['Data'])
 end_sea=max(df['Data'])
 n_gio=max(df['Giornata'])
 
-rc, ins = st.tabs(['Risultati e classifica','Insights'])
+rc, ins, sm = st.tabs(['Risultati e classifica','Insights','Special matches'])
 with rc:
     class_c, ris_c = st.columns([2, 1])
     with class_c:
@@ -43,7 +43,6 @@ with rc:
         with cla:
             st.write('Classifica in trasferta:')
             st.dataframe(class_ct(seas=sea_sel)[1],hide_index=True)
-#2 tab (1 ris e classifica, 2 insights su partite e gol, distribuzione gol ecc)
 
 with ins:
     m1, m2, m3 = st.columns(3)
@@ -102,3 +101,62 @@ with ins:
         gol_gio_gr = px.line(agg_gol_gio, x="Giornata", y="gol_match", markers=True)
         gol_gio_gr.update_layout(xaxis_title="Giornata", yaxis_title="Media gol segnati")
         st.plotly_chart(gol_gio_gr)
+
+with sm:
+    st.subheader('Ricerca partita:')
+    hcol, acol, scol = st.columns(3)
+    with hcol:
+        ht=st.selectbox('Seleziona la squadra in casa',sorted(list(classifica['Squadra'])))
+        st.image(Image.open(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content)))
+    with acol:
+        at=st.selectbox('Seleziona la squadra in trasferta',sorted(list(classifica['Squadra'])))
+        st.image(Image.open(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content)))
+    search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
+    with scol:
+        if search_match.shape[0]>0:
+            st.write(f"Data: {search_match['Giorno']}")
+            st.write(f"Giornata: {search_match['Giornata']}")
+            st.subheader(f"Risultato: {search_match['GC']}-{search_match['GT']}")
+        else:
+            st.error('Partita non ancora giocata')
+
+    with st.expander('Big Match'):
+        bmcol, bmcol2 = st.columns(2)
+        primo = classifica.iloc[0, 2]
+        secondo = classifica.iloc[1, 2]
+        search_bm = df[
+            ((df['CASA'] == primo) & (df['TRAS'] == secondo)) | ((df['CASA'] == secondo) & (df['TRAS'] == primo))]
+        search_bm = search_bm.sort_values('Giornata')
+        search_bm.reset_index(drop=True, inplace=True)
+        with bmcol:
+            if search_bm.shape[0]==1:
+                and_bm = search_bm.iloc[0,:]
+                st.write('Andata')
+                st.write(f"Data: {and_bm['Giorno']}")
+                acol1, acol2 = st.columns(2)
+                with acol1:
+                    st.image(Image.open(BytesIO(requests.get(load_images(team=and_bm['CASA'], yyyy=sea_sel)).content)))
+                    st.write(f"{and_bm['CASA']}")
+                    st.write(f"{and_bm['GC']}")
+                with acol2:
+                    st.image(Image.open(BytesIO(requests.get(load_images(team=and_bm['TRAS'], yyyy=sea_sel)).content)))
+                    st.write(f"{and_bm['TRAS']}")
+                    st.write(f"{and_bm['GT']}")
+            else:
+                st.error('Andata non ancora giocata')
+        with bmcol2:
+            if search_bm.shape[0] == 2:
+                rit_bm = search_bm.iloc[1,:]
+                st.write('Ritorno')
+                st.write(f"Data: {rit_bm['Giorno']}")
+                rcol1, rcol2 = st.columns(2)
+                with rcol1:
+                    st.image(Image.open(BytesIO(requests.get(load_images(team=rit_bm['CASA'], yyyy=sea_sel)).content)))
+                    st.write(f"{rit_bm['CASA']}")
+                    st.write(f"{rit_bm['GC']}")
+                with rcol2:
+                    st.image(Image.open(BytesIO(requests.get(load_images(team=rit_bm['TRAS'], yyyy=sea_sel)).content)))
+                    st.write(f"{rit_bm['TRAS']}")
+                    st.write(f"{rit_bm['GT']}")
+            else:
+                st.error('Ritorno non ancora giocato')

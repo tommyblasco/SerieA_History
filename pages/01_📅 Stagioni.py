@@ -109,7 +109,7 @@ with sm:
         ht=st.selectbox('Seleziona la squadra in casa',sorted(list(classifica['Squadra'])))
         st.image(Image.open(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content)))
     with acol:
-        at=st.selectbox('Seleziona la squadra in trasferta',sorted(list(classifica['Squadra'])))
+        at=st.selectbox('Seleziona la squadra in trasferta',sorted(list(classifica['Squadra'])).pop(ht))
         st.image(Image.open(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content)))
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
     with scol:

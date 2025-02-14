@@ -46,6 +46,29 @@ with h2h:
                                   values=[df1['GC'].item(), df1['GT'].item() ],
                                   labels=[f"Gol {t1}", f"Gol {t2}"])
                 st.plotly_chart(go.FigureWidget(data=goal1), use_container_width=True)
+        with colgc2:
+            st.text("COMPLESSIVO")
+            gauge2 = go.Figure(go.Indicator(
+                domain={'x': [0, 1], 'y': [0, 1]},
+                value=int(df1['Bil'].item())-int(df2['Bil'].item()),
+                mode="gauge+number",
+                title={'text': "Bilancio"},
+                gauge={'axis': {'range': [df1['TRAS'].item()+df2['TRAS'].item(), -df1['TRAS'].item()-df2['TRAS'].item()]},
+                       'steps': [
+                           {'range': [0,-df1['TRAS'].item()-df2['TRAS'].item()], 'color': "orange"},
+                           {'range': [df1['TRAS'].item()+df2['TRAS'].item(),0], 'color': "blue"}]
+                       }))
+            st.plotly_chart(gauge2, use_container_width=True)
+            subcol5, subcol6 = st.columns(2)
+            with subcol5:
+                wh_d_wa3 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item()+df2['WA'].item(), df1['N'].item()+df2['N'].item() ,df1['WA'].item()+df2['WH'].item()],
+                                 labels=[f"W {t1}", "Pari", f"W {t2}"])
+                st.plotly_chart(go.FigureWidget(data=wh_d_wa3), use_container_width=True)
+            with subcol6:
+                goal3 = go.Pie(hole=0.5, sort=False, direction='clockwise',
+                                  values=[df1['GC'].item()+df2['GT'].item(), df1['GT'].item()+df2['GC'].item() ],
+                                  labels=[f"Gol {t1}", f"Gol {t2}"])
+                st.plotly_chart(go.FigureWidget(data=goal3), use_container_width=True)
         with colgc3:
             st.text(f'{t2} home')
             gauge3 = go.Figure(go.Indicator(

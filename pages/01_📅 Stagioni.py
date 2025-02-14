@@ -104,12 +104,14 @@ with ins:
 
 with sm:
     st.subheader('Ricerca partita:')
+    l1=sorted(list(classifica['Squadra']))
     hcol, acol, scol = st.columns(3)
     with hcol:
-        ht=st.selectbox('Seleziona la squadra in casa',sorted(list(classifica['Squadra'])))
+        ht=st.selectbox('Seleziona la squadra in casa',l1)
         st.image(Image.open(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content)))
     with acol:
-        at=st.selectbox('Seleziona la squadra in trasferta',sorted(list(classifica['Squadra'])).remove(ht))
+        l2=[x for x in l1 if x!=ht]
+        at=st.selectbox('Seleziona la squadra in trasferta',l2)
         st.image(Image.open(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content)))
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
     with scol:

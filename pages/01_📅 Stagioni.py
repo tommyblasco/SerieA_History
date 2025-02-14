@@ -23,7 +23,6 @@ with rc:
         st.dataframe(classifica,column_config={"Badge":st.column_config.ImageColumn()},hide_index=True)
     with ris_c:
         sel_gio = st.slider("Seleziona la giornata:",1,n_gio,n_gio)
-        df['Giorno'] = pd.to_datetime(df['Data']).dt.strftime('%b %d, %Y')
         df['Risultato']=[str(x)+'-'+str(y) for x,y in zip(df['GC'],df['GT'])]
         df_fil_gio=df[df['Giornata']==sel_gio]
         st.dataframe(df_fil_gio[['Giorno','CASA','TRAS','Risultato']],hide_index=True)

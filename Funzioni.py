@@ -122,9 +122,9 @@ def match_series(team,c_t):
     db=storico[(storico[c_t] == team)].sort_values('Data')
     db['Risultato']=[str(x)+'-'+str(y) for x,y in zip(db['GC'],db['GT'])]
     if c_t=='CASA':
-        db=db.reanme(columns={'GC':'Gol Fatti','GT':'Gol subiti'})
+        db=db.rename(columns={'GC':'Gol Fatti','GT':'Gol subiti'})
     else:
-        db = db.reanme(columns={'GT': 'Gol Fatti', 'GC': 'Gol subiti'})
+        db = db.rename(columns={'GT': 'Gol Fatti', 'GC': 'Gol subiti'})
     db['Esito']=['W' if x>y else 'N' if x==y else 'L' for x,y in zip(db['Gol Fatti'],db['Gol subiti'])]
     sin_count = noloss_count = nowin_count = gf_count = gs_count = 0
     prev_esit = None

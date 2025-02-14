@@ -246,6 +246,6 @@ def prec(t1,t2):
     t2h_gr = t2h.groupby('CASA',as_index=False).agg({'TRAS':'count','WH':'sum','N':'sum','WA':'sum','GC':'sum','GT':'sum'})
     t2h_gr['Bil'] = [x - y for x, y in zip(t2h_gr['WH'], t2h_gr['WA'])]
     cum_prec = pd.concat([t1h[['Stagione','Prec cum']],t2h[['Stagione','Prec cum']]])
-    cum_prec = cum_prec.groupby('Stagione').agg({'Prec cum':'sum'})
+    cum_prec = cum_prec.groupby('Stagione',as_index=False).agg({'Prec cum':'sum'})
     cum_prec['CumPr'] = cum_prec['Prec cum'].cumsum()
     return [t1h_gr, t2h_gr, cum_prec]

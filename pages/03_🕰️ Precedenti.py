@@ -78,8 +78,8 @@ with h2h:
                 title={'text': "Bilancio"},
                 gauge={'axis': {'range': [-df2['TRAS'].item(), df2['TRAS'].item()]},
                        'steps': [
-                           {'range': [-df2['TRAS'].item(),0], 'color': "orange"},
-                           {'range': [0,df2['TRAS'].item()], 'color': "blue"}]
+                           {'range': [-df2['TRAS'].item(),0], 'color': "blue"},
+                           {'range': [0,df2['TRAS'].item()], 'color': "orange"}]
                        }))
             st.plotly_chart(gauge3, use_container_width=True)
             subcol3, subcol4 = st.columns(2)

@@ -129,7 +129,7 @@ with sm:
         search_bm = search_bm.sort_values('Giornata')
         search_bm.reset_index(drop=True, inplace=True)
         with bmcol:
-            if search_bm.shape[0]==1:
+            if search_bm.shape[0]>=1:
                 and_bm = search_bm.iloc[0,:]
                 st.write('Andata')
                 st.write(f"Data: {and_bm['Giorno']}")

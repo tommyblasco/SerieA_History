@@ -1,6 +1,8 @@
+import streamlit as st
+st.set_page_config(page_title="Serie A",layout='wide')
 from Funzioni import *
 
-st.set_page_config(page_title="Serie A",layout='wide')
+
 
 st.title("Serie A")
 

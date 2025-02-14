@@ -76,3 +76,11 @@ with h2h:
             wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WA'].item(), df2['N'].item() ,df2['WH'].item()],
                                  labels=[f"W {t1}", "Pari", f"W {t2}"])
             st.plotly_chart(go.FigureWidget(data=wh_d_wa2), use_container_width=True)
+        st.subheader('Andamento precedenti nel tempo')
+        pre_cum = prec(t1=t1, t2=t2)[2]
+        cump_gr = px.line(pre_cum, x="Stagione", y="CumPr", markers=True)
+        cump_gr.add_annotation( x=-0.2, y=max(pre_cum["CumPr"]),
+            text=f"{t1}", yref="y")
+        cump_gr.add_annotation(x=-0.2, y=min(pre_cum["CumPr"]),
+                               text=f"{t2}", yref="y")
+        st.plotly_chart(cump_gr)

@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit
 
 from Funzioni import *
+st.set_page_config(page_title="Serie A - Squadre",layout='wide')
 
 tea_sel=st.selectbox('Seleziona una squadra',lista_sq)
 

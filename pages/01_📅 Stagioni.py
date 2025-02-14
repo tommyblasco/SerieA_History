@@ -1,6 +1,8 @@
 import streamlit
 
 from Funzioni import *
+st.set_page_config(page_title="Serie A - Stagioni",layout='wide')
+
 st.header('Le stagioni')
 
 sea_sel=st.selectbox('Seleziona una stagione',seas_list)

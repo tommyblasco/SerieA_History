@@ -134,7 +134,7 @@ def match_series(team,c_t):
         noloss_count = noloss_count + 1 if e != 'L' else 0
         nowin_count = nowin_count + 1 if e != 'W' else 0
         gf_count = gf_count + 1 if gf != 0 else 0
-        gs_count = gs_count + 1 if gs != 0 else 0
+        gs_count = gs_count + 1 if gs == 0 else 0
         list_single.append(sin_count)
         list_noloss.append(noloss_count)
         list_nowin.append(nowin_count)
@@ -145,14 +145,14 @@ def match_series(team,c_t):
     db['No loss']=list_noloss
     db['No win']=list_nowin
     db['Gf consec']=list_gf
-    db['Gs consec']=list_gs
+    db['Clean sheet']=list_gs
     return db
 
 def match_series_tot(team):
     home_ser=match_series(team,c_t='CASA')
     away_ser=match_series(team,c_t='TRAS')
-    home_ser1=home_ser.drop(['Single','No loss','No win','Gf consec','Gs consec'],axis=1)
-    away_ser1 = away_ser.drop(['Single', 'No loss', 'No win', 'Gf consec', 'Gs consec'], axis=1)
+    home_ser1=home_ser.drop(['Single','No loss','No win','Gf consec','Clean sheet'],axis=1)
+    away_ser1 = away_ser.drop(['Single', 'No loss', 'No win', 'Gf consec', 'Clean sheet'], axis=1)
     db=pd.concat([home_ser1,away_ser1],ignore_index=True).sort_values('Data')
     sin_count = noloss_count = nowin_count = gf_count = gs_count = 0
     prev_esit = None
@@ -162,7 +162,7 @@ def match_series_tot(team):
         noloss_count = noloss_count + 1 if e != 'L' else 0
         nowin_count = nowin_count + 1 if e != 'W' else 0
         gf_count = gf_count + 1 if gf != 0 else 0
-        gs_count = gs_count + 1 if gs != 0 else 0
+        gs_count = gs_count + 1 if gs == 0 else 0
         list_single.append(sin_count)
         list_noloss.append(noloss_count)
         list_nowin.append(nowin_count)
@@ -173,5 +173,5 @@ def match_series_tot(team):
     db['No loss']=list_noloss
     db['No win']=list_nowin
     db['Gf consec']=list_gf
-    db['Gs consec']=list_gs
+    db['Clean sheet']=list_gs
     return [db, home_ser, away_ser]

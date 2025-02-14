@@ -25,6 +25,7 @@ with h2h:
 
         with colgc1:
             st.text(f'{t1} home')
+            st.metric(label='Partite giocate',value=df1.shape[0])
             gauge1 = go.Figure(go.Indicator(
                 domain={'x': [0, 1], 'y': [0, 1]},
                 value=int(df1['Bil'].item()),
@@ -48,6 +49,7 @@ with h2h:
                 st.plotly_chart(go.FigureWidget(data=goal1), use_container_width=True)
         with colgc2:
             st.text("COMPLESSIVO")
+            st.metric(label='Partite giocate in serie A', value=df1.shape[0]+df2.shape[0])
             gauge2 = go.Figure(go.Indicator(
                 domain={'x': [0, 1], 'y': [0, 1]},
                 value=int(df1['Bil'].item())-int(df2['Bil'].item()),
@@ -71,6 +73,7 @@ with h2h:
                 st.plotly_chart(go.FigureWidget(data=goal3), use_container_width=True)
         with colgc3:
             st.text(f'{t2} home')
+            st.metric(label='Partite giocate', value=df2.shape[0])
             gauge3 = go.Figure(go.Indicator(
                 domain={'x': [0, 1], 'y': [0, 1]},
                 value=int(df2['Bil'].item()),

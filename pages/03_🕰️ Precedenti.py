@@ -16,8 +16,8 @@ with h2h:
         lsq2 = [x for x in lista_sq if x != t1]
         t2=st.selectbox('Seleziona il team 2:',lsq2)
         st.image(Image.open(BytesIO(requests.get(load_images(team=t2, yyyy='2999')).content)))
-    df1 = prec(t1=t1, t2=t2)
-    df2 = prec(t1=t2, t2=t1)
+    df1 = prec(t1=t1, t2=t2)[0]
+    df2 = prec(t1=t1, t2=t2)[1]
     if (df1.shape[0]==0) | (df2.shape[0]==0):
         st.error('Nessun precedente trovato')
     else:

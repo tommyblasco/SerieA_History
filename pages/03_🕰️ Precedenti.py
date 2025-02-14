@@ -24,7 +24,7 @@ with h2h:
         st.text(f'{t1} home')
         gauge1 = go.Figure(go.Indicator(
             domain={'x': [0, 1], 'y': [0, 1]},
-            value=df1['Bil'].item(),
+            value=int(df1['Bil'].item()),
             mode="gauge+number",
             title={'text': "Bilancio"},
             gauge={'axis': {'range': [df1['TRAS'].item(), -df1['TRAS'].item()]},
@@ -47,7 +47,7 @@ with h2h:
         st.text(f'{t2} home')
         gauge3 = go.Figure(go.Indicator(
             domain={'x': [0, 1], 'y': [0, 1]},
-            value=df2['Bil'].item(),
+            value=int(df2['Bil'].item()),
             mode="gauge+number",
             title={'text': "Bilancio"},
             gauge={'axis': {'range': [-df2['TRAS'].item(), df2['TRAS'].item()]},

@@ -21,7 +21,7 @@ with h2h:
     if (df1.shape[0]==0) | (df2.shape[0]==0):
         st.error('Nessun precedente trovato')
     else:
-        colgc1, colgc2, colgc3 = st.columns(3)
+        colgc1, colgc2, colgc3 = st.columns([3,4,3])
 
         with colgc1:
             st.text(f'{t1} home')

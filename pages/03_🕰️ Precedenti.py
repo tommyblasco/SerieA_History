@@ -43,9 +43,9 @@ with h2h:
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow")))
             beta=((df1['WH'].item()+df2['WA'].item())/(df2['WH'].item()+df1['WA'].item()))-1
-            fig.add_trace(go.Scatter(x=[-2,0,2], y= np.asarray([-2,0,2])*beta))
+            fig.add_trace(go.Scatter(x=[-2,0,2], y= np.asarray([-2,0,2])*beta, showlegend=False))
             fig.add_trace(go.Scatter(x=[-2,2], y=[(-2*beta)+0.1, (2*beta)+0.1], mode='markers',
-                                     marker=dict(name=['W T1','W T2'],color=['orange','blue'],size=[df1['WH'].item()+df2['WA'].item(),df2['WH'].item()+df1['WA'].item()])))
+                                     marker=dict(color=['orange','blue'],size=[df1['WH'].item()+df2['WA'].item(),df2['WH'].item()+df1['WA'].item()])))
             fig.update_layout(xaxis=dict(showgrid=False,showticklabels=False), yaxis=dict(range=[-2,2],showgrid=False,showticklabels=False))
 
             st.plotly_chart(fig, use_container_width=True)

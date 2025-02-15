@@ -59,8 +59,8 @@ with h2h:
             st.metric(label='Partite giocate in serie A', value=n_gio)
             st.text('così ripartite:')
             hbar = go.Figure()
-            for i,col in zip([wt1,pareg,wt2],['orange','gray','blue']):
-                hbar.add_trace(go.Bar(x=[i],y=['Bil'],orientation='h',marker=dict(color=[col]),text=[str(round(100*i/n_gio,2))+'%'],textposition='auto',textfont=dict(size=16)))
+            for i,col,t in zip([wt1,pareg,wt2],['orange','gray','blue'],[f'W {t1}','N',f'W {t2}']):
+                hbar.add_trace(go.Bar(x=[i],y=[t],orientation='h',marker=dict(color=[col]),text=[str(round(100*i/n_gio,2))+'%'],textposition='auto',textfont=dict(size=16)))
             hbar.update_layout(barmode='stack',showlegend=False,yaxis=dict(showticklabels=False),bargap=0.7)
             st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
         with colgc3:

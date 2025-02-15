@@ -148,7 +148,7 @@ with riep:
     df_tt1['D'] =[1 if x==y else 0 for x,y in zip(df_tt1['GC'],df_tt1['GT'])]
     df_tt1['L']=[1 if ((x==tt1) & (y<z) | (x!=tt1) & (z<y)) else 0 for x,y,z in zip(df_tt1['CASA'],df_tt1['GC'],df_tt1['GT'])]
     df_tt1_g=df_tt1.groupby('Opponent',as_index=False).agg({'CASA':'count','W':'sum','D':'sum','L':'sum'}).sort_values(['CASA','W'])
-    df_tt1_g['Bil']=[x-y for x,y in zip(df_tt1['W'],df_tt1['L'])]
+    df_tt1_g['Bil']=[x-y for x,y in zip(df_tt1_g['W'],df_tt1_g['L'])]
     df_tt1_g.reset_index(drop=True, inplace=True)
 
     colgg1, colgg2 = st.columns([3, 1])

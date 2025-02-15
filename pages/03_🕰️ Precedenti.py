@@ -147,7 +147,7 @@ with riep:
     df_tt1['W']=[1 if ((x==tt1) & (y>z) | (x!=tt1) & (z>y)) else 0 for x,y,z in zip(df_tt1['CASA'],df_tt1['GC'],df_tt1['GT'])]
     df_tt1['D'] =[1 if x==y else 0 for x,y in zip(df_tt1['GC'],df_tt1['GT'])]
     df_tt1['L']=[1 if ((x==tt1) & (y<z) | (x!=tt1) & (z<y)) else 0 for x,y,z in zip(df_tt1['CASA'],df_tt1['GC'],df_tt1['GT'])]
-    df_tt1_g=df_tt1.groupby('Opponent',as_index=False).agg({'CASA':'count','W':'sum','D':'sum','L':'sum'}).sort_values(['CASA','W'],ascending=False)
+    df_tt1_g=df_tt1.groupby('Opponent',as_index=False).agg({'CASA':'count','W':'sum','D':'sum','L':'sum'}).sort_values(['CASA','W'])
     df_tt1_g.reset_index(drop=True, inplace=True)
 
     hbar2 = go.Figure()
@@ -157,5 +157,6 @@ with riep:
                            text=[str(df_tt1_g['D'])], textposition='auto', textfont=dict(size=16)))
     hbar2.add_trace(go.Bar(x=df_tt1_g['L'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='red'),
                            text=[str(df_tt1_g['L'])], textposition='auto', textfont=dict(size=16)))
-    hbar2.update_layout(barmode='stack', showlegend=False, yaxis=dict(showticklabels=False))
+    hbar2.update_layout(barmode='stack', showlegend=False, yaxis=dict(showticklabels=False),height=1600)
+    hbar2.update_xaxes(side='top')
     st.plotly_chart(hbar2)

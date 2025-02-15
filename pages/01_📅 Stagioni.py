@@ -105,20 +105,23 @@ with ins:
 with sm:
     st.subheader('Ricerca partita:')
     l1=sorted(list(classifica['Squadra']))
-    hcol, acol, scol = st.columns(3)
-    with hcol:
-        ht=st.selectbox('Seleziona la squadra in casa',l1)
+    ht=st.selectbox('Seleziona la squadra in casa',l1)
+    l2=[x for x in l1 if x!=ht]
+    at=st.selectbox('Seleziona la squadra in trasferta',l2)
+    stcol, nomcol, riscol = st.columns(3)
+    with stcol:
         st.image(Image.open(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content)))
-    with acol:
-        l2=[x for x in l1 if x!=ht]
-        at=st.selectbox('Seleziona la squadra in trasferta',l2)
         st.image(Image.open(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content)))
+    with nomcol:
+        st.subheader(ht)
+        st.subheader(at)
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
-    with scol:
+    with riscol:
         if search_match.shape[0]>0:
+            st.subheader(search_match['GC'].item())
+            st.subheader(search_match['GT'].item())
             st.write(f"Data: {search_match['Giorno'].item()}")
             st.write(f"Giornata: {search_match['Giornata'].item()}")
-            st.subheader(f"Risultato: {search_match['GC'].item()}-{search_match['GT'].item()}")
         else:
             st.error('Partita non ancora giocata')
 

@@ -26,17 +26,19 @@ with h2h:
         with colgc1:
             st.text(f'{t1} home')
             st.metric(label='Partite giocate',value=df1['TRAS'].item())
-            gauge1 = go.Figure(go.Indicator(
-                domain={'x': [0, 1], 'y': [0, 1]},
-                value=int(df1['Bil'].item()),
-                mode="gauge+number",
-                title={'text': "Bilancio"},
-                gauge={'axis': {'range': [df1['TRAS'].item(), -df1['TRAS'].item()]},
-                       'steps': [
-                           {'range': [0,-df1['TRAS'].item()], 'color': "orange"},
-                           {'range': [df1['TRAS'].item(),0], 'color': "blue"}]
-                       }))
-            st.plotly_chart(gauge1, use_container_width=True)
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=[0], y=[0], mode="markers",
+                                     marker=dict(symbol="triangle-down", size=50, color="black"),
+                                     name="Pivot"))
+            fig.add_trace(go.Scatter(x=[df1['WA'].item()-df1['WH'].item()], y=[-1], mode="markers",
+                                     marker=dict(symbol="circle", size=30, color="blue"),
+                                     name=f"{t1}"))
+            fig.add_trace(go.Scatter(x=[df1['WH'].item()-df1['WA'].item()], y=[-1], mode="markers",
+                                     marker=dict(symbol="circle", size=30, color="red"),
+                                     name=f"{t2}"))
+            fig.update_layout(xaxis=dict(showticklabels=False), yaxis=dict(showticklabels=False),
+                              showlegend=True)
+            st.plotly_chart(fig, use_container_width=True)
 
             wh_d_wa1 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
                                  labels=[f"W {t1}", "Pari", f"W {t2}"])

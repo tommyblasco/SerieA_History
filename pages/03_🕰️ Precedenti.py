@@ -42,12 +42,12 @@ with h2h:
             st.markdown('''
             <style>
             /*center metric label*/
-            [data-testid="stMetricLabel"] > div:nth-child(1) {
+            [data-testid="Partite giocate in serie A"] > div:nth-child(1) {
                 justify-content: center;
             }
 
             /*center metric value*/
-            [data-testid="stMetricValue"] > div:nth-child(1) {
+            [data-testid="df1['TRAS'].item()+df2['TRAS'].item()"] > div:nth-child(1) {
                 justify-content: center;
             }
             </style>

@@ -116,13 +116,11 @@ with sm:
     with nomcol:
         st.subheader(ht)
         st.subheader('')
-        st.subheader('')
         st.subheader(at)
         st.write(f"Data: {search_match['Giorno'].item()}")
     with riscol:
         if search_match.shape[0]>0:
             st.subheader(search_match['GC'].item())
-            st.subheader('')
             st.subheader('')
             st.subheader(search_match['GT'].item())
             st.write(f"Giornata: {search_match['Giornata'].item()}")

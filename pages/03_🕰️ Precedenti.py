@@ -58,7 +58,7 @@ with h2h:
 
             hbar = go.Figure()
             hbar.add_trace(go.Bar(x=[(df1['WH'].item() + df2['WA'].item())/(df1['TRAS'].item()+df2['TRAS'].item()), (df1['N'].item() + df2['N'].item())/(df1['TRAS'].item()+df2['TRAS'].item()),(df2['WH'].item() + df1['WA'].item())/(df1['TRAS'].item()+df2['TRAS'].item())],y=['Bil'],orientation='h',marker=dict(color=['orange','blue'])))
-            hbar.update_layout(barmode='stack',showlegend=False,yaxis=dict(showticklabels=False),xaxis=dict(xrange=[0,100]))
+            hbar.update_layout(barmode='stack',showlegend=False,yaxis=dict(showticklabels=False),xaxis=dict(range=[0,100]))
             st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
         with colgc3:
             st.text(f'{t2} home')

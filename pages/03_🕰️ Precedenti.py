@@ -25,24 +25,17 @@ with h2h:
 
         with colgc1:
             st.text(f'{t1} home')
-            st.metric(label='Partite giocate',value=df1['TRAS'].item())
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=[0], y=[0], mode="markers",
-                                     marker=dict(symbol="triangle-down", size=50, color="black"),
-                                     name="Pivot"))
-            fig.add_trace(go.Scatter(x=[df1['WA'].item()-df1['WH'].item()], y=[-1], mode="markers",
-                                     marker=dict(symbol="circle", size=30, color="blue"),
-                                     name=f"{t1}"))
-            fig.add_trace(go.Scatter(x=[df1['WH'].item()-df1['WA'].item()], y=[-1], mode="markers",
-                                     marker=dict(symbol="circle", size=30, color="red"),
-                                     name=f"{t2}"))
-            fig.update_layout(xaxis=dict(showticklabels=False), yaxis=dict(showticklabels=False),
-                              showlegend=True)
-            st.plotly_chart(fig, use_container_width=True)
+            m1, m2 = st.columns(2)
+            m1.metric(label='Partite giocate',value=df1['TRAS'].item())
+            m2.metric(label='Bilancio POV Home', value=df1['WH'].item()-df1['WA'].item(),border=True)
 
             wh_d_wa1 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
                                  labels=[f"W {t1}", "Pari", f"W {t2}"])
             st.plotly_chart(go.FigureWidget(data=wh_d_wa1), use_container_width=True)
+
+            m3, m4 = st.columns(2)
+            m3.metric(label=f'Gol fatti {t1}',value=df1['GC'].item())
+            m4.metric(label=f'Gol fatti {t2}', value=df1['GT'].item())
         with colgc2:
             st.text("COMPLESSIVO")
             st.metric(label='Partite giocate in serie A', value=df1['TRAS'].item()+df2['TRAS'].item())
@@ -63,21 +56,17 @@ with h2h:
             st.plotly_chart(go.FigureWidget(data=wh_d_wa3), use_container_width=True)
         with colgc3:
             st.text(f'{t2} home')
-            st.metric(label='Partite giocate', value=df2['TRAS'].item())
-            gauge3 = go.Figure(go.Indicator(
-                domain={'x': [0, 1], 'y': [0, 1]},
-                value=-df2['Bil'].item(),
-                mode="gauge+number",
-                title={'text': "Bilancio"},
-                gauge={'axis': {'range': [-df2['TRAS'].item(), df2['TRAS'].item()]},
-                       'steps': [
-                           {'range': [df2['TRAS'].item(),0], 'color': "blue"},
-                           {'range': [0,-df2['TRAS'].item()], 'color': "orange"}]
-                       }))
-            st.plotly_chart(gauge3, use_container_width=True)
-            wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WA'].item(), df2['N'].item() ,df2['WH'].item()],
-                                 labels=[f"W {t1}", "Pari", f"W {t2}"])
+            m5, m6 = st.columns(2)
+            m5.metric(label='Partite giocate',value=df2['TRAS'].item())
+            m6.metric(label='Bilancio POV Home', value=df2['WH'].item()-df2['WA'].item(),border=True)
+
+            wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],
+                                 labels=[f"W {t2}", "Pari", f"W {t1}"])
             st.plotly_chart(go.FigureWidget(data=wh_d_wa2), use_container_width=True)
+            m7, m8 = st.columns(2)
+            m7.metric(label=f'Gol fatti {t2}', value=df2['GC'].item())
+            m8.metric(label=f'Gol fatti {t1}', value=df2['GT'].item())
+
         st.subheader('Andamento precedenti nel tempo')
         pre_cum = prec(t1=t1, t2=t2)[2]
         cump_gr = px.area(pre_cum, x="Stagione", y="CumPr", markers=True)

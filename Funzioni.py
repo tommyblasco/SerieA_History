@@ -85,7 +85,7 @@ def ranking(seas,st_date=date(1900,1,1),en_date=date.today()):
             new_class=classifica.sort_values(by=['Punti', 'DR'], ascending=False)
     else:
         new_class=classifica[['Squadra','Gio','V','N','P','GF','GS']]
-        new_class.insert(1,"Med Pnt 3W",[(x*3+y)/z for x,y,z in zip(new_class['V'],new_class['N'],new_class['Gio'])])
+        new_class.insert(1,"Med Pnt 3W",[round((x*3+y)/z,1) for x,y,z in zip(new_class['V'],new_class['N'],new_class['Gio'])])
         new_class = new_class.sort_values(by=['Med Pnt 3W'], ascending=False)
     new_class.insert(0,'Rk',range(1,new_class.shape[0]+1))
     return new_class

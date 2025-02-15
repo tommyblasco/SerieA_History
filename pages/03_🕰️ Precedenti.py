@@ -48,10 +48,10 @@ with h2h:
                                      marker=dict(color=['orange','blue'],size=[df1['WH'].item()+df2['WA'].item(),df2['WH'].item()+df1['WA'].item()],sizemode='area',sizeref=2.*max(df1['WH'].item()+df2['WA'].item(),df2['WH'].item()+df1['WA'].item())/(70.**2))))
             fig.update_layout(xaxis=dict(showgrid=False,showticklabels=False), yaxis=dict(range=[-2,2],showgrid=False,showticklabels=False))
             fig.add_annotation(x=-1.9, y=(-2 * beta) + 0.7, showarrow=False,
-                               text=f"{df1['WH'].item() + df2['WA'].item()}",font=dict(size=25,family='Gravitas One'))
+                               text=f"{df1['WH'].item() + df2['WA'].item()}",font=dict(size=25,family='droid sans'))
             fig.add_annotation(x=-1.9, y=(-2*beta)+0.4, showarrow=False, text=f"W {t1}")
             fig.add_annotation(x=1.9, y=(2 * beta) + 0.7, showarrow=False,
-                               text=f"{df2['WH'].item() + df1['WA'].item()}",font=dict(size=25,family='Gravitas One'))
+                               text=f"{df2['WH'].item() + df1['WA'].item()}",font=dict(size=25,family='droid sans'))
             fig.add_annotation(x=1.9, y=(2 * beta) + 0.4, showarrow=False,text=f"W {t2}")
             fig.add_annotation(x=0, y=0.4, showarrow=False, text=f"{df1['N'].item() + df2['N'].item()} pareggi")
             st.plotly_chart(fig, use_container_width=True)

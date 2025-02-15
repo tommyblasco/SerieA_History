@@ -109,7 +109,7 @@ with sm:
     l2=[x for x in l1 if x!=ht]
     at=st.selectbox('Seleziona la squadra in trasferta',l2)
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
-    stcol, nomcol, riscol = st.columns(3)
+    stcol, nomcol, riscol, infcol = st.columns([3,3,3,1])
     with stcol:
         st.image(Image.open(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content)))
         st.image(Image.open(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content)))
@@ -117,17 +117,16 @@ with sm:
         st.subheader(ht)
         st.subheader('')
         st.subheader(at)
-        st.write('')
-        st.write(f"Data: {search_match['Giorno'].item()}")
-    with riscol:
-        if search_match.shape[0]>0:
+    if search_match.shape[0]>0:
+        with riscol:
             st.subheader(search_match['GC'].item())
             st.subheader('')
             st.subheader(search_match['GT'].item())
-            st.write('')
+        with infcol:
+            st.write(f"Data: {search_match['Giorno'].item()}")
             st.write(f"Giornata: {search_match['Giornata'].item()}")
-        else:
-            st.error('Partita non ancora giocata')
+    else:
+        st.error('Partita non ancora giocata')
 
     with st.expander('Big Match'):
         bmcol, bmcol2 = st.columns(2)

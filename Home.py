@@ -12,13 +12,6 @@ stagione_curr=str(seas_list[0])  #stagione corrente
 
 rpl, part = st.columns(2)
 with rpl:
-    clas_rbc['Scudetti']=[int(x) for x in clas_rbc['Scudetti']]
-    bcr=barplot(df=clas_rbc,item_column='Squadra',value_column='Scudetti',time_column='Anno')
-    rbc = bcr.plot(time_label='Anno', value_label='Scudetti', title='Scudetti vinti', frame_duration=1000)
-    st.plotly_chart(rbc)
-
-    st.divider()
-
     st.text('Partecipazioni Serie A')
     part_gr = go.Figure()
     part_gr.add_trace(go.Bar(y=riep_grp['Squadre'], x=riep_grp['Stagioni'],orientation='h'))
@@ -26,6 +19,12 @@ with rpl:
     part_gr.update_xaxes(side='top')
     st.plotly_chart(go.FigureWidget(data=part_gr))
 
+    st.divider()
+
+    clas_rbc['Scudetti']=[int(x) for x in clas_rbc['Scudetti']]
+    bcr=barplot(df=clas_rbc,item_column='Squadra',value_column='Scudetti',time_column='Anno')
+    rbc = bcr.plot(time_label='Anno', value_label='Scudetti', title='Scudetti vinti', frame_duration=1000)
+    st.plotly_chart(rbc)
 with part:
     st.subheader('Albo d\'oro')
     for i in range(0, len(albo), 4):

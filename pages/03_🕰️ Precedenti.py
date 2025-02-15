@@ -148,13 +148,22 @@ with riep:
     df_tt1['D'] =[1 if x==y else 0 for x,y in zip(df_tt1['GC'],df_tt1['GT'])]
     df_tt1['L']=[1 if ((x==tt1) & (y<z) | (x!=tt1) & (z<y)) else 0 for x,y,z in zip(df_tt1['CASA'],df_tt1['GC'],df_tt1['GT'])]
     df_tt1_g=df_tt1.groupby('Opponent',as_index=False).agg({'CASA':'count','W':'sum','D':'sum','L':'sum'}).sort_values(['CASA','W'])
+    df_tt1_g['Bil']=[x-y for x,y in zip(df_tt1['W'],df_tt1['L'])]
     df_tt1_g.reset_index(drop=True, inplace=True)
 
-    hbar2 = go.Figure()
-    hbar2.add_trace(go.Bar(x=df_tt1_g['W'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='green'), text=df_tt1_g['W']))
-    hbar2.add_trace(go.Bar(x=df_tt1_g['D'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='gray'), text=df_tt1_g['D']))
-    hbar2.add_trace(go.Bar(x=df_tt1_g['L'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='red'), text=df_tt1_g['L']))
-    hbar2.update_layout(barmode='stack', showlegend=False, height=1600)
-    hbar2.update_traces(textangle=0)
-    hbar2.update_xaxes(side='top')
-    st.plotly_chart(hbar2)
+    colgg1, colgg2 = st.columns([3, 1])
+    with colgg1:
+        hbar2 = go.Figure()
+        hbar2.add_trace(go.Bar(x=df_tt1_g['W'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='green'), text=df_tt1_g['W']))
+        hbar2.add_trace(go.Bar(x=df_tt1_g['D'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='gray'), text=df_tt1_g['D']))
+        hbar2.add_trace(go.Bar(x=df_tt1_g['L'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='red'), text=df_tt1_g['L']))
+        hbar2.update_layout(barmode='stack', showlegend=False, height=1600)
+        hbar2.update_traces(textangle=0)
+        hbar2.update_xaxes(side='top')
+        st.plotly_chart(hbar2)
+    with colgg2:
+        bar3 = go.Figure()
+        bar3.add_trace(go.Bar(y=df_tt1_g['Opponent'], x=df_tt1_g['Bil'], orientation='h', marker_color=np.where(df_tt1_g["Bil"]<0, 'red', 'green') ))
+        bar3.update_layout(height=1600)
+        bar3.update_xaxes(side='top')
+        st.plotly_chart(bar3)

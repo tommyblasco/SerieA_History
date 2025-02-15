@@ -22,7 +22,10 @@ with h2h:
         st.error('Nessun precedente trovato')
     else:
         colgc1, colgc2, colgc3 = st.columns([3,4,3])
-
+        wt1=df1['WH'].item()+df2['WA'].item()
+        wt2=df2['WH'].item()+df1['WA'].item()
+        n_gio=df1['TRAS'].item()+df2['TRAS'].item()
+        pareg=df1['N'].item() + df2['N'].item()
         with colgc1:
             st.text(f'{t1} home')
             m1, m2 = st.columns(2)
@@ -38,27 +41,28 @@ with h2h:
             m4.metric(label=f'Gol fatti {t2}', value=df1['GT'].item())
         with colgc2:
             st.text("COMPLESSIVO")
-            st.metric(label='Partite giocate in serie A', value=df1['TRAS'].item()+df2['TRAS'].item())
+            st.metric(label='Partite giocate in serie A', value=n_gio)
 
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow"), showlegend=False))
-            beta=((df1['WH'].item()+df2['WA'].item())/(df2['WH'].item()+df1['WA'].item()))-1
+            beta=(wt1/wt2)-1
             fig.add_trace(go.Scatter(x=[-2,0,2], y= np.asarray([-2,0,2])*beta, showlegend=False))
             fig.add_trace(go.Scatter(x=[-2,2], y=[(-2*beta)+0.1, (2*beta)+0.1], mode='markers', showlegend=False,
-                                     marker=dict(color=['orange','blue'],size=[df1['WH'].item()+df2['WA'].item(),df2['WH'].item()+df1['WA'].item()],sizemode='area',sizeref=2.*max(df1['WH'].item()+df2['WA'].item(),df2['WH'].item()+df1['WA'].item())/(70.**2))))
+                                     marker=dict(color=['orange','blue'],size=[wt1,wt2],sizemode='area',sizeref=2.*max(wt1,wt2)/(70.**2))))
             fig.update_layout(xaxis=dict(showgrid=False,showticklabels=False), yaxis=dict(range=[-2,2],showgrid=False,showticklabels=False))
             fig.add_annotation(x=-1.9, y=(-2 * beta) + 0.7, showarrow=False,
-                               text=f"{df1['WH'].item() + df2['WA'].item()}",font=dict(size=25))
+                               text=f"{wt1}",font=dict(size=25))
             fig.add_annotation(x=-1.9, y=(-2*beta)+0.4, showarrow=False, text=f"W {t1}")
             fig.add_annotation(x=1.9, y=(2 * beta) + 0.7, showarrow=False,
-                               text=f"{df2['WH'].item() + df1['WA'].item()}",font=dict(size=25))
+                               text=f"{wt2}",font=dict(size=25))
             fig.add_annotation(x=1.9, y=(2 * beta) + 0.4, showarrow=False,text=f"W {t2}")
-            fig.add_annotation(x=0, y=0.4, showarrow=False, text=f"{df1['N'].item() + df2['N'].item()} pareggi")
+            fig.add_annotation(x=0, y=0.4, showarrow=False, text=f"{pareg} pareggi")
             st.plotly_chart(fig, use_container_width=True)
 
             hbar = go.Figure()
-            hbar.add_trace(go.Bar(x=[(df1['WH'].item() + df2['WA'].item())/(df1['TRAS'].item()+df2['TRAS'].item()), (df1['N'].item() + df2['N'].item())/(df1['TRAS'].item()+df2['TRAS'].item()),(df2['WH'].item() + df1['WA'].item())/(df1['TRAS'].item()+df2['TRAS'].item())],y=['Bil'],orientation='h',marker=dict(color=['orange','blue'])))
-            hbar.update_layout(barmode='stack',showlegend=False,yaxis=dict(showticklabels=False),xaxis=dict(range=[0,1]))
+            for i,col in zip([wt1,pareg,wt2],['orange','gray','blue']):
+                hbar.add_trace(go.Bar(x=[i],y=['Bil'],orientation='h',marker=dict(color=[col])))
+            hbar.update_layout(barmode='stack',showlegend=False,yaxis=dict(showticklabels=False))
             st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
         with colgc3:
             st.text(f'{t2} home')

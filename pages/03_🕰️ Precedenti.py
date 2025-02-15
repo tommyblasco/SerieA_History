@@ -89,41 +89,53 @@ with h2h:
             dft1 = storico[(storico['CASA']==t1) & (storico['TRAS']==t2)].sort_values('Data',ascending=False)
             dft1.reset_index(drop=True, inplace=True)
             dft1['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
-            st.dataframe(dft1[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
+            st.dataframe(dft1[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)
         with detcol3:
             dft2 = storico[(storico['CASA']==t2) & (storico['TRAS']==t1)].sort_values('Data',ascending=False)
             dft2.reset_index(drop=True, inplace=True)
             dft2['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft2['GC'], dft2['GT'])]
-            st.dataframe(dft2[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
+            st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)
         with detcol2:
             dftot = pd.concat([dft1,dft2],ignore_index=True).sort_values('Data',ascending=False)
             dftot.reset_index(drop=True, inplace=True)
             dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]
-            st.dataframe(dftot[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
+            st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)
 
     with st.expander('Record'):
         reccol1, reccol2 = st.columns(2)
         with reccol1:
             wte1h = dft1[dft1['GC']>dft1['GT']]
-            ggwte1h=wte1h.loc[0, 'Data']
-            st.write(f"Ultima vittoria {t1} in casa:")
-            st.write(f"{t1}-{t2} {wte1h.loc[0,'GC'].item()}-{wte1h.loc[0,'GT'].item()}")
-            st.write(f"il {ggwte1h}, {(date.today()-ggwte1h).days} giorni fa")
+            if wte1h.shape[0]>0:
+                ggwte1h=wte1h.loc[0, 'Data']
+                st.write(f"Ultima vittoria {t1} in casa:")
+                st.write(f"{t1}-{t2} {wte1h.loc[0,'GC'].item()}-{wte1h.loc[0,'GT'].item()}")
+                st.write(f"il {wte1h.loc[0, 'Giorno']}, {(date.today()-ggwte1h).days} giorni fa")
+            else:
+                st.warning(f'Nessuna vittoria in casa per {t1}')
             st.divider()
             lte1h = dft1[dft1['GC'] < dft1['GT']]
-            gglte1h = lte1h.loc[0, 'Data']
-            st.write(f"Ultima vittoria {t2} in trasferta:")
-            st.write(f"{t1}-{t2} {lte1h.loc[0, 'GC'].item()}-{lte1h.loc[0, 'GT'].item()}")
-            st.write(f"il {gglte1h}, {(date.today() - gglte1h).days} giorni fa")
+            if lte1h.shape[0]>0:
+                gglte1h = lte1h.loc[0, 'Data']
+                st.write(f"Ultima vittoria {t2} in trasferta:")
+                st.write(f"{t1}-{t2} {lte1h.loc[0, 'GC'].item()}-{lte1h.loc[0, 'GT'].item()}")
+                st.write(f"il {lte1h.loc[0, 'Giorno']}, {(date.today() - gglte1h).days} giorni fa")
+            else:
+                st.warning(f'Nessuna vittoria in trasferta per {t2}')
         with reccol2:
             wte2h = dft2[dft2['GC'] > dft2['GT']]
-            ggwte2h = wte2h.loc[0, 'Data']
-            st.write(f"Ultima vittoria {t2} in casa:")
-            st.write(f"{t2}-{t1} {wte2h.loc[0, 'GC'].item()}-{wte2h.loc[0, 'GT'].item()}")
-            st.write(f"il {ggwte2h}, {(date.today() - ggwte2h).days} giorni fa")
+            if wte2h.shape[0]>0:
+                ggwte2h = wte2h.loc[0, 'Data']
+                st.write(f"Ultima vittoria {t2} in casa:")
+                st.write(f"{t2}-{t1} {wte2h.loc[0, 'GC'].item()}-{wte2h.loc[0, 'GT'].item()}")
+                st.write(f"il {wte2h.loc[0, 'Giorno']}, {(date.today() - ggwte2h).days} giorni fa")
+            else:
+                st.warning(f'Nessuna vittoria in casa per {t2}')
             st.divider()
             lte2h = dft2[dft2['GC'] < dft2['GT']]
-            gglte2h = lte2h.loc[0, 'Data']
-            st.write(f"Ultima vittoria {t1} in trasferta:")
-            st.write(f"{t2}-{t1} {lte2h.loc[0, 'GC'].item()}-{lte2h.loc[0, 'GT'].item()}")
-            st.write(f"il {gglte2h}, {(date.today() - gglte2h).days} giorni fa")
+            if lte2h.shape[0]>0:
+                gglte2h = lte2h.loc[0, 'Data']
+                st.write(f"Ultima vittoria {t1} in trasferta:")
+                st.write(f"{t2}-{t1} {lte2h.loc[0, 'GC'].item()}-{lte2h.loc[0, 'GT'].item()}")
+                st.write(f"il {lte2h.loc[0, 'Giorno']}, {(date.today() - gglte2h).days} giorni fa")
+            else:
+                st.warning(f'Nessuna vittoria in trasferta per {t1}')

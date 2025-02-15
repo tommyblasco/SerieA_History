@@ -151,12 +151,9 @@ with riep:
     df_tt1_g.reset_index(drop=True, inplace=True)
 
     hbar2 = go.Figure()
-    hbar2.add_trace(go.Bar(x=df_tt1_g['W'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='green'),
-                    text=[str(df_tt1_g['W'])], textposition='auto', textfont=dict(size=16)))
-    hbar2.add_trace(go.Bar(x=df_tt1_g['D'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='gray'),
-                           text=[str(df_tt1_g['D'])], textposition='auto', textfont=dict(size=16)))
-    hbar2.add_trace(go.Bar(x=df_tt1_g['L'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='red'),
-                           text=[str(df_tt1_g['L'])], textposition='auto', textfont=dict(size=16)))
+    hbar2.add_trace(go.Bar(x=df_tt1_g['W'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='green'), text=df_tt1_g['W']))
+    hbar2.add_trace(go.Bar(x=df_tt1_g['D'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='gray'), text=df_tt1_g['D']))
+    hbar2.add_trace(go.Bar(x=df_tt1_g['L'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='red'), text=df_tt1_g['L']))
     hbar2.update_layout(barmode='stack', showlegend=False, height=1600)
     hbar2.update_xaxes(side='top')
     st.plotly_chart(hbar2)

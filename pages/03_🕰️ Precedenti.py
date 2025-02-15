@@ -153,6 +153,7 @@ with riep:
 
     colgg1, colgg2 = st.columns([3, 1])
     with colgg1:
+        st.subheader('Distribuzione precedenti')
         hbar2 = go.Figure()
         hbar2.add_trace(go.Bar(x=df_tt1_g['W'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='green'), text=df_tt1_g['W']))
         hbar2.add_trace(go.Bar(x=df_tt1_g['D'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='gray'), text=df_tt1_g['D']))
@@ -162,8 +163,10 @@ with riep:
         hbar2.update_xaxes(side='top')
         st.plotly_chart(hbar2)
     with colgg2:
+        st.subheader('Bilancio')
         bar3 = go.Figure()
         bar3.add_trace(go.Bar(y=df_tt1_g['Opponent'], x=df_tt1_g['Bil'], orientation='h', marker_color=np.where(df_tt1_g["Bil"]<0, 'red', 'green') ))
         bar3.update_layout(height=1600)
         bar3.update_xaxes(side='top')
+        bar3.update_yaxes(side='right')
         st.plotly_chart(bar3)

@@ -82,3 +82,48 @@ with h2h:
         cump_gr.add_annotation(x=-0.2, y=min(pre_cum["CumPr"]), showarrow=False,
                                text=f"{t2}", yref="y")
         st.plotly_chart(cump_gr)
+
+    with st.expander('Dettaglio partite'):
+        detcol1, detcol2, detcol3 = st.columns(3)
+        with detcol1:
+            dft1 = storico[(storico['CASA']==t1) & (storico['TRAS']==t2)].sort_values('Data',ascending=False)
+            dft1.reset_index(drop=True, inplace=True)
+            dft1['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
+            st.dataframe(dft1[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
+        with detcol3:
+            dft2 = storico[(storico['CASA']==t2) & (storico['TRAS']==t1)].sort_values('Data',ascending=False)
+            dft2.reset_index(drop=True, inplace=True)
+            dft2['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
+            st.dataframe(dft2[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
+        with detcol2:
+            dftot = pd.concat([dft1,dft2],ignore_index=True).sort_values('Data',ascending=False)
+            dftot.reset_index(drop=True, inplace=True)
+            dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
+            st.dataframe(dftot[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
+
+    with st.expander('Record'):
+        reccol1, reccol2 = st.columns(2)
+        with reccol1:
+            wte1h = dft1[dft1['GC']>dft1['GT']]
+            ggwte1h=wte1h.loc[0, 'Giorno'].item()
+            st.write(f"Ultima vittoria {t1} in casa:")
+            st.write(f"{t1}-{t2} {wte1h.loc[0,'GC'].item()}-{wte1h.loc[0,'GT'].item()}")
+            st.write(f"il {ggwte1h}, {(date.today()-ggwte1h).days} giorni fa")
+            st.divider()
+            lte1h = dft1[dft1['GC'] < dft1['GT']]
+            gglte1h = lte1h.loc[0, 'Giorno'].item()
+            st.write(f"Ultima vittoria {t2} in trasferta:")
+            st.write(f"{t1}-{t2} {lte1h.loc[0, 'GC'].item()}-{lte1h.loc[0, 'GT'].item()}")
+            st.write(f"il {gglte1h}, {(date.today() - gglte1h).days} giorni fa")
+        with reccol2:
+            wte2h = dft2[dft2['GC'] > dft2['GT']]
+            ggwte2h = wte2h.loc[0, 'Giorno'].item()
+            st.write(f"Ultima vittoria {t2} in casa:")
+            st.write(f"{t2}-{t1} {wte2h.loc[0, 'GC'].item()}-{wte2h.loc[0, 'GT'].item()}")
+            st.write(f"il {ggwte2h}, {(date.today() - ggwte2h).days} giorni fa")
+            st.divider()
+            lte2h = dft2[dft2['GC'] < dft2['GT']]
+            gglte2h = lte2h.loc[0, 'Giorno'].item()
+            st.write(f"Ultima vittoria {t1} in trasferta:")
+            st.write(f"{t2}-{t1} {lte2h.loc[0, 'GC'].item()}-{lte2h.loc[0, 'GT'].item()}")
+            st.write(f"il {gglte2h}, {(date.today() - gglte2h).days} giorni fa")

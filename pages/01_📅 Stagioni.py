@@ -114,11 +114,15 @@ with sm:
         st.image(Image.open(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content)))
     with nomcol:
         st.subheader(ht)
+        st.text('')
+        st.text('')
         st.subheader(at)
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
     with riscol:
         if search_match.shape[0]>0:
             st.subheader(search_match['GC'].item())
+            st.text('')
+            st.text('')
             st.subheader(search_match['GT'].item())
             st.write(f"Data: {search_match['Giorno'].item()}")
             st.write(f"Giornata: {search_match['Giornata'].item()}")

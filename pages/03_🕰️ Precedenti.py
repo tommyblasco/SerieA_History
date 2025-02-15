@@ -41,7 +41,7 @@ with h2h:
             st.metric(label='Partite giocate in serie A', value=df1['TRAS'].item()+df2['TRAS'].item())
 
             fig = go.Figure()
-            fig.add_trace(go.Scatter(x=[0], y=[0], mode="markers", marker=dict(symbol="triangle", size=50, color="yellow")))
+            fig.add_trace(go.Scatter(x=[0], y=[0], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow")))
             fig.add_hline(y=0)
             st.plotly_chart(fig, use_container_width=True)
 

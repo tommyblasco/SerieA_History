@@ -39,30 +39,11 @@ with h2h:
         with colgc2:
             st.text("COMPLESSIVO")
             st.metric(label='Partite giocate in serie A', value=df1['TRAS'].item()+df2['TRAS'].item())
-            st.markdown('''
-            <style>
-            /*center metric label*/
-            [data-testid="Partite giocate in serie A"] > div:nth-child(1) {
-                justify-content: center;
-            }
 
-            /*center metric value*/
-            [data-testid="df1['TRAS'].item()+df2['TRAS'].item()"] > div:nth-child(1) {
-                justify-content: center;
-            }
-            </style>
-            ''', unsafe_allow_html=True)
-            gauge2 = go.Figure(go.Indicator(
-                domain={'x': [0, 1], 'y': [0, 1]},
-                value=int(df1['Bil'].item())-int(df2['Bil'].item()),
-                mode="gauge+number",
-                title={'text': "Bilancio"},
-                gauge={'axis': {'range': [df1['TRAS'].item()+df2['TRAS'].item(), -df1['TRAS'].item()-df2['TRAS'].item()]},
-                       'steps': [
-                           {'range': [0,-df1['TRAS'].item()-df2['TRAS'].item()], 'color': "orange"},
-                           {'range': [df1['TRAS'].item()+df2['TRAS'].item(),0], 'color': "blue"}]
-                       }))
-            st.plotly_chart(gauge2, use_container_width=True)
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=[0], y=[0], mode="markers", marker=dict(symbol="triangle", size=50, color="yellow")))
+            fig.add_hline(y=0)
+            st.plotly_chart(fig, use_container_width=True)
 
             wh_d_wa3 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item()+df2['WA'].item(), df1['N'].item()+df2['N'].item() ,df1['WA'].item()+df2['WH'].item()],
                                  labels=[f"W {t1}", "Pari", f"W {t2}"])

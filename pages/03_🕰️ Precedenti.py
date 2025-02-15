@@ -8,7 +8,7 @@ st.title("Precedenti")
 h2h, riep = st.tabs(['Testa a testa','Riepilogo x squadra'])
 
 with h2h:
-    colt1, colt2 = st.columns(2)
+    colt1, colfake, colt2 = st.columns([3,4,3])
     with colt1:
         t1=st.selectbox('Seleziona il team 1:',lista_sq)
         st.image(Image.open(BytesIO(requests.get(load_images(team=t1, yyyy='2999')).content)))
@@ -40,7 +40,7 @@ with h2h:
             m3.metric(label=f'Gol fatti {t1}',value=df1['GC'].item())
             m4.metric(label=f'Gol fatti {t2}', value=df1['GT'].item())
         with colgc2:
-            st.text("COMPLESSIVO")
+            st.subheader("      COMPLESSIVO")
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow"), showlegend=False))
             beta=(wt1/wt2)-1

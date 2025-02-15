@@ -45,7 +45,7 @@ with h2h:
             beta=((df1['WH'].item()+df2['WA'].item())/(df2['WH'].item()+df1['WA'].item()))-1
             fig.add_trace(go.Scatter(x=[-2,0,2], y= np.asarray([-2,0,2])*beta, showlegend=False))
             fig.add_trace(go.Scatter(x=[-2,2], y=[(-2*beta)+0.1, (2*beta)+0.1], mode='markers', showlegend=False,
-                                     marker=dict(color=['orange','blue'],size=[df1['WH'].item()+df2['WA'].item(),df2['WH'].item()+df1['WA'].item()])))
+                                     marker=dict(color=['orange','blue'],size=[df1['WH'].item()+df2['WA'].item(),df2['WH'].item()+df1['WA'].item()],sizemode='area',sizeref=2.*max(df1['WH'].item()+df2['WA'].item(),df2['WH'].item()+df1['WA'].item())/(70.**2))))
             fig.update_layout(xaxis=dict(showgrid=False,showticklabels=False), yaxis=dict(range=[-2,2],showgrid=False,showticklabels=False))
             fig.add_annotation(x=-1.9, y=(-2*beta)+0.4, showarrow=False, text=f"{df1['WH'].item()+df2['WA'].item()}W {t1}")
             fig.add_annotation(x=1.9, y=(2 * beta) + 0.4, showarrow=False,text=f"{df2['WH'].item()+df1['WA'].item()}W {t2}")

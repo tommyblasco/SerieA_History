@@ -106,36 +106,36 @@ with h2h:
         with reccol1:
             wte1h = dft1[dft1['GC']>dft1['GT']]
             if wte1h.shape[0]>0:
-                ggwte1h=wte1h.loc[0, 'Data']
+                ggwte1h=wte1h['Data'].iloc[0]
                 st.write(f"Ultima vittoria {t1} in casa:")
-                st.write(f"{t1}-{t2} {wte1h.loc[0,'GC'].item()}-{wte1h.loc[0,'GT'].item()}")
-                st.write(f"il {wte1h.loc[0, 'Giorno']}, {(date.today()-ggwte1h).days} giorni fa")
+                st.write(f"{t1}-{t2} {wte1h['GC'].iloc[0]}-{wte1h['GT'].iloc[0]}")
+                st.write(f"il {wte1h['Giorno'].iloc[0]}, {(date.today()-ggwte1h).days} giorni fa")
             else:
                 st.warning(f'Nessuna vittoria in casa per {t1}')
             st.divider()
             lte1h = dft1[dft1['GC'] < dft1['GT']]
             if lte1h.shape[0]>0:
-                gglte1h = lte1h.loc[0, 'Data']
+                gglte1h = lte1h['Data'].iloc[0]
                 st.write(f"Ultima vittoria {t2} in trasferta:")
-                st.write(f"{t1}-{t2} {lte1h.loc[0, 'GC'].item()}-{lte1h.loc[0, 'GT'].item()}")
-                st.write(f"il {lte1h.loc[0, 'Giorno']}, {(date.today() - gglte1h).days} giorni fa")
+                st.write(f"{t1}-{t2} {lte1h['GC'].iloc[0]}-{lte1h['GT'].iloc[0]}")
+                st.write(f"il {lte1h['Giorno'].iloc[0]}, {(date.today() - gglte1h).days} giorni fa")
             else:
                 st.warning(f'Nessuna vittoria in trasferta per {t2}')
         with reccol2:
             wte2h = dft2[dft2['GC'] > dft2['GT']]
             if wte2h.shape[0]>0:
-                ggwte2h = wte2h.loc[0, 'Data']
+                ggwte2h = wte2h['Data'].iloc[0]
                 st.write(f"Ultima vittoria {t2} in casa:")
-                st.write(f"{t2}-{t1} {wte2h.loc[0, 'GC'].item()}-{wte2h.loc[0, 'GT'].item()}")
-                st.write(f"il {wte2h.loc[0, 'Giorno']}, {(date.today() - ggwte2h).days} giorni fa")
+                st.write(f"{t2}-{t1} {wte2h['GC'].iloc[0]}-{wte2h['GT'].iloc[0]}")
+                st.write(f"il {wte2h['Giorno'].iloc[0]}, {(date.today() - ggwte2h).days} giorni fa")
             else:
                 st.warning(f'Nessuna vittoria in casa per {t2}')
             st.divider()
             lte2h = dft2[dft2['GC'] < dft2['GT']]
             if lte2h.shape[0]>0:
-                gglte2h = lte2h.loc[0, 'Data']
+                gglte2h = lte2h['Data'].iloc[0]
                 st.write(f"Ultima vittoria {t1} in trasferta:")
-                st.write(f"{t2}-{t1} {lte2h.loc[0, 'GC'].item()}-{lte2h.loc[0, 'GT'].item()}")
-                st.write(f"il {lte2h.loc[0, 'Giorno']}, {(date.today() - gglte2h).days} giorni fa")
+                st.write(f"{t2}-{t1} {lte2h['GC'].iloc[0]}-{lte2h['GT'].iloc[0]}")
+                st.write(f"il {lte2h['Giorno'].iloc[0]}, {(date.today() - gglte2h).days} giorni fa")
             else:
                 st.warning(f'Nessuna vittoria in trasferta per {t1}')

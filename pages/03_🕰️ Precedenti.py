@@ -41,8 +41,6 @@ with h2h:
             m4.metric(label=f'Gol fatti {t2}', value=df1['GT'].item())
         with colgc2:
             st.text("COMPLESSIVO")
-            st.metric(label='Partite giocate in serie A', value=n_gio)
-
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow"), showlegend=False))
             beta=(wt1/wt2)-1
@@ -58,7 +56,8 @@ with h2h:
             fig.add_annotation(x=1.9, y=(2 * beta) + 0.4, showarrow=False,text=f"W {t2}")
             fig.add_annotation(x=0, y=0.4, showarrow=False, text=f"{pareg} pareggi")
             st.plotly_chart(fig, use_container_width=True)
-
+            st.metric(label='Partite giocate in serie A', value=n_gio)
+            st.text('così ripartite:')
             hbar = go.Figure()
             for i,col in zip([wt1,pareg,wt2],['orange','gray','blue']):
                 hbar.add_trace(go.Bar(x=[i],y=['Bil'],orientation='h',marker=dict(color=[col]),text=[str(round(100*i/n_gio,2))+'%'],textposition='auto',textfont=dict(size=16)))

@@ -42,7 +42,8 @@ with h2h:
 
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow")))
-            fig.add_hline(y=0)
+            beta=1-((df1['WH'].item()+df2['WA'].item())/(df2['WH'].item()+df1['WA'].item()))
+            fig.add_trace(go.Scatter(x=[-2,0,2], y=x*beta))
             st.plotly_chart(fig, use_container_width=True)
 
             wh_d_wa3 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item()+df2['WA'].item(), df1['N'].item()+df2['N'].item() ,df1['WA'].item()+df2['WH'].item()],

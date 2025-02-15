@@ -61,7 +61,7 @@ with h2h:
 
             hbar = go.Figure()
             for i,col in zip([wt1,pareg,wt2],['orange','gray','blue']):
-                hbar.add_trace(go.Bar(x=[i],y=['Bil'],orientation='h',marker=dict(color=[col])))
+                hbar.add_trace(go.Bar(x=[i],y=['Bil'],orientation='h',marker=dict(color=[col]),text=[str(round(i/n_gio,2))+'%'],textposition='inside'))
             hbar.update_layout(barmode='stack',showlegend=False,yaxis=dict(showticklabels=False))
             st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
         with colgc3:

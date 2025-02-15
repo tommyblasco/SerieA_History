@@ -41,7 +41,7 @@ with h2h:
             st.metric(label='Partite giocate in serie A', value=df1['TRAS'].item()+df2['TRAS'].item())
 
             fig = go.Figure()
-            fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow")))
+            fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow"), showlegend=False))
             beta=((df1['WH'].item()+df2['WA'].item())/(df2['WH'].item()+df1['WA'].item()))-1
             fig.add_trace(go.Scatter(x=[-2,0,2], y= np.asarray([-2,0,2])*beta, showlegend=False))
             fig.add_trace(go.Scatter(x=[-2,2], y=[(-2*beta)+0.1, (2*beta)+0.1], mode='markers', showlegend=False,
@@ -56,9 +56,10 @@ with h2h:
             fig.add_annotation(x=0, y=0.4, showarrow=False, text=f"{df1['N'].item() + df2['N'].item()} pareggi")
             st.plotly_chart(fig, use_container_width=True)
 
-            wh_d_wa3 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item()+df2['WA'].item(), df1['N'].item()+df2['N'].item() ,df1['WA'].item()+df2['WH'].item()],
-                                 labels=[f"W {t1}", "Pari", f"W {t2}"])
-            st.plotly_chart(go.FigureWidget(data=wh_d_wa3), use_container_width=True)
+            hbar = go.Figure()
+            hbar.add_trace(go.Bar(x=[df1['WH'].item() + df2['WA'].item(), df1['N'].item() + df2['N'].item(),df2['WH'].item() + df1['WA'].item()],y=['.'],orientation='h',marker=dict(color=['orange','blue'])))
+            hbar.update_layout(barmode='stack',showlegend=False,yaxis=dict(showticklabels=False))
+            st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
         with colgc3:
             st.text(f'{t2} home')
             m5, m6 = st.columns(2)

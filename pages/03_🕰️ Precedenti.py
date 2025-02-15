@@ -93,12 +93,12 @@ with h2h:
         with detcol3:
             dft2 = storico[(storico['CASA']==t2) & (storico['TRAS']==t1)].sort_values('Data',ascending=False)
             dft2.reset_index(drop=True, inplace=True)
-            dft2['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
+            dft2['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft2['GC'], dft2['GT'])]
             st.dataframe(dft2[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
         with detcol2:
             dftot = pd.concat([dft1,dft2],ignore_index=True).sort_values('Data',ascending=False)
             dftot.reset_index(drop=True, inplace=True)
-            dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
+            dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]
             st.dataframe(dftot[['Stagione','Giorno','CASA','TRAS','Risultato']], hide_index=True)
 
     with st.expander('Record'):

@@ -157,6 +157,6 @@ with riep:
                            text=[str(df_tt1_g['D'])], textposition='auto', textfont=dict(size=16)))
     hbar2.add_trace(go.Bar(x=df_tt1_g['L'], y=df_tt1_g['Opponent'], orientation='h', marker=dict(color='red'),
                            text=[str(df_tt1_g['L'])], textposition='auto', textfont=dict(size=16)))
-    hbar2.update_layout(barmode='stack', showlegend=False, yaxis=dict(showticklabels=False),height=1600)
+    hbar2.update_layout(barmode='stack', showlegend=False, height=1600)
     hbar2.update_xaxes(side='top')
     st.plotly_chart(hbar2)

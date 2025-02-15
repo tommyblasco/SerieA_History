@@ -109,7 +109,7 @@ with sm:
     l2=[x for x in l1 if x!=ht]
     at=st.selectbox('Seleziona la squadra in trasferta',l2)
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
-    stcol, nomcol, riscol, infcol = st.columns([3,3,3,1])
+    stcol, nomcol, riscol, infcol = st.columns([2,2,2,1])
     with stcol:
         st.image(Image.open(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content)))
         st.image(Image.open(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content)))

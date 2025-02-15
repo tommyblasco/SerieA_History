@@ -39,6 +39,19 @@ with h2h:
         with colgc2:
             st.text("COMPLESSIVO")
             st.metric(label='Partite giocate in serie A', value=df1['TRAS'].item()+df2['TRAS'].item())
+            st.markdown('''
+            <style>
+            /*center metric label*/
+            [data-testid="stMetricLabel"] > div:nth-child(1) {
+                justify-content: center;
+            }
+
+            /*center metric value*/
+            [data-testid="stMetricValue"] > div:nth-child(1) {
+                justify-content: center;
+            }
+            </style>
+            ''', unsafe_allow_html=True)
             gauge2 = go.Figure(go.Indicator(
                 domain={'x': [0, 1], 'y': [0, 1]},
                 value=int(df1['Bil'].item())-int(df2['Bil'].item()),

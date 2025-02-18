@@ -39,6 +39,7 @@ storico['GT']=[int(x) for x in storico['GT']]
 marcatori=marcatori[~marcatori['Minuto'].isna()]
 marcatori['Minuto']=[int(x) for x in marcatori['Minuto']]
 marcatori['Recupero']=[int(x) if not pd.isna(x) else np.nan for x in marcatori['Recupero'] ]
+marcatori['Recupero'] = marcatori['Recupero'].astype('Int64')
 penalita['Da']=[x.date() for x in penalita['Da']]
 penalita['A']=[x.date() for x in penalita['A']]
 

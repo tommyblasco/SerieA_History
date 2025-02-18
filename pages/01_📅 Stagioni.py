@@ -131,11 +131,11 @@ with sm:
                     nome_scor=scorers.iloc[s,0]
                     nome_split=nome_scor.split(' ')
                     nome_fin = '. '.join([x if x.isupper() else x[:1] for x in nome_split])
-                    if (scorers.iloc[s,2]!='') & (scorers.iloc[s,3]!=''):
+                    if (scorers.iloc[s,2]!=np.nan) & (scorers.iloc[s,3]!=np.nan):
                         st.write(f"{scorers.iloc[s,1]}'+{scorers.iloc[s,2]} ({scorers.iloc[s,3]}) {nome_fin} ({scorers.iloc[s,5][:1]})")
-                    elif (scorers.iloc[s,2]!='') & (scorers.iloc[s,3]==''):
+                    elif (scorers.iloc[s,2]!=np.nan) & (scorers.iloc[s,3]==np.nan):
                         st.write(f"{scorers.iloc[s,1]}'+{scorers.iloc[s,2]} {nome_fin} ({scorers.iloc[s,5][:1]})")
-                    elif (scorers.iloc[s,2]=='') & (scorers.iloc[s,3]!=''):
+                    elif (scorers.iloc[s,2]==np.nan) & (scorers.iloc[s,3]!=np.nan):
                         st.write(f"{scorers.iloc[s,1]}' ({scorers.iloc[s,3]}) {nome_fin} ({scorers.iloc[s,5][:1]})")
                     else:
                         st.write(f"{scorers.iloc[s, 1]}' {nome_fin} ({scorers.iloc[s, 5][:1]})")

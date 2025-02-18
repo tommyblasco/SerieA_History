@@ -13,13 +13,9 @@ import plotly.express as px
 conn_g=Github(st.secrets['TOKEN'])
 repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
 @st.cache_data
-def load_data(df):
-    if df!='Penalizzazioni':
-        l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
-                             sep=",", decimal=".", parse_dates=['Data'],dayfirst=True)
-    else:
-        l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
-                             sep=",", decimal=".", parse_dates=['Da','A'],dayfirst=True)
+def load_data(df,dates):
+    l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
+                             sep=",", decimal=".", parse_dates=dates,dayfirst=True)
     return l_data
 @st.cache_data
 def load_images(team,yyyy):
@@ -29,12 +25,12 @@ def load_images(team,yyyy):
     url_stemma=f"https://github.com/tommyblasco/SerieA_History/blob/main/images/stemmi/{team}/{yy_sel}.png?raw=True".replace(' ','%20')
     return url_stemma
 
-storico=load_data("Partite")
-tbd=load_data("TBD")
-penalita=load_data("Penalizzazioni")
+storico=load_data(df="Partite",dates=['Da','A'])
+tbd=load_data(df="TBD",dates=['Da','A'])
+penalita=load_data(df="Penalizzazioni",dates=['Data'])
+marcatori=load_data(df="Marcatori",dates=[])
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')
-marcatori=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/Marcatori.csv',sep=",",decimal='.')
 
 storico['Data']=[x.date() for x in storico['Data']]
 storico['Giorno'] = pd.to_datetime(storico['Data']).dt.strftime('%b %d, %Y')

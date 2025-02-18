@@ -25,9 +25,9 @@ def load_images(team,yyyy):
     url_stemma=f"https://github.com/tommyblasco/SerieA_History/blob/main/images/stemmi/{team}/{yy_sel}.png?raw=True".replace(' ','%20')
     return url_stemma
 
-storico=load_data(df="Partite",dates=['Da','A'])
-tbd=load_data(df="TBD",dates=['Da','A'])
-penalita=load_data(df="Penalizzazioni",dates=['Data'])
+storico=load_data(df="Partite",dates=['Data'])
+tbd=load_data(df="TBD",dates=['Data'])
+penalita=load_data(df="Penalizzazioni",dates=['Da','A'])
 marcatori=load_data(df="Marcatori",dates=[])
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')

@@ -109,10 +109,10 @@ with sm:
     l2=[x for x in l1 if x!=ht]
     at=st.selectbox('Seleziona la squadra in trasferta',l2)
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
-    idm=search_match['ID']
+    idm=search_match['ID'].item()
     stcol, nomcol, riscol, infcol = st.columns([2,2,2,1])
     if search_match.shape[0]>0:
-        st.write(f"{search_match['Giornata'].item()}° giornata, {search_match['Giorno'].item()} ")
+        st.write(f"{search_match['Giornata'].item()}° giornata - {search_match['Giorno'].item()} ")
         with stcol:
             st.image(Image.open(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content)))
             st.image(Image.open(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content)))
@@ -126,7 +126,7 @@ with sm:
             st.subheader(search_match['GT'].item())
         with infcol:
             if search_match['GC'].item()+search_match['GT'].item()>0:
-                scorers=marcatori[marcatori['ID']==idm[0]]
+                scorers=marcatori[marcatori['ID']==idm]
                 for s in list(range(scorers.shape[0])):
                     nome_scor=scorers.iloc[s,0]
                     nome_split=nome_scor.split(' ')

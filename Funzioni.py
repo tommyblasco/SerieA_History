@@ -34,11 +34,13 @@ tbd=load_data("TBD")
 penalita=load_data("Penalizzazioni")
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')
+marcatori=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/Marcatori.csv',sep=";",decimal='.')
 
 storico['Data']=[x.date() for x in storico['Data']]
 storico['Giorno'] = pd.to_datetime(storico['Data']).dt.strftime('%b %d, %Y')
 storico['GC']=[int(x) for x in storico['GC']]
 storico['GT']=[int(x) for x in storico['GT']]
+marcatori['Minuto']=[int(x) for x in marcatori['Minuto']]
 penalita['Da']=[x.date() for x in penalita['Da']]
 penalita['A']=[x.date() for x in penalita['A']]
 

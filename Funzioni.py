@@ -40,6 +40,7 @@ storico['Data']=[x.date() for x in storico['Data']]
 storico['Giorno'] = pd.to_datetime(storico['Data']).dt.strftime('%b %d, %Y')
 storico['GC']=[int(x) for x in storico['GC']]
 storico['GT']=[int(x) for x in storico['GT']]
+marcatori=marcatori[marcatori['Marcatore']!='']
 marcatori['Minuto']=[int(x) for x in marcatori['Minuto']]
 penalita['Da']=[x.date() for x in penalita['Da']]
 penalita['A']=[x.date() for x in penalita['A']]

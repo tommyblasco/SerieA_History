@@ -109,7 +109,7 @@ with sm:
     l2=[x for x in l1 if x!=ht]
     at=st.selectbox('Seleziona la squadra in trasferta',l2)
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
-    idm=search_match['ID'].item()
+    idm=search_match['ID']
     stcol, nomcol, riscol, infcol = st.columns([2,2,2,1])
     if search_match.shape[0]>0:
         st.write(f"{search_match['Giornata'].item()}° giornata, {search_match['Giorno'].item()} ")

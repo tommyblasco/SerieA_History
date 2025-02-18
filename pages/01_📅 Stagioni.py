@@ -126,7 +126,7 @@ with sm:
             st.subheader(search_match['GT'].item())
         with infcol:
             if search_match['GC'].item()+search_match['GT'].item()>0:
-                scorers=marcatori[marcatori['ID']==idm]
+                scorers=marcatori[marcatori['ID']==idm[0]]
                 for s in list(range(scorers.shape[0])):
                     nome_scor=scorers.iloc[s,0]
                     nome_split=nome_scor.split(' ')

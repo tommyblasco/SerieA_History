@@ -131,11 +131,11 @@ with sm:
                     nome_scor=scorers.iloc[s,0]
                     nome_split=nome_scor.split(' ')
                     nome_fin = '. '.join([x if x.isupper() else x[:1] for x in nome_split])
-                    if (not np.isnan(scorers.iloc[s,2])) & (pd.notna(scorers.iloc[s,3])):
+                    if (pd.notna(scorers.iloc[s,2])) & (pd.notna(scorers.iloc[s,3])):
                         st.write(f"{scorers.iloc[s,1]}'+{scorers.iloc[s,2]} ({scorers.iloc[s,3]}) {nome_fin} ({scorers.iloc[s,5][:1]})")
-                    elif (not np.isnan(scorers.iloc[s,2])) & (pd.isna(scorers.iloc[s,3])):
+                    elif (pd.notna(scorers.iloc[s,2])) & (pd.isna(scorers.iloc[s,3])):
                         st.write(f"{scorers.iloc[s,1]}'+{scorers.iloc[s,2]} {nome_fin} ({scorers.iloc[s,5][:1]})")
-                    elif (np.isnan(scorers.iloc[s,2])) & (pd.notna(scorers.iloc[s,3])):
+                    elif (pd.isna(scorers.iloc[s,2])) & (pd.notna(scorers.iloc[s,3])):
                         st.write(f"{scorers.iloc[s,1]}' ({scorers.iloc[s,3]}) {nome_fin} ({scorers.iloc[s,5][:1]})")
                     else:
                         st.write(f"{scorers.iloc[s, 1]}' {nome_fin} ({scorers.iloc[s, 5][:1]})")

@@ -47,12 +47,12 @@ with mgol:
     id_eligibles = [x for x in marcatori['ID'] if x[:4]==sea_sel[:4]]
     marcatori_st = marcatori[(marcatori['Squadra'].isin(id_eligibles)) & ((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
     marcatori_st['Rig'] = [1 if x == 'R' else 0 for x in marcatori_st['Note']]
-    m1 = marcatori_st.groupby('Marcatori', as_index=False).agg({'Squadra':'list','ID': 'count', 'Rig': 'sum'})
+    m1 = marcatori_st.groupby('Marcatori', as_index=False).agg({'Squadra':list,'ID': 'count', 'Rig': 'sum'})
     m1.columns = ['Marcatori', 'Squadra','Gol', 'di cui Rig']
-    ass_mar = marcatori_st.groupby('Assist', as_index=False).agg({'Squadra':'list','ID': 'count'})
+    ass_mar = marcatori_st.groupby('Assist', as_index=False).agg({'Squadra':list,'ID': 'count'})
     ass_mar.columns = ['Marcatori','Squadra','Assist']
     mar_tot_fin = pd.concat([m1, ass_mar]).groupby('Marcatori', as_index=False).agg(
-        {'Squadra':'list','Gol':'sum', 'di cui Rig': 'sum', 'Assist': 'sum'})
+        {'Squadra':list,'Gol':'sum', 'di cui Rig': 'sum', 'Assist': 'sum'})
     mar_tot_fin['Gol+Ass'] = [x + y for x, y in zip(mar_tot_fin['Gol'], mar_tot_fin['Assist'])]
     mar_tot_fin = mar_tot_fin.sort_values('Gol', ascending=False)
     mar_tot_fin['Squadra']=[', '.join(x) for x in mar_tot_fin['Squadra']]

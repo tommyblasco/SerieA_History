@@ -92,7 +92,7 @@ with mgol:
                                            text=df_freq.round(1).astype(str) + '%', texttemplate="%{text}",
                                            colorscale="oranges", showscale=True))
         time_gr.update_layout(xaxis=dict(title="Segmento temporale", type="category"),
-                             yaxis=dict(title="1°/2° Tempo", type="category"))
+                             yaxis=dict(title="1°/2° Tempo", type="category", autorange="reversed"))
         time_gr.update_xaxes(side='top')
         st.plotly_chart(go.FigureWidget(data=time_gr), use_container_width=True)
 

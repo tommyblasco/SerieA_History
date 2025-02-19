@@ -42,8 +42,8 @@ with rec:
     wc = dfs.iloc[dfs.shape[0]-1, :]
     daymore=storico.groupby(['Stagione','Giornata'],as_index=False).agg({'sum_gol':'sum'})
     daymore1 = daymore.sort_values('sum_gol', ascending=False)
-    st.write(f"Vittoria più larga in casa: {wc['CASA']} - {wc['TRAS']} {wc['GC'].item()}-{wc['GT'].item()} - {wc['Giornata'].item()}° giornata - {wc['Giorno'].item()}")
-    st.write(f"Vittoria più larga in trasferta: {wt['CASA']} - {wt['TRAS']} {wt['GC'].item()}-{wt['GT'].item()} - {wt['Giornata'].item()}° giornata - {wt['Giorno'].item()}")
-    st.write(f"Partita con più gol: {wmore['CASA']} - {wmore['TRAS']} {wmore['GC'].item()}-{wmore['GT'].item()} - {wmore['Giornata'].item()}° giornata - {wmore['Giorno'].item()}")
-    st.write(f"Giornata con più gol: {daymore1['Giornata'].item()}° giornata della stagione {daymore1['Stagione'].item()} con {daymore1['sum_gol'].item()} gol")
+    st.write(f"Vittoria più larga in casa: {wc['CASA']} - {wc['TRAS']} {wc['GC'].item()}-{wc['GT'].item()} - {wc['Giornata'].item()}° giornata - {wc['Giorno']}")
+    st.write(f"Vittoria più larga in trasferta: {wt['CASA']} - {wt['TRAS']} {wt['GC'].item()}-{wt['GT'].item()} - {wt['Giornata'].item()}° giornata - {wt['Giorno']}")
+    st.write(f"Partita con più gol: {wmore['CASA']} - {wmore['TRAS']} {wmore['GC'].item()}-{wmore['GT'].item()} - {wmore['Giornata'].item()}° giornata - {wmore['Giorno']}")
+    st.write(f"Giornata con più gol: {daymore1['Giornata'].item()}° giornata della stagione {daymore1['Stagione']} con {daymore1['sum_gol'].item()} gol")
 

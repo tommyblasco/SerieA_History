@@ -284,3 +284,20 @@ def class_1t(seas):
     classifica=pd.concat([casa,trasferta],ignore_index=True).groupby(['Squadra'],as_index=False).agg({'Punti':'sum','Gio':'sum','V':'sum','N':'sum','P':'sum','GF':'sum','GS':'sum'})
     classifica=classifica.sort_values('Punti',ascending=False)
     return classifica
+
+def change_1t_2t(seas):
+    db=ris_parz()
+    db = db[(db['Stagione'] == seas)]
+    db['1t/2t H']=['V/V' if (x>y) & (x1>y1) else 'N/V' if (x>y) & (x1==y1) else 'P/V' if (x>y) & (x1<y1)
+                   else 'V/N' if (x==y) & (x1>y1) else 'V/P' if (x<y) & (x1>y1) else 'N/P' if (x<y) & (x1==y1) else
+                   'P/N' if (x==y) & (x1<y1) else 'P/P' if (x<y) & (x1<y1) else 'N/N' for x,y,x1,y1 in zip(db['GC'],db['GT'],db['GC_parz'],db['GT_parz'])]
+    db['1t/2t A']=['V/V' if x=='P/P' else 'N/P' if x=='N/V' else 'V/P' if x=='P/V' else 'P/N' if x=='V/N'
+                    else 'P/V' if x=='V/P' else 'N/V' if x=='N/P' else 'V/N' if x=='P/N' else 'V/V' if x=='P/P' else 'N/N' for x in db['1t/2t H']]
+    db_casa=db[['CASA','1t/2t H']]
+    db_tras = db[['TRAS', '1t/2t A']]
+    db_casa.columns=['Squadre','1t/2t']
+    db_tras.columns = ['Squadre', '1t/2t']
+    db_fin=pd.concat([db_casa,db_tras])
+    df_pivot = db_fin.pivot_table(index='Squadre', columns='1t/2t',aggfunc='size')
+    df_pivot = df_pivot[['Squadre','V/V','V/N','V/P','N/V','N/N','N/P','P/V','P/N','P/P']]
+    return df_pivot

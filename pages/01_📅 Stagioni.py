@@ -44,8 +44,14 @@ with rc:
             st.write('Classifica in trasferta:')
             st.dataframe(class_ct(seas=sea_sel)[1],hide_index=True)
 
-    with st.expander('Classifica 1° Tempo'):
-        st.dataframe(class_1t(seas=sea_sel),hide_index=True)
+    with st.expander('Classifica 1° Tempo e esito 1°/2° tempo'):
+        cl1t, cles12 = st.columns(2)
+        with cl1t:
+            st.write('Classifica 1° Tempo:')
+            st.dataframe(class_1t(seas=sea_sel),hide_index=True)
+        with cles12:
+            st.write('Esito 1°T/2°T:')
+            st.dataframe(change_1t_2t(seas=sea_sel),hide_index=True)
 
 with mgol:
     id_eligibles = [x for x in marcatori['ID'] if x[:4]==sea_sel[:4]]

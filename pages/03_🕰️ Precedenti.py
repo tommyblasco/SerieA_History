@@ -102,7 +102,8 @@ with h2h:
             st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)
 
     with st.expander('I mattatori della sfida'):
-        ids_m = [x for x in df1['ID']]+[x for x in df2['ID']]
+        dfglob=storico[((storico['CASA']==t1) & (storico['TRAS']==t2)) | ((storico['CASA']==t2) & (storico['TRAS']==t1))]
+        ids_m = [x for x in dfglob['ID']]
         marcatori_prec = marcatori[marcatori['ID'].isin(ids_m)]
         marcatori_prec = marcatori_prec[(marcatori_prec['Note']!='A') | pd.isna(marcatori_prec['Note'])]
         marcatori_prec['t1']=[1 if x==t1 else 0 for x in marcatori_prec['Squadra']]

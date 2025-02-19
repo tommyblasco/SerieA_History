@@ -64,9 +64,9 @@ with mgol:
     with m2:
         played = df.shape[0]
         gol_tot = sum(df['GC']) + sum(df['GT'])
-        st.metric(label='Gol segnati', value=gol_tot)
+        st.metric(label='Gol segnati in stagione', value=gol_tot)
         media_gol = round(gol_tot / played, 2)
-        st.metric(label='Media gol', value=media_gol)
+        st.metric(label='Media gol a partita', value=media_gol)
 
     st.divider()
 

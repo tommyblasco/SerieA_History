@@ -52,7 +52,7 @@ with mgol:
     ass_mar = marcatori_st.groupby('Assist', as_index=False).agg({'ID': 'count'})
     ass_mar.columns = ['Marcatori','Assist']
     mar_tot_fin = m1.merge(ass_mar,how='left',on='Marcatori')
-    mar_tot_fin['Assist'].fillna(0)
+    mar_tot_fin['Assist']=mar_tot_fin['Assist'].fillna(0)
     mar_tot_fin['Gol+Ass'] = [x + y for x, y in zip(mar_tot_fin['Gol'], mar_tot_fin['Assist'])]
     mar_tot_fin = mar_tot_fin.sort_values('Gol', ascending=False)
     mar_tot_fin['Squadra'] = [sorted(set(x)) for x in mar_tot_fin['Squadra']]

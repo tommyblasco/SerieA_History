@@ -45,7 +45,7 @@ with rc:
             st.dataframe(class_ct(seas=sea_sel)[1],hide_index=True)
 
     with st.expander('Classifica 1° Tempo'):
-        st.dataframe(df_1t = class_1t(seas=sea_sel),hide_index=True)
+        st.dataframe(class_1t(seas=sea_sel),hide_index=True)
 
 with mgol:
     id_eligibles = [x for x in marcatori['ID'] if x[:4]==sea_sel[:4]]

@@ -51,8 +51,7 @@ with mgol:
     m1.columns = ['Marcatori', 'Squadra','Gol', 'di cui Rig']
     ass_mar = marcatori_st.groupby('Assist', as_index=False).agg({'ID': 'count'})
     ass_mar.columns = ['Marcatori','Assist']
-    mar_tot_fin = pd.concat([m1, ass_mar]).groupby(['Marcatori','Squadra'], as_index=False).agg(
-        {'Gol':'sum', 'di cui Rig': 'sum', 'Assist': 'sum'})
+    mar_tot_fin = pd.merge([m1, ass_mar],how='left',on='Marcatori')
     mar_tot_fin['Gol+Ass'] = [x + y for x, y in zip(mar_tot_fin['Gol'], mar_tot_fin['Assist'])]
     mar_tot_fin = mar_tot_fin.sort_values('Gol', ascending=False)
     mar_tot_fin['Squadra'] = [sorted(set(x)) for x in mar_tot_fin['Squadra']]

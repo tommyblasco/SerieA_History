@@ -43,6 +43,10 @@ with rc:
         with cla:
             st.write('Classifica in trasferta:')
             st.dataframe(class_ct(seas=sea_sel)[1],hide_index=True)
+
+    with st.expander('Classifica 1° Tempo'):
+        st.dataframe(df_1t = class_1t(seas=sea_sel),hide_index=True)
+
 with mgol:
     id_eligibles = [x for x in marcatori['ID'] if x[:4]==sea_sel[:4]]
     marcatori_st = marcatori[(marcatori['ID'].isin(id_eligibles)) & ((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]

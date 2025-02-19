@@ -251,3 +251,36 @@ def prec(t1,t2):
     cum_prec = cum_prec.groupby('Stagione',as_index=False).agg({'Prec cum':'sum'})
     cum_prec['CumPr'] = cum_prec['Prec cum'].cumsum()
     return [t1h_gr, t2h_gr, cum_prec]
+
+def ris_parz():
+    mar_arr=marcatori.merge(storico[['ID','CASA','TRAS']],on='ID',how='left')
+    mar_arr['delta_gc']=[1 if x==y else 0 for x,y in zip(mar_arr['Squadra'],mar_arr['CASA'])]
+    mar_arr['delta_gt']=[1 if x==y else 0 for x,y in zip(mar_arr['Squadra'],mar_arr['TRAS'])]
+    mar_arr['GC_parz'] = mar_arr.groupby('ID')['delta_gc'].cumsum()
+    mar_arr['GT_parz'] = mar_arr.groupby('ID')['delta_gt'].cumsum()
+    mar_1t = mar_arr[mar_arr['Minuto'] <= 45]
+    mar_1t['min_tot'] = [x + y if not pd.isna(y) else x for x, y in zip(mar_1t['Minuto'], mar_1t['Recupero'])]
+    mar_1t_max = mar_1t.groupby(['ID'], as_index=False).agg({'min_tot': 'max'})
+    mar_1t_max = mar_1t_max.merge(mar_1t, on=['ID', 'min_tot'], how='inner')
+    df_fin = storico.merge(mar_1t_max[['ID', 'GC_parz', 'GT_parz']], on='ID', how='left')
+    df_fin['GC_parz']=df_fin['GC_parz'].fillna(0)
+    df_fin['GT_parz']=df_fin['GT_parz'].fillna(0)
+    df_fin['GC_parz']=[int(x) for x in df_fin['GC_parz']]
+    df_fin['GT_parz'] = [int(x) for x in df_fin['GT_parz']]
+    return df_fin
+
+def class_1t(seas):
+    db = ris_parz()
+    db = db[(db['Stagione'] == seas)]
+    db['H']=[1 if x>y else 0 for x,y in zip(db['GC_parz'],db['GT_parz'])]
+    db['N']=[1 if x==y else 0 for x,y in zip(db['GC_parz'],db['GT_parz'])]
+    db['A']=[1 if x<y else 0 for x,y in zip(db['GC_parz'],db['GT_parz'])]
+    db['PH']=[x*3+y if z>='1994-95' else x*2+y for x,y,z in zip(db['H'],db['N'],db['Stagione'])]
+    db['PA']=[x*3+y if z>='1994-95' else x*2+y for x,y,z in zip(db['A'],db['N'],db['Stagione'])]
+    casa=db.groupby(['CASA'],as_index=False).agg({'PH':'sum','Data':'count','H':'sum','N':'sum','A':'sum','GC_parz':'sum','GT_parz':'sum'})
+    trasferta=db.groupby(['TRAS'],as_index=False).agg({'PA':'sum','Data':'count','A':'sum','N':'sum','H':'sum','GT_parz':'sum','GC_parz':'sum'})
+    casa.columns=['Squadra','Punti','Gio','V','N','P','GF','GS']
+    trasferta.columns=['Squadra','Punti','Gio','V','N','P','GF','GS']
+    classifica=pd.concat([casa,trasferta],ignore_index=True).groupby(['Squadra'],as_index=False).agg({'Punti':'sum','Gio':'sum','V':'sum','N':'sum','P':'sum','GF':'sum','GS':'sum','DR':'sum'})
+    classifica=classifica.sort_values('Punti',ascending=False)
+    return classifica

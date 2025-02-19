@@ -55,7 +55,8 @@ with mgol:
         {'Squadra':list,'Gol':'sum', 'di cui Rig': 'sum', 'Assist': 'sum'})
     mar_tot_fin['Gol+Ass'] = [x + y for x, y in zip(mar_tot_fin['Gol'], mar_tot_fin['Assist'])]
     mar_tot_fin = mar_tot_fin.sort_values('Gol', ascending=False)
-    mar_tot_fin['Squadra']=mar_tot_fin['Squadra'].apply(lambda x: ', '.join(map(str, sorted(set(x)))))
+    mar_tot_fin['Squadra'] = [sorted(set(x)) for x in mar_tot_fin['Squadra']]
+    mar_tot_fin['Squadra'] = mar_tot_fin['Squadra'].apply(lambda x: ', '.join(map(str, x)))
     m1,m2 = st.columns([2,1])
     with m1:
         st.subheader('Classifica marcatori')

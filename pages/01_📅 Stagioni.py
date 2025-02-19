@@ -12,7 +12,7 @@ start_sea=min(df['Data'])
 end_sea=max(df['Data'])
 n_gio=max(df['Giornata'])
 
-rc, ins, sm = st.tabs(['Risultati e classifica','Insights','Special matches'])
+rc, mgol, ins, sm = st.tabs(['Risultati e classifica','Marcatori & gol stats','Insights','Special matches'])
 with rc:
     class_c, ris_c = st.columns([2, 1])
     with class_c:
@@ -43,20 +43,61 @@ with rc:
         with cla:
             st.write('Classifica in trasferta:')
             st.dataframe(class_ct(seas=sea_sel)[1],hide_index=True)
+with mgol:
+    id_eligibles = [x for x in marcatori['ID'] if x[:4]==sea_sel[:4]]
+    marcatori_st = marcatori[(marcatori['Squadra'].isin(id_eligibles)) & ((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
+    marcatori_st['Rig'] = [1 if x == 'R' else 0 for x in marcatori_st['Note']]
+    m1 = marcatori_st.groupby('Marcatori', as_index=False).agg({'Squadra':'list','ID': 'count', 'Rig': 'sum'})
+    m1.columns = ['Marcatori', 'Squadra','Gol', 'di cui Rig']
+    ass_mar = marcatori_st.groupby('Assist', as_index=False).agg({'Squadra':'list','ID': 'count'})
+    ass_mar.columns = ['Marcatori','Squadra','Assist']
+    mar_tot_fin = pd.concat([m1, ass_mar]).groupby('Marcatori', as_index=False).agg(
+        {'Squadra':'list','Gol':'sum', 'di cui Rig': 'sum', 'Assist': 'sum'})
+    mar_tot_fin['Gol+Ass'] = [x + y for x, y in zip(mar_tot_fin['Gol'], mar_tot_fin['Assist'])]
+    mar_tot_fin = mar_tot_fin.sort_values('Gol', ascending=False)
+    mar_tot_fin['Squadra']=[', '.join(x) for x in mar_tot_fin['Squadra']]
+    m1,m2 = st.columns([2,1])
+    with m1:
+        st.subheader('Classifica marcatori')
+        st.dataframe(mar_tot_fin, hide_index=True)
+    with m2:
+        played = df.shape[0]
+        gol_tot = sum(df['GC']) + sum(df['GT'])
+        st.metric(label='Gol segnati', value=gol_tot)
+        media_gol = round(gol_tot / played, 2)
+        st.metric(label='Media gol', value=media_gol)
+
+    st.divider()
+
+    piegol1, piegol2 = st.columns(2)
+    with piegol1:
+        gca = sum(df['GC'])
+        gtr = sum(df['GT'])
+        gct = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[gca, gtr],
+                     labels=["Gol Casa", "Gol Tras"])
+        st.plotly_chart(go.FigureWidget(data=gct), use_container_width=True)
+
+        st.write('Distribuzione gol per match')
+        n_gol = [x + y for x, y in zip(df['GC'], df['GT'])]
+        dis_gol = go.Figure()
+        dis_gol.add_trace(go.Histogram(x=n_gol, name="count"))
+        st.plotly_chart(go.FigureWidget(data=dis_gol), use_container_width=True)
+    with piegol2:
+        marcatori_st['Tempo'] = ['1T' if x <= 45 else '2T' for x in marcatori_st['Minuto']]
+        marcatori_st['Q_Tempo'] = ['0-15' if (0 < x <= 15) | (45 < x <= 60) else '16-30' if (15 < x <= 30) | (60 < x <= 75) else '31-45' for x in marcatori_st['Minuto']]
+        df_pivot = marcatori_st.pivot_table(index='Tempo', columns='Q_Tempo', values='Marcatori', aggfunc='count')
+        df_freq = df_pivot * 100 / df.shape[0]
+        time_gr = go.Figure(data=go.Heatmap(z=df_freq.values, x=df_freq.columns, y=df_freq.index,
+                                           text=df_freq.round(1).astype(str) + '%', texttemplate="%{text}",
+                                           colorscale="oranges", showscale=True))
+        time_gr.update_layout(xaxis=dict(title="Segmento temporale", type="category"),
+                             yaxis=dict(title="1°/2° Tempo", type="category"))
+        time_gr.update_xaxes(side='top')
+        st.plotly_chart(go.FigureWidget(data=time_gr), use_container_width=True)
+
 
 with ins:
-    m1, m2, m3 = st.columns(3)
-    with m1:
-        played = df.shape[0]
-        st.metric(label='Partite giocate',value=played)
-    with m2:
-        gol_tot = sum(df['GC'])+sum(df['GT'])
-        st.metric(label='Gol segnati',value=gol_tot)
-    with m3:
-        media_gol = round(gol_tot/played,2)
-        st.metric(label='Media gol',value=media_gol)
-    st.divider()
-    pie1, pie2 = st.columns(2)
+    pie1, pie2 = st.columns([2,1])
     with pie1:
         wh=df[df['GC']>df['GT']].shape[0]
         wa = df[df['GC'] < df['GT']].shape[0]
@@ -71,17 +112,9 @@ with ins:
                        labels=["Under", "Over"])
         st.plotly_chart(go.FigureWidget(data=uo_gr), use_container_width=True)
     with pie2:
-        gca=sum(df['GC'])
-        gtr = sum(df['GT'])
-        gct = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[gca, gtr],
-                        labels=["Gol Casa","Gol Tras"])
-        st.plotly_chart(go.FigureWidget(data=gct), use_container_width=True)
-
-        st.write('Distribuzione gol per match')
-        n_gol = [x + y for x, y in zip(df['GC'], df['GT'])]
-        dis_gol = go.Figure()
-        dis_gol.add_trace(go.Histogram(x=n_gol, name="count"))
-        st.plotly_chart(go.FigureWidget(data=dis_gol), use_container_width=True)
+        st.metric(label='Partite giocate', value=played)
+        st.metric(label='Vittorie in casa', value=wh)
+        st.metric(label='Vittorie in trasferta', value=wa)
 
     with st.expander('Frequenza risultati'):
         df['clus_GC']=[str(x) if x<=4 else '>4' for x in df['GC']]

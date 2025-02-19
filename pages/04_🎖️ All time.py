@@ -31,3 +31,19 @@ with perp:
         df2_gr = px.bar(df2, x="Stagione", y=['Gol 1T','Gol 2T'])
         df2_gr.update_layout(xaxis=dict(title="Stagione", type="category"), yaxis=dict(title="% Gol 1T/2T"))
         st.plotly_chart(df2_gr)
+
+with rec:
+    storico['diff_gol']=[x-y for x,y in zip(storico['GC'],storico['GT'])]
+    storico['sum_gol'] = [x + y for x, y in zip(storico['GC'], storico['GT'])]
+    dfs=storico.sort_values('diff_gol')
+    dfg = storico.sort_values('sum_gol',ascending=False)
+    wmore = dfg.iloc[0, :]
+    wt=dfs.iloc[0,:]
+    wc = dfs.iloc[dfs.shape[0]-1, :]
+    daymore=storico.groupby(['Stagione','Giornata'],as_index=False).agg({'sum_gol':'sum'})
+    daymore1 = daymore.sort_values('sum_gol', ascending=False)
+    st.write(f"Vittoria più larga in casa: {wc['CASA'].item()} - {wc['TRAS'].item()} {wc['GC'].item()}-{wc['GT'].item()} - {wc['Giornata'].item()}° giornata - {wc['Giorno'].item()}")
+    st.write(f"Vittoria più larga in trasferta: {wt['CASA'].item()} - {wt['TRAS'].item()} {wt['GC'].item()}-{wt['GT'].item()} - {wt['Giornata'].item()}° giornata - {wt['Giorno'].item()}")
+    st.write(f"Partita con più gol: {wmore['CASA'].item()} - {wmore['TRAS'].item()} {wmore['GC'].item()}-{wmore['GT'].item()} - {wmore['Giornata'].item()}° giornata - {wmore['Giorno'].item()}")
+    st.write(f"Giornata con più gol: {daymore1['Giornata'].item()}° giornata della stagione {daymore1['Stagione'].item()} con {daymore1['sum_gol'].item()} gol")
+

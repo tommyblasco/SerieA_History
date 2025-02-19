@@ -281,6 +281,6 @@ def class_1t(seas):
     trasferta=db.groupby(['TRAS'],as_index=False).agg({'PA':'sum','Data':'count','A':'sum','N':'sum','H':'sum','GT_parz':'sum','GC_parz':'sum'})
     casa.columns=['Squadra','Punti','Gio','V','N','P','GF','GS']
     trasferta.columns=['Squadra','Punti','Gio','V','N','P','GF','GS']
-    classifica=pd.concat([casa,trasferta],ignore_index=True).groupby(['Squadra'],as_index=False).agg({'Punti':'sum','Gio':'sum','V':'sum','N':'sum','P':'sum','GF':'sum','GS':'sum','DR':'sum'})
+    classifica=pd.concat([casa,trasferta],ignore_index=True).groupby(['Squadra'],as_index=False).agg({'Punti':'sum','Gio':'sum','V':'sum','N':'sum','P':'sum','GF':'sum','GS':'sum'})
     classifica=classifica.sort_values('Punti',ascending=False)
     return classifica

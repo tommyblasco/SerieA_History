@@ -45,7 +45,7 @@ with rc:
             st.dataframe(class_ct(seas=sea_sel)[1],hide_index=True)
 with mgol:
     id_eligibles = [x for x in marcatori['ID'] if x[:4]==sea_sel[:4]]
-    marcatori_st = marcatori[(marcatori['Squadra'].isin(id_eligibles)) & ((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
+    marcatori_st = marcatori[(marcatori['ID'].isin(id_eligibles)) & ((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
     marcatori_st['Rig'] = [1 if x == 'R' else 0 for x in marcatori_st['Note']]
     m1 = marcatori_st.groupby('Marcatori', as_index=False).agg({'Squadra':list,'ID': 'count', 'Rig': 'sum'})
     m1.columns = ['Marcatori', 'Squadra','Gol', 'di cui Rig']
@@ -97,7 +97,7 @@ with mgol:
 
 
 with ins:
-    pie1, pie2 = st.columns([2,1])
+    pie1, pie2 = st.columns(2)
     with pie1:
         wh=df[df['GC']>df['GT']].shape[0]
         wa = df[df['GC'] < df['GT']].shape[0]
@@ -105,16 +105,13 @@ with ins:
                         labels=["W Casa","Pari", "W Tras"])
         st.plotly_chart(go.FigureWidget(data=wh_d_wa), use_container_width=True)
 
+    with pie2:
         un_ov = st.slider("Seleziona la soglia U/O:", min_value=0.5, max_value=5.5, value=2.5)
         over = [x + y for x, y in zip(df['GC'], df['GT']) if x + y > un_ov]
         under = [x + y for x, y in zip(df['GC'], df['GT']) if x + y < un_ov]
         uo_gr = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[len(under), len(over)],
                        labels=["Under", "Over"])
         st.plotly_chart(go.FigureWidget(data=uo_gr), use_container_width=True)
-    with pie2:
-        st.metric(label='Partite giocate', value=played)
-        st.metric(label='Vittorie in casa', value=wh)
-        st.metric(label='Vittorie in trasferta', value=wa)
 
     with st.expander('Frequenza risultati'):
         df['clus_GC']=[str(x) if x<=4 else '>4' for x in df['GC']]

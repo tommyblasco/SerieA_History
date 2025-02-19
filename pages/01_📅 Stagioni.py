@@ -51,7 +51,7 @@ with rc:
             st.dataframe(class_1t(seas=sea_sel),hide_index=True)
         with cles12:
             st.write('Esito 1°T/2°T:')
-            st.dataframe(change_1t_2t(seas=sea_sel),hide_index=True)
+            st.dataframe(change_1t_2t(seas=sea_sel))
 
 with mgol:
     id_eligibles = [x for x in marcatori['ID'] if x[:4]==sea_sel[:4]]

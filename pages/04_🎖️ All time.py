@@ -23,4 +23,11 @@ with perp:
         dfg1_gr = px.bar(dfg1, x="Stagione", y=['WH','N','WA'])
         dfg1_gr.update_layout(xaxis=dict(title="Stagione", type="category"),yaxis=dict(title="% W H/A"))
         st.plotly_chart(dfg1_gr)
-
+    with st.expander('Gol 1/2 Tempo'):
+        marcatori['Stagione']=[x[:4]+'-'+x[4:6] for x in marcatori['ID']]
+        marcatori['Gol 1T']=[100 if x<=45 else 0 for x in marcatori['Minuto']]
+        marcatori['Gol 2T'] = [100 if x > 45 else 0 for x in marcatori['Minuto']]
+        df2=marcatori.groupby(['Stagione'],as_index=False).agg({'Gol 1T':'mean','Gol 2T':'mean'})
+        df2_gr = px.bar(df2, x="Stagione", y=['Gol 1T','Gol 2T'])
+        df2_gr.update_layout(xaxis=dict(title="Stagione", type="category"), yaxis=dict(title="% Gol 1T/2T"))
+        st.plotly_chart(df2_gr)

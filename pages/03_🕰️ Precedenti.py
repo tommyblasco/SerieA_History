@@ -101,6 +101,18 @@ with h2h:
             dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]
             st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)
 
+    with st.expander('I mattatori della sfida'):
+        ids_m = [x for x in df1['ID']]+[x for x in df2['ID']]
+        marcatori_prec = marcatori[marcatori['ID'].isin(ids_m)]
+        marcatori_prec = marcatori_prec[(marcatori_prec['Note']!='A') | pd.isna(marcatori_prec['Note'])]
+        marcatori_prec['t1']=[1 if x==t1 else 0 for x in marcatori_prec['Squadra']]
+        marcatori_prec['t2']=[1 if x==t2 else 0 for x in marcatori_prec['Squadra']]
+        mtot=marcatori_prec.groupby('Marcatori',as_index=False).agg({'t1':'sum','t2':'sum'})
+        mtot['Tot Gol']=[x+y for x,y in zip(mtot['t1'],mtot['t2'])]
+        mtot=mtot.sort_values('Tot Gol',ascending=False)
+        mtot.columns=['Bombers',f'Per {t1}',f'per {t2}','Totale']
+        st.dataframe(mtot,hide_index=True)
+
     with st.expander('Record'):
         reccol1, reccol2 = st.columns(2)
         with reccol1:

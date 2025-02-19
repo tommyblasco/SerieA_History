@@ -167,6 +167,18 @@ with inst:
         avg_gola_gr.update_layout(xaxis={'title':'Stagione','type':'category'}, yaxis={'title':'Media Gol'})
         st.plotly_chart(go.FigureWidget(data=avg_gola_gr), use_container_width=True)
 
+    with st.expander('I migliori marcatori in serie A'):
+        marcatori_sq = marcatori[(marcatori['Squadra']==tea_sel) & ((marcatori['Note']!='A') | pd.isna(marcatori['Note']))]
+        marcatori_sq['Rig']=[1 if x=='R' else 0 for x in marcatori_sq['Note']]
+        m1=marcatori_sq.groupby('Marcatori',as_index=False).agg({'ID':'count','Rig':'sum'})
+        m1.columns=['Marcatori','Gol','di cui Rig']
+        ass_mar = marcatori_sq.groupby('Assist',as_index=False).agg({'ID':'count'})
+        ass_mar.columns=['Marcatori','Assist']
+        mar_tot_fin=pd.concat([m1,ass_mar]).groupby('Marcatori').agg({'Gol':'sum','di cui Rig':'sum','Assist':'sum'})
+        mar_tot_fin['Gol+Ass']=[x+y for x,y in zip(mar_tot_fin['Gol'],mar_tot_fin['Assist'])]
+        mar_tot_fin=mar_tot_fin.sort_values('Gol',ascending=False)
+        st.dataframe(mar_tot_fin,hide_index=True)
+
 with rec:
     but_tot3, but_h3, but_a3 = st.columns(3)
     subc5, subc6 = st.columns(2)

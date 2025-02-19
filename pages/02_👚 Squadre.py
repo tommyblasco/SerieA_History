@@ -174,7 +174,7 @@ with inst:
         m1.columns=['Marcatori','Gol','di cui Rig']
         ass_mar = marcatori_sq.groupby('Assist',as_index=False).agg({'ID':'count'})
         ass_mar.columns=['Marcatori','Assist']
-        mar_tot_fin=pd.concat([m1,ass_mar]).groupby('Marcatori').agg({'Gol':'sum','di cui Rig':'sum','Assist':'sum'})
+        mar_tot_fin=pd.concat([m1,ass_mar]).groupby('Marcatori',as_index=False).agg({'Gol':'sum','di cui Rig':'sum','Assist':'sum'})
         mar_tot_fin['Gol+Ass']=[x+y for x,y in zip(mar_tot_fin['Gol'],mar_tot_fin['Assist'])]
         mar_tot_fin=mar_tot_fin.sort_values('Gol',ascending=False)
         st.dataframe(mar_tot_fin,hide_index=True)

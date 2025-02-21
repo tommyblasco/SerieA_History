@@ -7,6 +7,7 @@ from Funzioni import *
 st.title("Serie A")
 
 st.subheader("Database storico della Serie A a girone unico")
+st.markdown("*Tutti i risultati ed i marcatori dal 1929-30 ad oggi*")
 
 stagione_curr=str(seas_list[0])  #stagione corrente
 

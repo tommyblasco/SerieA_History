@@ -31,6 +31,7 @@ with rc:
         st.dataframe(df_fil_gio[['Giorno','CASA','TRAS','Risultato']],hide_index=True)
 
     with st.expander('Andamento classifica'):
+        st.markdown("*Come si è evoluta la classifica giornata per giornata?*")
         c_cum=class_cum(seas=sea_sel)
         cum_gr = px.line(c_cum, x="Giornata", y="CumP", color="Squadra",markers=True)
         cum_gr.update_layout(xaxis_title="Giornata", yaxis_title="Punti Cumulati")
@@ -48,10 +49,10 @@ with rc:
     with st.expander('Classifica 1° Tempo e esito 1°/2° tempo'):
         cl1t, cles12 = st.columns(2)
         with cl1t:
-            st.write('Classifica 1° Tempo:')
+            st.markdown("*Come sarebbe la classifica se le partite finissero entro i primi 45'?*")
             st.dataframe(class_1t(seas=sea_sel),hide_index=True)
         with cles12:
-            st.write('Esito 1°T/2°T:')
+            st.markdown("*Il risultato del primo tempo è cambiato o rimasto invariato nel secondo?*")
             st.dataframe(change_1t_2t(seas=sea_sel))
 
 with mgol:
@@ -83,6 +84,7 @@ with mgol:
 
     piegol1, piegol2 = st.columns(2)
     with piegol1:
+        st.markdown("*Quanti gol sono stati segnati in casa e in trasferta?*")
         gca = sum(df['GC'])
         gtr = sum(df['GT'])
         gct = go.Figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[gca, gtr],
@@ -90,12 +92,13 @@ with mgol:
         gct.update_layout(annotations=[dict(text=f'{gca+gtr} gol',x=0.5, y=0.5, font_size=15, showarrow=False,xanchor='center')])
         st.plotly_chart(go.FigureWidget(data=gct), use_container_width=True)
 
-        st.write('Distribuzione gol per match')
+        st.markdown("*Quanti gol sono stati segnati per partita?*")
         n_gol = [x + y for x, y in zip(df['GC'], df['GT'])]
         dis_gol = go.Figure()
         dis_gol.add_trace(go.Histogram(x=n_gol, name="count"))
         st.plotly_chart(go.FigureWidget(data=dis_gol), use_container_width=True)
     with piegol2:
+        st.markdown("*In quale frazione di tempo vengono segnati più gol?*")
         marcatori_st['Tempo'] = ['1T' if x <= 45 else '2T' for x in marcatori_st['Minuto']]
         marcatori_st['Q_Tempo'] = ['0-15' if (0 < x <= 15) | (45 < x <= 60) else '16-30' if (15 < x <= 30) | (60 < x <= 75) else '31-45' for x in marcatori_st['Minuto']]
         df_pivot = marcatori_st.pivot_table(index='Tempo', columns='Q_Tempo', values='Marcatori', aggfunc='count')
@@ -112,13 +115,16 @@ with mgol:
 with ins:
     pie1, pie2 = st.columns(2)
     with pie1:
+        st.markdown("*Quante partite sono state vinte in casa e in trasferta? Quanti pareggi?*")
         wh=df[df['GC']>df['GT']].shape[0]
         wa = df[df['GC'] < df['GT']].shape[0]
-        wh_d_wa = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[wh, played-wh-wa, wa],
-                        labels=["W Casa","Pari", "W Tras"])
+        wh_d_wa = go.figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[wh, played-wh-wa, wa],
+                        labels=["W Casa","Pari", "W Tras"]))
+        wh_d_wa.update_layout(annotations=[dict(text=f'{played} partite',x=0.5, y=0.5, font_size=15, showarrow=False,xanchor='center')])
         st.plotly_chart(go.FigureWidget(data=wh_d_wa), use_container_width=True)
 
     with pie2:
+        st.markdown("*Quante partite hanno avuto meno o più di ... gol?*")
         un_ov = st.slider("Seleziona la soglia U/O:", min_value=0.5, max_value=5.5, value=2.5)
         over = [x + y for x, y in zip(df['GC'], df['GT']) if x + y > un_ov]
         under = [x + y for x, y in zip(df['GC'], df['GT']) if x + y < un_ov]
@@ -127,6 +133,8 @@ with ins:
         st.plotly_chart(go.FigureWidget(data=uo_gr), use_container_width=True)
 
     with st.expander('Frequenza risultati'):
+        st.markdown("*Quali risultati si sono verificati più frequentemente?*")
+        st.write("Per riga: Gol segnati in casa, per colonna: gol segnati in trasferta")
         df['clus_GC']=[str(x) if x<=4 else '>4' for x in df['GC']]
         df['clus_GT'] = [str(x) if x <= 4 else '>4' for x in df['GT']]
         df_pivot = df.pivot_table(index='clus_GC', columns='clus_GT', values='GC', aggfunc='count')
@@ -140,6 +148,7 @@ with ins:
         st.plotly_chart(go.FigureWidget(data=res_gr), use_container_width=True)
 
     with st.expander('Andamento gol per giornata'):
+        st.markdown("Quanti gol in media sono stati segnati per giornata?")
         df['gol_match'] = [x + y for x, y in zip(df['GC'], df['GT'])]
         agg_gol_gio=df.groupby(['Giornata'],as_index=False).agg({'gol_match':'mean'})
         gol_gio_gr = px.line(agg_gol_gio, x="Giornata", y="gol_match", markers=True)
@@ -148,6 +157,7 @@ with ins:
 
 with sm:
     st.subheader('Ricerca partita:')
+    st.markdown("*Conosci risultato e marcatori di qualsiasi partita in stagione*")
     l1=sorted(list(classifica['Squadra']))
     ht=st.selectbox('Seleziona la squadra in casa',l1)
     l2=[x for x in l1 if x!=ht]
@@ -187,6 +197,7 @@ with sm:
         st.error('Partita non ancora giocata')
 
     with st.expander('Big Match'):
+        st.markdown("*Com'è finito il doppio confronto stagionale tra prima e seconda classificata?*")
         bmcol, bmcol2 = st.columns(2)
         primo = classifica.iloc[0, 2]
         secondo = classifica.iloc[1, 2]

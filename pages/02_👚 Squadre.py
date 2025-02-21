@@ -19,6 +19,7 @@ ov, inst, rec = st.tabs(['Overview','Insights','Record'])
 
 with ov:
     st.subheader('Partecipazioni e pos finale:')
+    st.markdown("*Qual è stata la posizione finale della squadra nelle varie stagioni in Serie A a cui ha partecipato?*")
     parcol1, parcol2 = st.columns([1, 3])
     with parcol1:
         n_part = int(riep_grp.loc[riep_grp['Squadre']==tea_sel,'Stagioni'].item())
@@ -47,6 +48,7 @@ with ov:
     st.divider()
 
     st.subheader('Bilancio serie A')
+    st.markdown("*Clicca su un bottone sotto e scopri quante partite la squadra ha vinto, pareggiato o perso in Serie A e quanti gol ha realizzato o subito*")
     met_casa = [df_casa.shape[0], df_casa[df_casa['GC']>df_casa['GT']].shape[0], df_casa[df_casa['GC']==df_casa['GT']].shape[0],
                 df_casa[df_casa['GC']<df_casa['GT']].shape[0], sum(df_casa['GC']), sum(df_casa['GT'])]
     met_tras = [df_tras.shape[0], df_tras[df_tras['GC']<df_tras['GT']].shape[0], df_tras[df_tras['GC']==df_tras['GT']].shape[0],
@@ -113,6 +115,7 @@ with inst:
     df_filt = pd.concat([df_casa_filt,df_tras_filt],ignore_index=True)
     df_filt['Pnt_real']=[3 if (x>y) & (z>='1994-95') else 2 if (x>y) & (z<'1994-95') else 1 if x==y else 0 for x,y,z in zip(df_filt['GF'],df_filt['GS'],df_filt['Stagione'])]
     df_filt['Pnt_hyp']=[3 if (x>y) & (z<'1994-95') else 1 if (x==y) & (z<'1994-95') else 0 if z<'1994-95' else np.nan for x,y,z in zip(df_filt['GF'],df_filt['GS'],df_filt['Stagione'])]
+    st.markdown("*Clicca su un bottone sotto e scopri l'andamento stagionale della squadra per media punti (anche considerando sempre 3 pnt a vittoria) e media gol*")
 
     but_tot2, but_h2, but_a2 = st.columns(3)
 
@@ -168,6 +171,7 @@ with inst:
         st.plotly_chart(go.FigureWidget(data=avg_gola_gr), use_container_width=True)
 
     with st.expander('I migliori marcatori in serie A'):
+        st.markdown("*Chi è stato il più grande bomber di tutti i tempi della squadra in Serie A?*")
         marcatori_sq = marcatori[(marcatori['Squadra']==tea_sel) & ((marcatori['Note']!='A') | pd.isna(marcatori['Note']))]
         marcatori_sq['Rig']=[1 if x=='R' else 0 for x in marcatori_sq['Note']]
         m1=marcatori_sq.groupby('Marcatori',as_index=False).agg({'ID':'count','Rig':'sum'})
@@ -180,6 +184,7 @@ with inst:
         st.dataframe(mar_tot_fin,hide_index=True)
 
 with rec:
+    st.markdown("*Quali sono i record consecutivi per vittorie, sconfitte e molto altro della squadra in Serie A?*")
     but_tot3, but_h3, but_a3 = st.columns(3)
     subc5, subc6 = st.columns(2)
     df1 = match_series_mod(team=tea_sel, choice='Tot')

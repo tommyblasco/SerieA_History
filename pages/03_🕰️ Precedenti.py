@@ -8,6 +8,7 @@ st.title("Precedenti")
 h2h, riep = st.tabs(['Testa a testa','Riepilogo x squadra'])
 
 with h2h:
+    st.markdown("*Chi ha vinto di più in serie A tra le 2 squadre?*")
     colt1, colfake, colt2 = st.columns([3,4,3])
     with colt1:
         t1=st.selectbox('Seleziona il team 1:',lista_sq)
@@ -74,6 +75,7 @@ with h2h:
             m8.metric(label=f'Gol fatti {t1}', value=df2['GT'].item())
 
         st.subheader('Andamento precedenti nel tempo')
+        st.markdown("*Chi era solito vincere nel passato tra i 2 team?*")
         pre_cum = prec(t1=t1, t2=t2)[2]
         cump_gr = px.area(pre_cum, x="Stagione", y="CumPr", markers=True)
         cump_gr.update_layout(xaxis=dict(title="Stagione", type="category"))
@@ -84,6 +86,7 @@ with h2h:
         st.plotly_chart(cump_gr)
 
     with st.expander('Dettaglio partite'):
+        st.markdown("*Scopri tutti i risultati dei precedenti tra i 2 team*")
         detcol1, detcol2, detcol3 = st.columns(3)
         with detcol1:
             dft1 = storico[(storico['CASA']==t1) & (storico['TRAS']==t2)].sort_values('Data',ascending=False)
@@ -102,6 +105,7 @@ with h2h:
             st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)
 
     with st.expander('I mattatori della sfida'):
+        st.markdown("*Chi è stato il bomber della sfida tra i 2 team in serie A?*")
         dfglob=storico[((storico['CASA']==t1) & (storico['TRAS']==t2)) | ((storico['CASA']==t2) & (storico['TRAS']==t1))]
         ids_m = [x for x in dfglob['ID']]
         marcatori_prec = marcatori[marcatori['ID'].isin(ids_m)]
@@ -115,6 +119,7 @@ with h2h:
         st.dataframe(mtot,hide_index=True)
 
     with st.expander('Record'):
+        st.markdown("*Da quanto tempo una squadra non vince in casa dell'altra?*")
         reccol1, reccol2 = st.columns(2)
         with reccol1:
             wte1h = dft1[dft1['GC']>dft1['GT']]
@@ -155,6 +160,7 @@ with h2h:
 
 with riep:
     tt1 = st.selectbox('Seleziona una squadra:', lista_sq)
+    st.markdown("*Contro chi la squadra ha un bilancio tra vittorie e sconfitte più favorevole?*")
     df_tt1 = storico[(storico['CASA'] == tt1) | (storico['TRAS'] == tt1)]
     df_tt1['Opponent']=[x if x!=tt1 else y for x,y in zip(df_tt1['CASA'],df_tt1['TRAS'])]
     df_tt1['W']=[1 if ((x==tt1) & (y>z) | (x!=tt1) & (z>y)) else 0 for x,y,z in zip(df_tt1['CASA'],df_tt1['GC'],df_tt1['GT'])]

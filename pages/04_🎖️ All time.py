@@ -6,16 +6,19 @@ perp, rec = st.tabs(['Classifica perpetua','Record'])
 
 with perp:
     st.subheader('Classifica perpetua')
+    st.markdown("*Quale squadra ha la maggiore media punti in Serie A?*")
     pclass=ranking(seas='All').drop('Rk',axis=1)
     st.dataframe(pclass, hide_index=True)
 
     with st.expander('Media gol stagionale'):
+        st.markdown("*E' vero che negli anni 70 e 80 si segnava di meno?*")
         storico['Gol Tot']=[x+y for x,y in zip(storico['GC'],storico['GT'])]
         dfg=storico.groupby('Stagione',as_index=False).agg({'Gol Tot':'mean'})
         df_gr = px.line(dfg, x="Stagione", y="Gol Tot", markers=True)
         df_gr.update_layout(xaxis=dict(title="Stagione", type="category"),yaxis=dict(title="Media Gol"))
         st.plotly_chart(df_gr)
     with st.expander('Vittorie C/T stagionale'):
+        st.markdown("*Com'è cambiato il fattore campo stagione dopo stagione?*")
         storico['WH']=[100 if x>y else 0 for x,y in zip(storico['GC'],storico['GT'])]
         storico['WA'] = [100 if x < y else 0 for x, y in zip(storico['GC'], storico['GT'])]
         storico['N'] = [100 if x == y else 0 for x, y in zip(storico['GC'], storico['GT'])]
@@ -24,6 +27,7 @@ with perp:
         dfg1_gr.update_layout(xaxis=dict(title="Stagione", type="category"),yaxis=dict(title="% W H/A"))
         st.plotly_chart(dfg1_gr)
     with st.expander('Gol 1/2 Tempo'):
+        st.markdown("*Si è sempre segnato di più nel secondo tempo rispetto al primo?*")
         marcatori['Stagione']=[x[:4]+'-'+x[4:6] for x in marcatori['ID']]
         marcatori['Gol 1T']=[100 if x<=45 else 0 for x in marcatori['Minuto']]
         marcatori['Gol 2T'] = [100 if x > 45 else 0 for x in marcatori['Minuto']]
@@ -33,6 +37,7 @@ with perp:
         st.plotly_chart(df2_gr)
 
 with rec:
+    st.markdown("*Record tutt'ora imbattuti in Serie A*")
     storico['diff_gol']=[x-y for x,y in zip(storico['GC'],storico['GT'])]
     storico['sum_gol'] = [x + y for x, y in zip(storico['GC'], storico['GT'])]
     dfs=storico.sort_values('diff_gol')

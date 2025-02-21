@@ -118,7 +118,7 @@ with ins:
         st.markdown("*Quante partite sono state vinte in casa e in trasferta? Quanti pareggi?*")
         wh=df[df['GC']>df['GT']].shape[0]
         wa = df[df['GC'] < df['GT']].shape[0]
-        wh_d_wa = go.figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[wh, played-wh-wa, wa],
+        wh_d_wa = go.Figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[wh, played-wh-wa, wa],
                         labels=["W Casa","Pari", "W Tras"]))
         wh_d_wa.update_layout(annotations=[dict(text=f'{played} partite',x=0.5, y=0.5, font_size=15, showarrow=False,xanchor='center')])
         st.plotly_chart(go.FigureWidget(data=wh_d_wa), use_container_width=True)

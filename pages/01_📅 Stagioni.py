@@ -27,6 +27,7 @@ with rc:
         sel_gio = st.slider("Seleziona la giornata:",1,n_gio,n_gio)
         df['Risultato']=[str(x)+'-'+str(y) for x,y in zip(df['GC'],df['GT'])]
         df_fil_gio=df[df['Giornata']==sel_gio]
+        df_fil_gio=df_fil_gio.sort_values(['Data','CASA'])
         st.dataframe(df_fil_gio[['Giorno','CASA','TRAS','Risultato']],hide_index=True)
 
     with st.expander('Andamento classifica'):
@@ -84,8 +85,9 @@ with mgol:
     with piegol1:
         gca = sum(df['GC'])
         gtr = sum(df['GT'])
-        gct = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[gca, gtr],
-                     labels=["Gol Casa", "Gol Tras"])
+        gct = go.Figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[gca, gtr],
+                     labels=["Gol Casa", "Gol Tras"]))
+        gct.update_layout(annotations=[dict(text=f'{gca+gtr} gol',x=0.5, y=0.5, showarrow=False,xanchor='center')])
         st.plotly_chart(go.FigureWidget(data=gct), use_container_width=True)
 
         st.write('Distribuzione gol per match')

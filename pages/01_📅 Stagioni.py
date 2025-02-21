@@ -87,7 +87,7 @@ with mgol:
         gtr = sum(df['GT'])
         gct = go.Figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[gca, gtr],
                      labels=["Gol Casa", "Gol Tras"]))
-        gct.update_layout(annotations=[dict(text=f'{gca+gtr} gol',x=0.5, y=0.5, showarrow=False,xanchor='center')])
+        gct.update_layout(annotations=[dict(text=f'{gca+gtr} gol',x=0.5, y=0.5, font_size=15, showarrow=False,xanchor='center')])
         st.plotly_chart(go.FigureWidget(data=gct), use_container_width=True)
 
         st.write('Distribuzione gol per match')

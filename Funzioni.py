@@ -32,7 +32,6 @@ def load_images(team,yyyy):
     return url_stemma
 
 storico=load_data(n="gspartite")
-tbd=load_data(n="gstbd")
 marcatori=load_data(n="gsmarcatori")
 penalita=pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/Penalizzazioni.csv",
                              sep=",", decimal=".", parse_dates=['Da','A'],dayfirst=True)

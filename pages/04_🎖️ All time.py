@@ -5,10 +5,28 @@ from Funzioni import *
 perp, rec = st.tabs(['Classifica perpetua','Record'])
 
 with perp:
-    st.subheader('Classifica perpetua')
-    st.markdown("*Quale squadra ha la maggiore media punti in Serie A?*")
-    pclass=ranking(seas='All').drop('Rk',axis=1)
-    st.dataframe(pclass, hide_index=True)
+    perp1, perp2 = st.columns(2)
+    with perp1:
+        st.subheader('Classifica perpetua')
+        st.markdown("*Quale squadra ha la maggiore media punti in Serie A?*")
+        pclass=ranking(seas='All').drop('Rk',axis=1)
+        st.dataframe(pclass, hide_index=True)
+    with perp2:
+        st.subheader('Classifica marcatori all time')
+        st.markdown('*Chi sono i bomber storici in Serie A?*')
+        marcatori_alt = marcatori[((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
+        marcatori_alt['Rig'] = [1 if x == 'R' else 0 for x in marcatori_alt['Note']]
+        m1 = marcatori_alt.groupby('Marcatori', as_index=False).agg({'Squadra': list, 'ID': 'count', 'Rig': 'sum'})
+        m1.columns = ['Marcatori', 'Squadra', 'Gol', 'di cui Rig']
+        ass_mar = marcatori_alt.groupby('Assist', as_index=False).agg({'ID': 'count'})
+        ass_mar.columns = ['Marcatori', 'Assist']
+        mar_alt_fin = m1.merge(ass_mar, how='left', on='Marcatori')
+        mar_alt_fin['Assist'] = mar_alt_fin['Assist'].fillna(0)
+        mar_alt_fin['Gol+Ass'] = [x + y for x, y in zip(mar_alt_fin['Gol'], mar_alt_fin['Assist'])]
+        mar_alt_fin = mar_alt_fin.sort_values('Gol', ascending=False)
+        mar_alt_fin['Squadra'] = [sorted(set(x)) for x in mar_alt_fin['Squadra']]
+        mar_alt_fin['Squadra'] = mar_alt_fin['Squadra'].apply(lambda x: ', '.join(map(str, x)))
+        st.dataframe(mar_alt_fin, hide_index=True)
 
     with st.expander('Media gol stagionale'):
         st.markdown("*E' vero che negli anni 70 e 80 si segnava di meno?*")

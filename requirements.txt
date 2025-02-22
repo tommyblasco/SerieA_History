@@ -2,6 +2,7 @@ pandas
 requests
 numpy
 streamlit
+st-gsheets-connection
 plotly
 ipywidgets
 PyGithub

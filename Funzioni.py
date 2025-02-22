@@ -3,6 +3,7 @@ import numpy as np
 from datetime import date, datetime, timedelta
 import streamlit as st
 from github import Github
+from streamlit_gsheets import GSheetsConnection
 from PIL import Image
 from io import BytesIO
 import requests
@@ -12,6 +13,11 @@ import plotly.express as px
 
 conn_g=Github(st.secrets['TOKEN'])
 repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
+
+conn1 = st.connection("gspartite", type=GSheetsConnection)
+conn2 = st.connection("gsmarcatori", type=GSheetsConnection)
+conn3 = st.connection("gstbd", type=GSheetsConnection)
+
 @st.cache_data
 def load_data(df,dates):
     l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",

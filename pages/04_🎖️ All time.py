@@ -53,3 +53,5 @@ with rec:
     st.write(f"Partita con più gol: {wmore['CASA']} - {wmore['TRAS']} {wmore['GC'].item()}-{wmore['GT'].item()} - {wmore['Giornata'].item()}° giornata - {wmore['Giorno']}")
     st.write(f"Giornata con più gol: {dm['Giornata'].item()}° giornata della stagione {dm['Stagione']} con {dm['sum_gol'].item()} gol")
 
+    dfprova = conn1.read(worksheet="Foglio1",ttl="10m")
+    st.dataframe(dfprova,hide_index=True)

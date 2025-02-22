@@ -19,10 +19,10 @@ conn2 = st.connection("gsmarcatori", type=GSheetsConnection)
 conn3 = st.connection("gstbd", type=GSheetsConnection)
 
 @st.cache_data
-def load_data(df,dates):
-    l_data = pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/{df}.csv",
-                             sep=",", decimal=".", parse_dates=dates,dayfirst=True)
-    return l_data
+def load_data(n):
+    l_data = st.connection(n, type=GSheetsConnection)
+    l_data1 = l_data.read(worksheet="Foglio1", ttl="10m")
+    return l_data1
 @st.cache_data
 def load_images(team,yyyy):
     stemmi_ava=repo_seriea.get_contents(f"/images/stemmi/{team}")
@@ -31,21 +31,22 @@ def load_images(team,yyyy):
     url_stemma=f"https://github.com/tommyblasco/SerieA_History/blob/main/images/stemmi/{team}/{yy_sel}.png?raw=True".replace(' ','%20')
     return url_stemma
 
-storico=load_data(df="Partite",dates=['Data'])
-tbd=load_data(df="TBD",dates=['Data'])
-penalita=load_data(df="Penalizzazioni",dates=['Da','A'])
-marcatori=load_data(df="Marcatori",dates=[])
+storico=load_data(n="gspartite")
+tbd=load_data(n="gstbd")
+marcatori=load_data(n="gsmarcatori")
+penalita=pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/Penalizzazioni.csv",
+                             sep=",", decimal=".", parse_dates=['Da','A'],dayfirst=True)
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')
 
-storico['Data']=[x.date() for x in storico['Data']]
+#storico['Data']=[x.date() for x in storico['Data']]
 storico['Giorno'] = pd.to_datetime(storico['Data']).dt.strftime('%b %d, %Y')
-storico['GC']=[int(x) for x in storico['GC']]
-storico['GT']=[int(x) for x in storico['GT']]
+#storico['GC']=[int(x) for x in storico['GC']]
+#storico['GT']=[int(x) for x in storico['GT']]
 marcatori=marcatori[~marcatori['Minuto'].isna()]
-marcatori['Minuto']=[int(x) for x in marcatori['Minuto']]
-marcatori['Recupero']=[int(x) if not pd.isna(x) else np.nan for x in marcatori['Recupero'] ]
-marcatori['Recupero'] = marcatori['Recupero'].astype('Int64')
+#marcatori['Minuto']=[int(x) for x in marcatori['Minuto']]
+#marcatori['Recupero']=[int(x) if not pd.isna(x) else np.nan for x in marcatori['Recupero'] ]
+#marcatori['Recupero'] = marcatori['Recupero'].astype('Int64')
 penalita['Da']=[x.date() for x in penalita['Da']]
 penalita['A']=[x.date() for x in penalita['A']]
 

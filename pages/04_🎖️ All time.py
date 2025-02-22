@@ -5,7 +5,7 @@ from Funzioni import *
 perp, rec = st.tabs(['Classifica perpetua','Record'])
 
 with perp:
-    perp1, perp2, perp3 = st.columns([3,3,1])
+    perp1, perp2, perp3 = st.columns([2,2,1])
     with perp1:
         st.subheader('Classifica perpetua')
         st.markdown("*Quale squadra ha la maggiore media punti in Serie A?*")
@@ -17,7 +17,7 @@ with perp:
         marcatori_alt = marcatori[((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
         marcatori_alt['Rig'] = [1 if x == 'R' else 0 for x in marcatori_alt['Note']]
         m1 = marcatori_alt.groupby('Marcatori', as_index=False).agg({'Squadra': list, 'ID': 'count', 'Rig': 'sum'})
-        m1.columns = ['Marcatori', 'Squadra', 'Gol', 'di cui Rig']
+        m1.columns = ['Marcatori', 'Gol', 'di cui Rig','Squadra']
         ass_mar = marcatori_alt.groupby('Assist', as_index=False).agg({'ID': 'count'})
         ass_mar.columns = ['Marcatori', 'Assist']
         mar_alt_fin = m1.merge(ass_mar, how='left', on='Marcatori')

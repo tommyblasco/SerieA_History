@@ -16,7 +16,7 @@ with perp:
         st.markdown('*Chi sono i bomber storici in Serie A?*')
         marcatori_alt = marcatori[((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
         marcatori_alt['Rig'] = [1 if x == 'R' else 0 for x in marcatori_alt['Note']]
-        m1 = marcatori_alt.groupby('Marcatori', as_index=False).agg({'Squadra': list, 'ID': 'count', 'Rig': 'sum'})
+        m1 = marcatori_alt.groupby('Marcatori', as_index=False).agg({ 'ID': 'count', 'Rig': 'sum','Squadra': list})
         m1.columns = ['Marcatori', 'Gol', 'di cui Rig','Squadra']
         ass_mar = marcatori_alt.groupby('Assist', as_index=False).agg({'ID': 'count'})
         ass_mar.columns = ['Marcatori', 'Assist']

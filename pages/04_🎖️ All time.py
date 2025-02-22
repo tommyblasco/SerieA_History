@@ -28,6 +28,14 @@ with perp:
         mar_alt_fin['Squadra'] = mar_alt_fin['Squadra'].apply(lambda x: ', '.join(map(str, x)))
         st.dataframe(mar_alt_fin, hide_index=True)
 
+    with st.expander('Classifica autogol'):
+        st.markdown("*Chi il più sfortunato nella storia della Serie A?*")
+        autogols = marcatori[marcatori['Note'] == 'A']
+        autogols = autogols.groupby('Marcatori', as_index=False).agg({'ID': 'count'})
+        autogols.columns = ['Giocatore', 'Autogol']
+        autogols = autogols.sort_values('Autogol', ascending=False)
+        st.dataframe(autogols, hide_index=True)
+
     with st.expander('Media gol stagionale'):
         st.markdown("*E' vero che negli anni 70 e 80 si segnava di meno?*")
         storico['Gol Tot']=[x+y for x,y in zip(storico['GC'],storico['GT'])]

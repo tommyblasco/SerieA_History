@@ -5,7 +5,7 @@ from Funzioni import *
 perp, rec = st.tabs(['Classifica perpetua','Record'])
 
 with perp:
-    perp1, perp2 = st.columns(2)
+    perp1, perp2, perp3 = st.columns([3,3,1])
     with perp1:
         st.subheader('Classifica perpetua')
         st.markdown("*Quale squadra ha la maggiore media punti in Serie A?*")
@@ -27,8 +27,8 @@ with perp:
         mar_alt_fin['Squadra'] = [sorted(set(x)) for x in mar_alt_fin['Squadra']]
         mar_alt_fin['Squadra'] = mar_alt_fin['Squadra'].apply(lambda x: ', '.join(map(str, x)))
         st.dataframe(mar_alt_fin, hide_index=True)
-
-    with st.expander('Classifica autogol'):
+    with perp3:
+        st.subheader('Classifica autogol all time')
         st.markdown("*Chi il più sfortunato nella storia della Serie A?*")
         autogols = marcatori[marcatori['Note'] == 'A']
         autogols = autogols.groupby('Marcatori', as_index=False).agg({'ID': 'count'})

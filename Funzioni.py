@@ -39,8 +39,8 @@ penalita=pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_Hist
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')
 
-#storico['Data']=[x.date() for x in storico['Data']]
 storico['Data']=pd.to_datetime(storico['Data'], dayfirst=True)
+storico['Data']=[x.date() for x in storico['Data']]
 storico['Giorno'] = storico['Data'].dt.strftime('%b %d, %Y')
 #storico['GC']=[int(x) for x in storico['GC']]
 #storico['GT']=[int(x) for x in storico['GT']]

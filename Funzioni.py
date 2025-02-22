@@ -59,7 +59,7 @@ riep_grp = riep_part.groupby('Squadre', as_index=False).agg({'Stagioni': 'count'
 riep_grp = riep_grp.sort_values(by='Stagioni')
 
 #classifica x tutte le stagioni
-@st.cache_data
+
 def ranking(seas,st_date=date(1900,1,1),en_date=date.today()):
     if seas=='All':
         db=storico

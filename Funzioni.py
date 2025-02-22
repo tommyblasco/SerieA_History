@@ -16,7 +16,6 @@ repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
 
 conn1 = st.connection("gspartite", type=GSheetsConnection)
 conn2 = st.connection("gsmarcatori", type=GSheetsConnection)
-conn3 = st.connection("gstbd", type=GSheetsConnection)
 
 @st.cache_data
 def load_data(n):

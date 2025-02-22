@@ -40,8 +40,8 @@ albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/r
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')
 
 storico['Data']=pd.to_datetime(storico['Data'], dayfirst=True)
-storico['Data']=[x.date() for x in storico['Data']]
 storico['Giorno'] = storico['Data'].dt.strftime('%b %d, %Y')
+storico['Data']=[x.date() for x in storico['Data']]
 #storico['GC']=[int(x) for x in storico['GC']]
 #storico['GT']=[int(x) for x in storico['GT']]
 marcatori=marcatori[~marcatori['Minuto'].isna()]

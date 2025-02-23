@@ -29,6 +29,10 @@ def load_images(team,yyyy):
     url_stemma=f"https://github.com/tommyblasco/SerieA_History/blob/main/images/stemmi/{team}/{yy_sel}.png?raw=True".replace(' ','%20')
     return url_stemma
 
+def refresh_data():
+    storico=load_data(n="gspartite")
+    marcatori = load_data(n="gsmarcatori")
+
 storico=load_data(n="gspartite")
 marcatori=load_data(n="gsmarcatori")
 penalita=pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/Penalizzazioni.csv",

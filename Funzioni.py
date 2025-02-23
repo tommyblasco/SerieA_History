@@ -30,8 +30,8 @@ def load_images(team,yyyy):
     return url_stemma
 
 def refresh_data():
-    storico=load_data(n="gspartite")
-    marcatori = load_data(n="gsmarcatori")
+    storico=load_data(n="gspartite").clear()
+    marcatori = load_data(n="gsmarcatori").clear()
 
 storico=load_data(n="gspartite")
 marcatori=load_data(n="gsmarcatori")

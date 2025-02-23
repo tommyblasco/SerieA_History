@@ -7,8 +7,7 @@ st.header('Le stagioni')
 
 sea_sel=st.selectbox('Seleziona una stagione',seas_list)
 if st.button("Forza Aggiornamento"):
-    st.cache_data.clear()  # Cancella la cache
-    st.rerun()  # Ricarica la pagina
+    load_data(n="gspartite")
 
 df=storico[storico['Stagione']==sea_sel]
 start_sea=min(df['Data'])

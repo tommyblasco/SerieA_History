@@ -7,9 +7,6 @@ st.header('Le stagioni')
 
 sea_sel=st.selectbox('Seleziona una stagione',seas_list)
 
-count=0
-if st.button('Refresh'):
-    count+=1
 
 df=storico[storico['Stagione']==sea_sel]
 start_sea=min(df['Data'])

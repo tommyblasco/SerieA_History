@@ -17,10 +17,9 @@ repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
 conn1 = st.connection("gspartite", type=GSheetsConnection)
 conn2 = st.connection("gsmarcatori", type=GSheetsConnection)
 
-@st.cache_data(ttl=300)
 def load_data(n):
     l_data = st.connection(n, type=GSheetsConnection)
-    l_data1 = l_data.read(worksheet="Foglio1")
+    l_data1 = l_data.read(worksheet="Foglio1",ttl=30)
     return l_data1
 @st.cache_data
 def load_images(team,yyyy):

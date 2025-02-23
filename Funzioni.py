@@ -19,7 +19,7 @@ conn2 = st.connection("gsmarcatori", type=GSheetsConnection)
 
 def load_data(n):
     l_data = st.connection(n, type=GSheetsConnection)
-    l_data1 = l_data.read(worksheet="Foglio1",ttl=30)
+    l_data1 = l_data.read(worksheet="Foglio1")
     return l_data1
 @st.cache_data
 def load_images(team,yyyy):

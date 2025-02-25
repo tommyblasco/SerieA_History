@@ -1,14 +1,6 @@
 #st.set_page_config(page_title="Serie A - Squadre",layout='wide')
 from Funzioni import *
 
-if "storico" not in st.session_state:
-    from Home import load_data  # Importa solo se necessario
-    st.session_state.storico = load_data(n="gspartite")
-
-if "marcatori" not in st.session_state:
-    from Home import load_data  # Importa solo se necessario
-    st.session_state.marcatori = load_data(n="gsmarcatori")
-
 storico=get_storico()
 marcatori=get_marcatori()
 

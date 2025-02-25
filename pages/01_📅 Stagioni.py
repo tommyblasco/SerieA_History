@@ -3,15 +3,8 @@ st.set_page_config(page_title="Serie A - Stagioni",layout='wide')
 from Funzioni import *
 
 st.header('Le stagioni')
-c1, c2 = st.columns([3, 1])
-with c1:
-    sea_sel=st.selectbox('Seleziona una stagione',seas_list)
-with c2:
-    if st.button("Aggiorna Dati"):
-        st.session_state.clear()
-        st.session_state.storico = load_data(n="gspartite")
-        st.session_state.marcatori = load_data(n="gsmarcatori")
-        st.rerun()
+
+sea_sel=st.selectbox('Seleziona una stagione',seas_list)
 
 df=storico[storico['Stagione']==sea_sel]
 start_sea=min(df['Data'])

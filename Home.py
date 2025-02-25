@@ -44,7 +44,3 @@ if "storico" not in st.session_state:
 
 if "marcatori" not in st.session_state:
     st.session_state.marcatori = load_data(n="gsmarcatori")
-
-if st.button("Aggiorna Dati"):
-    st.session_state.storico = load_data(n="gspartite")
-    st.session_state.marcatori = load_data(n="gsmarcatori")

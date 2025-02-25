@@ -1,6 +1,10 @@
 #st.set_page_config(page_title="Serie A - Stagioni",layout='wide')
 from Funzioni import *
 
+storico=get_storico()
+marcatori=get_marcatori()
+seas_list = sorted(set(storico['Stagione']),reverse=True)
+
 st.header('Le stagioni')
 
 sea_sel=st.selectbox('Seleziona una stagione',seas_list)
@@ -15,7 +19,7 @@ with rc:
     class_c, ris_c = st.columns([2, 1])
     with class_c:
         sel_date = st.slider("Seleziona il range di date:", min_value=start_sea, max_value=end_sea,value=(start_sea,end_sea),step=timedelta(days=1),format="DD/MM/YYYY")
-        classifica=ranking(seas=sea_sel,st_date=sel_date[0],en_date=sel_date[1])
+        classifica=ranking(dati=storico,seas=sea_sel,st_date=sel_date[0],en_date=sel_date[1])
         stem = []
         for s in classifica['Squadra']:
             stem.append(load_images(team=s, yyyy=sea_sel[:4]))
@@ -30,7 +34,7 @@ with rc:
 
     with st.expander('Andamento classifica'):
         st.markdown("*Come si è evoluta la classifica giornata per giornata?*")
-        c_cum=class_cum(seas=sea_sel)
+        c_cum=class_cum(dati=storico,seas=sea_sel)
         cum_gr = px.line(c_cum, x="Giornata", y="CumP", color="Squadra",markers=True)
         cum_gr.update_layout(xaxis_title="Giornata", yaxis_title="Punti Cumulati")
         st.plotly_chart(cum_gr)
@@ -39,19 +43,19 @@ with rc:
         clh, cla = st.columns(2)
         with clh:
             st.write('Classifica in casa:')
-            st.dataframe(class_ct(seas=sea_sel)[0],hide_index=True)
+            st.dataframe(class_ct(dati=storico,seas=sea_sel)[0],hide_index=True)
         with cla:
             st.write('Classifica in trasferta:')
-            st.dataframe(class_ct(seas=sea_sel)[1],hide_index=True)
+            st.dataframe(class_ct(dati=storico,seas=sea_sel)[1],hide_index=True)
 
     with st.expander('Classifica 1° Tempo e esito 1°/2° tempo'):
         cl1t, cles12 = st.columns(2)
         with cl1t:
             st.markdown("*Come sarebbe la classifica se le partite finissero entro i primi 45'?*")
-            st.dataframe(class_1t(seas=sea_sel),hide_index=True)
+            st.dataframe(class_1t(datis=storico,datim=marcatori,seas=sea_sel),hide_index=True)
         with cles12:
             st.markdown("*Il risultato del primo tempo è cambiato o rimasto invariato nel secondo?*")
-            st.dataframe(change_1t_2t(seas=sea_sel))
+            st.dataframe(change_1t_2t(datis=storico,datim=marcatori,seas=sea_sel))
 
 with mgol:
     id_eligibles = [x for x in marcatori['ID'] if x[:4]==sea_sel[:4]]

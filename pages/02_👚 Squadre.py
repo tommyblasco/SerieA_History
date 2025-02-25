@@ -1,6 +1,16 @@
 #st.set_page_config(page_title="Serie A - Squadre",layout='wide')
 from Funzioni import *
 
+storico=get_storico()
+marcatori=get_marcatori()
+
+seas_list = sorted(set(storico['Stagione']),reverse=True)
+lista_sq=sorted(set(list(storico['CASA'])+list(storico['TRAS'])))
+riep_part = pd.DataFrame({'Stagioni': list(storico['Stagione']) + list(storico['Stagione']),
+                          'Squadre': list(storico['CASA']) + list(storico['TRAS'])})
+riep_part = riep_part.drop_duplicates()
+riep_grp = riep_part.groupby('Squadre', as_index=False).agg({'Stagioni': 'count'})
+riep_grp = riep_grp.sort_values(by='Stagioni')
 
 tea_sel=st.selectbox('Seleziona una squadra',lista_sq)
 
@@ -32,7 +42,7 @@ with ov:
     with parcol2:
         stag, pos = [], []
         for s in seas_list:
-            cl = ranking(seas=s)
+            cl = ranking(dati=storico,seas=s)
             if tea_sel in list(cl['Squadra']):
                 pos.append(int(cl.loc[cl['Squadra']==tea_sel,'Rk'].item()))
             else:
@@ -185,9 +195,9 @@ with rec:
     st.markdown("*Quali sono i record consecutivi per vittorie, sconfitte e molto altro della squadra in Serie A?*")
     but_tot3, but_h3, but_a3 = st.columns(3)
     subc5, subc6 = st.columns(2)
-    df1 = match_series_mod(team=tea_sel, choice='Tot')
-    df2 = match_series_mod(team=tea_sel, choice='C')
-    df3 = match_series_mod(team=tea_sel, choice='T')
+    df1 = match_series_mod(dati=storico,team=tea_sel, choice='Tot')
+    df2 = match_series_mod(dati=storico,team=tea_sel, choice='C')
+    df3 = match_series_mod(dati=storico,team=tea_sel, choice='T')
     if but_tot3.button("Totale", key='tot3'):
         with subc5:
             st.metric(label='Più lunga striscia di vittorie in totale',value=df1[1])

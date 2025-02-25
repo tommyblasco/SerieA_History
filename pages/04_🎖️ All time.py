@@ -1,6 +1,14 @@
 #st.set_page_config(page_title="Serie A - All time",layout='wide')
 from Funzioni import *
 
+storico=get_storico()
+marcatori=get_marcatori()
+riep_part = pd.DataFrame({'Stagioni': list(storico['Stagione']) + list(storico['Stagione']),
+                          'Squadre': list(storico['CASA']) + list(storico['TRAS'])})
+riep_part = riep_part.drop_duplicates()
+riep_grp = riep_part.groupby('Squadre', as_index=False).agg({'Stagioni': 'count'})
+riep_grp = riep_grp.sort_values(by='Stagioni')
+
 alb, perp, rec = st.tabs(["Albo d'oro & more",'Classifica perpetua','Record'])
      # stagione corrente
 
@@ -34,7 +42,7 @@ with perp:
     with perp1:
         st.subheader('Classifica perpetua')
         st.markdown("*Quale squadra ha la maggiore media punti in Serie A?*")
-        pclass=ranking(seas='All').drop('Rk',axis=1)
+        pclass=ranking(dati=storico,seas='All').drop('Rk',axis=1)
         st.dataframe(pclass, hide_index=True)
     with perp2:
         st.subheader('Classifica marcatori all time')

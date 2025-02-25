@@ -2,6 +2,11 @@
 
 from Funzioni import *
 
+storico=get_storico()
+marcatori=get_marcatori()
+lista_sq=sorted(set(list(storico['CASA'])+list(storico['TRAS'])))
+
+
 st.title("Precedenti")
 
 h2h, riep = st.tabs(['Testa a testa','Riepilogo x squadra'])
@@ -16,8 +21,8 @@ with h2h:
         lsq2 = [x for x in lista_sq if x != t1]
         t2=st.selectbox('Seleziona il team 2:',lsq2)
         st.image(Image.open(BytesIO(requests.get(load_images(team=t2, yyyy='2999')).content)))
-    df1 = prec(t1=t1, t2=t2)[0]
-    df2 = prec(t1=t1, t2=t2)[1]
+    df1 = prec(dati=storico,t1=t1, t2=t2)[0]
+    df2 = prec(dati=storico,t1=t1, t2=t2)[1]
     if (df1.shape[0]==0) | (df2.shape[0]==0):
         st.error('Nessun precedente trovato')
     else:
@@ -75,7 +80,7 @@ with h2h:
 
         st.subheader('Andamento precedenti nel tempo')
         st.markdown("*Chi era solito vincere nel passato tra i 2 team?*")
-        pre_cum = prec(t1=t1, t2=t2)[2]
+        pre_cum = prec(dati=storico,t1=t1, t2=t2)[2]
         cump_gr = px.area(pre_cum, x="Stagione", y="CumPr", markers=True)
         cump_gr.update_layout(xaxis=dict(title="Stagione", type="category"))
         cump_gr.add_annotation( x=-0.2, y=max(pre_cum["CumPr"]),showarrow=False,

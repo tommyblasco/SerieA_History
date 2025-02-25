@@ -25,6 +25,26 @@ def load_images(team,yyyy):
     url_stemma=f"https://github.com/tommyblasco/SerieA_History/blob/main/images/stemmi/{team}/{yy_sel}.png?raw=True".replace(' ','%20')
     return url_stemma
 
+def get_storico():
+    if "storico" in st.session_state:
+        storico = st.session_state.storico.copy()
+        storico['Data'] = pd.to_datetime(storico['Data'], dayfirst=True)
+        storico['Giorno'] = storico['Data'].dt.strftime('%b %d, %Y')
+        storico['Data'] = storico['Data'].dt.date
+        return storico
+    else:
+        return None
+
+def get_marcatori():
+    if "marcatori" in st.session_state:
+        marcatori = st.session_state.marcatori.copy()
+        marcatori = marcatori[~marcatori['Minuto'].isna()]
+        marcatori['Minuto'] = marcatori['Minuto'].astype(int)
+        marcatori['Recupero'] = marcatori['Recupero'].apply(lambda x: int(x) if not pd.isna(x) else np.nan)
+        marcatori['Recupero'] = marcatori['Recupero'].astype('Int64')
+        return marcatori
+    else:
+        return None
 
 
 penalita=pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/Penalizzazioni.csv",
@@ -35,23 +55,13 @@ clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_Histo
 penalita['Da']=[x.date() for x in penalita['Da']]
 penalita['A']=[x.date() for x in penalita['A']]
 
-
-seas_list = sorted(set(storico['Stagione']),reverse=True)
-lista_sq=sorted(set(list(storico['CASA'])+list(storico['TRAS'])))
-stagione_curr = str(seas_list[0])
-riep_part = pd.DataFrame({'Stagioni': list(storico['Stagione']) + list(storico['Stagione']),
-                          'Squadre': list(storico['CASA']) + list(storico['TRAS'])})
-riep_part = riep_part.drop_duplicates()
-riep_grp = riep_part.groupby('Squadre', as_index=False).agg({'Stagioni': 'count'})
-riep_grp = riep_grp.sort_values(by='Stagioni')
-
 #classifica x tutte le stagioni
 
-def ranking(seas,st_date=date(1900,1,1),en_date=date.today()):
+def ranking(dati,seas,st_date=date(1900,1,1),en_date=date.today()):
     if seas=='All':
-        db=storico
+        db=dati
     else:
-        db=storico[(storico['Stagione']==seas) & (storico['Data']>=st_date) & (storico['Data']<=en_date)]
+        db=dati[(dati['Stagione']==seas) & (dati['Data']>=st_date) & (dati['Data']<=en_date)]
     db['H']=[1 if x>y else 0 for x,y in zip(db['GC'],db['GT'])]
     db['N']=[1 if x==y else 0 for x,y in zip(db['GC'],db['GT'])]
     db['A']=[1 if x<y else 0 for x,y in zip(db['GC'],db['GT'])]
@@ -85,8 +95,8 @@ def ranking(seas,st_date=date(1900,1,1),en_date=date.today()):
     return new_class
 
 #prossima giornata avendo anche il rif alla posizione della squadra
-def class_cum(seas):
-    db = storico[(storico['Stagione'] == seas)]
+def class_cum(dati,seas):
+    db = dati[(dati['Stagione'] == seas)]
     db['H']=[1 if x>y else 0 for x,y in zip(db['GC'],db['GT'])]
     db['N']=[1 if x==y else 0 for x,y in zip(db['GC'],db['GT'])]
     db['A']=[1 if x<y else 0 for x,y in zip(db['GC'],db['GT'])]
@@ -97,8 +107,8 @@ def class_cum(seas):
     new_db_l['CumP'] = new_db_l.groupby(['Squadra'], as_index=False)['Punti'].transform(pd.Series.cumsum)
     return new_db_l
 
-def class_ct(seas):
-    db = storico[(storico['Stagione'] == seas)]
+def class_ct(dati,seas):
+    db = dati[(dati['Stagione'] == seas)]
     db['H']=[1 if x>y else 0 for x,y in zip(db['GC'],db['GT'])]
     db['N']=[1 if x==y else 0 for x,y in zip(db['GC'],db['GT'])]
     db['A']=[1 if x<y else 0 for x,y in zip(db['GC'],db['GT'])]
@@ -114,8 +124,8 @@ def class_ct(seas):
     trasferta = trasferta.sort_values(by=['Punti', 'DR'], ascending=False)
     return [casa, trasferta]
 
-def match_series(team,c_t):
-    db=storico[(storico[c_t] == team)].sort_values('Data')
+def match_series(dati,team,c_t):
+    db=dati[(dati[c_t] == team)].sort_values('Data')
     db['Risultato']=[str(x)+'-'+str(y) for x,y in zip(db['GC'],db['GT'])]
     if c_t=='CASA':
         db=db.rename(columns={'GC':'Gol Fatti','GT':'Gol subiti'})
@@ -144,9 +154,9 @@ def match_series(team,c_t):
     db['Clean sheet']=list_gs
     return db
 
-def match_series_tot(team):
-    home_ser=match_series(team,c_t='CASA')
-    away_ser=match_series(team,c_t='TRAS')
+def match_series_tot(dati,team):
+    home_ser=match_series(dati,team,c_t='CASA')
+    away_ser=match_series(dati,team,c_t='TRAS')
     home_ser1=home_ser.drop(['Single','No loss','No win','Gf consec','Clean sheet'],axis=1)
     away_ser1 = away_ser.drop(['Single', 'No loss', 'No win', 'Gf consec', 'Clean sheet'], axis=1)
     db=pd.concat([home_ser1,away_ser1],ignore_index=True).sort_values('Data')
@@ -172,14 +182,14 @@ def match_series_tot(team):
     db['Clean sheet']=list_gs
     return [db, home_ser, away_ser]
 
-def match_series_mod(team,choice):
+def match_series_mod(dati,team,choice):
     col_fin=['Stagione','Giorno','CASA','TRAS','Risultato']
     if choice=='Tot':
-        db_ser_tot = match_series_tot(team=team)[0]
+        db_ser_tot = match_series_tot(dati,team=team)[0]
     elif choice=='C':
-        db_ser_tot = match_series_tot(team=team)[1]
+        db_ser_tot = match_series_tot(dati,team=team)[1]
     else:
-        db_ser_tot = match_series_tot(team=team)[2]
+        db_ser_tot = match_series_tot(dati,team=team)[2]
     db_ser_tot['nrow'] = list(range(1, db_ser_tot.shape[0] + 1))
     db_ser_tot_w = db_ser_tot[db_ser_tot['Esito'] == 'W']
     db_ser_tot_w = db_ser_tot_w.sort_values(['Single', 'Data'], ascending=False)
@@ -225,9 +235,9 @@ def match_series_mod(team,choice):
             df_serie_nw[col_fin], record_nw,
             df_serie_gsc[col_fin], record_gsc]
 
-def prec(t1,t2):
-    t1h=storico[(storico['CASA']==t1) & (storico['TRAS']==t2)]
-    t2h = storico[(storico['CASA'] == t2) & (storico['TRAS'] == t1)]
+def prec(dati,t1,t2):
+    t1h=dati[(dati['CASA']==t1) & (dati['TRAS']==t2)]
+    t2h = dati[(dati['CASA'] == t2) & (dati['TRAS'] == t1)]
     t1h['WH']=[1 if x>y else 0 for x,y in zip(t1h['GC'],t1h['GT'])]
     t1h['N'] = [1 if x == y else 0 for x, y in zip(t1h['GC'], t1h['GT'])]
     t1h['WA'] = [1 if x < y else 0 for x, y in zip(t1h['GC'], t1h['GT'])]
@@ -245,8 +255,8 @@ def prec(t1,t2):
     cum_prec['CumPr'] = cum_prec['Prec cum'].cumsum()
     return [t1h_gr, t2h_gr, cum_prec]
 
-def ris_parz():
-    mar_arr=marcatori.merge(storico[['ID','CASA','TRAS']],on='ID',how='left')
+def ris_parz(datis,datim):
+    mar_arr=datim.merge(datis[['ID','CASA','TRAS']],on='ID',how='left')
     mar_arr['delta_gc']=[1 if x==y else 0 for x,y in zip(mar_arr['Squadra'],mar_arr['CASA'])]
     mar_arr['delta_gt']=[1 if x==y else 0 for x,y in zip(mar_arr['Squadra'],mar_arr['TRAS'])]
     mar_arr['GC_parz'] = mar_arr.groupby('ID')['delta_gc'].cumsum()
@@ -255,15 +265,15 @@ def ris_parz():
     mar_1t['min_tot'] = [x + y if not pd.isna(y) else x for x, y in zip(mar_1t['Minuto'], mar_1t['Recupero'])]
     mar_1t_max = mar_1t.groupby(['ID'], as_index=False).agg({'min_tot': 'max'})
     mar_1t_max = mar_1t_max.merge(mar_1t, on=['ID', 'min_tot'], how='inner')
-    df_fin = storico.merge(mar_1t_max[['ID', 'GC_parz', 'GT_parz']], on='ID', how='left')
+    df_fin = datis.merge(mar_1t_max[['ID', 'GC_parz', 'GT_parz']], on='ID', how='left')
     df_fin['GC_parz']=df_fin['GC_parz'].fillna(0)
     df_fin['GT_parz']=df_fin['GT_parz'].fillna(0)
     df_fin['GC_parz']=[int(x) for x in df_fin['GC_parz']]
     df_fin['GT_parz'] = [int(x) for x in df_fin['GT_parz']]
     return df_fin
 
-def class_1t(seas):
-    db = ris_parz()
+def class_1t(datis,datim,seas):
+    db = ris_parz(datis,datim)
     db = db[(db['Stagione'] == seas)]
     db['H']=[1 if x>y else 0 for x,y in zip(db['GC_parz'],db['GT_parz'])]
     db['N']=[1 if x==y else 0 for x,y in zip(db['GC_parz'],db['GT_parz'])]
@@ -278,8 +288,8 @@ def class_1t(seas):
     classifica=classifica.sort_values('Punti',ascending=False)
     return classifica
 
-def change_1t_2t(seas):
-    db=ris_parz()
+def change_1t_2t(datis,datim,seas):
+    db=ris_parz(datis,datim)
     db = db[(db['Stagione'] == seas)]
     db['1t/2t H']=['V/V' if (x>y) & (x1>y1) else 'N/V' if (x>y) & (x1==y1) else 'P/V' if (x>y) & (x1<y1)
                    else 'V/N' if (x==y) & (x1>y1) else 'V/P' if (x<y) & (x1>y1) else 'N/P' if (x<y) & (x1==y1) else

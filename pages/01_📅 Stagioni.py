@@ -2,9 +2,6 @@
 from Home import load_data
 from Funzioni import *
 
-if st.button("Aggiorna Dati"):
-    st.session_state.storico = load_data(n="gspartite")
-    st.session_state.marcatori = load_data(n="gsmarcatori")
 
 storico=get_storico()
 marcatori=get_marcatori()

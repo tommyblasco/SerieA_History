@@ -37,8 +37,8 @@ with h2h:
             hbar = go.Figure()
             for i, col in zip([wt1, pareg, wt2], ['orange', 'gray', 'blue']):
                 hbar.add_trace(go.Bar(x=[i], y=['Bil'], orientation='h', marker=dict(color=[col]),
-                                      text=[str(i)], textposition='inside',
-                                      textfont=dict(size=22)))
+                                      text=[str(round(100 * i / n_gio, 2))], textposition='auto',
+                                      textfont=dict(size=20)))
             hbar.update_layout(barmode='stack', showlegend=False,xaxis=dict(showticklabels=False), yaxis=dict(showticklabels=False), margin=dict(l=0,r=0,t=0,b=0),height=100)
             st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
 

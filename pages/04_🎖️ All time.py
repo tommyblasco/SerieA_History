@@ -1,5 +1,4 @@
-import streamlit as st
-st.set_page_config(page_title="Serie A - All time",layout='wide')
+#st.set_page_config(page_title="Serie A - All time",layout='wide')
 from Funzioni import *
 
 alb, perp, rec = st.tabs(["Albo d'oro & more",'Classifica perpetua','Record'])

@@ -32,7 +32,7 @@ with h2h:
 
         pretot1, pretot2 = st.columns([1,5])
         with pretot1:
-            st.metric(label='Partite giocate in serie A', value=n_gio)
+            st.metric(label='Tot precedenti in serie A', value=n_gio)
         with pretot2:
             hbar = go.Figure()
             for i, col in zip([wt1, pareg, wt2], ['orange', 'gray', 'blue']):

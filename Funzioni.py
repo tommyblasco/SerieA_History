@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from datetime import date, datetime, timedelta
+from Home import storico, marcatori
 import streamlit as st
 from github import Github
 from streamlit_gsheets import GSheetsConnection
@@ -10,7 +11,7 @@ import requests
 from raceplotly.plots import barplot
 import plotly.graph_objects as go
 import plotly.express as px
-from Home import storico, marcatori
+
 
 conn_g=Github(st.secrets['TOKEN'])
 repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")

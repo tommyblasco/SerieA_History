@@ -14,7 +14,6 @@ import plotly.express as px
 conn_g=Github(st.secrets['TOKEN'])
 repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
 
-
 @st.cache_data(ttl=0)
 def load_data(n):
     l_data = st.connection(n, type=GSheetsConnection)

@@ -10,6 +10,7 @@ with c2:
     if st.button("Aggiorna Dati"):
         st.session_state.storico = load_data(n="gspartite")
         st.session_state.marcatori = load_data(n="gsmarcatori")
+        st.rerun()
 
 df=storico[storico['Stagione']==sea_sel]
 start_sea=min(df['Data'])

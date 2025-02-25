@@ -3,7 +3,7 @@ st.set_page_config(page_title="Serie A - Stagioni",layout='wide')
 from Funzioni import *
 
 st.header('Le stagioni')
-c1, c2= st.column([3,1])
+c1, c2= st.columns([3,1])
 with c1:
     sea_sel=st.selectbox('Seleziona una stagione',seas_list)
 with c2:

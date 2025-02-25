@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from datetime import date, datetime, timedelta
-from Home import storico, marcatori
 import streamlit as st
 from github import Github
 from streamlit_gsheets import GSheetsConnection

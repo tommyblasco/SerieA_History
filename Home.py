@@ -5,8 +5,6 @@ import requests
 from PIL import Image
 from io import BytesIO
 from streamlit_gsheets import GSheetsConnection
-import pandas as pd
-import numpy as np
 
 st.title("Serie A")
 

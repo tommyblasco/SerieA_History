@@ -39,7 +39,7 @@ with h2h:
                 hbar.add_trace(go.Bar(x=[i], y=['Bil'], orientation='h', marker=dict(color=[col]),
                                       text=[str(i)], textposition='inside',
                                       textfont=dict(size=16)))
-            hbar.update_layout(barmode='stack', showlegend=False, yaxis=dict(showticklabels=False), margin=dict(l=0,r=0,t=0,b=0),height=100)
+            hbar.update_layout(barmode='stack', showlegend=False,xaxis=dict(showticklabels=False), yaxis=dict(showticklabels=False), margin=dict(l=0,r=0,t=0,b=0),height=100)
             st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
 
         colgc1, colgc2, colgc3 = st.columns([3,4,3])

@@ -25,11 +25,24 @@ with h2h:
     if (df1.shape[0]==0) | (df2.shape[0]==0):
         st.error('Nessun precedente trovato')
     else:
-        colgc1, colgc2, colgc3 = st.columns([3,4,3])
         wt1=df1['WH'].item()+df2['WA'].item()
         wt2=df2['WH'].item()+df1['WA'].item()
         n_gio=df1['TRAS'].item()+df2['TRAS'].item()
         pareg=df1['N'].item() + df2['N'].item()
+
+        pretot1, pretot2 = st.columns([1,5])
+        with pretot1:
+            st.metric(label='Partite giocate in serie A', value=n_gio)
+        with pretot2:
+            hbar = go.Figure()
+            for i, col in zip([wt1, pareg, wt2], ['orange', 'gray', 'blue']):
+                hbar.add_trace(go.Bar(x=[i], y=['Bil'], orientation='h', marker=dict(color=[col]),
+                                      text=[str(round(100 * i / n_gio, 2)) + '%'], textposition='auto',
+                                      textfont=dict(size=16)))
+            hbar.update_layout(barmode='stack', showlegend=False, yaxis=dict(showticklabels=False), margin=dict(l=0,r=0,t=0,b=0))
+            st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
+
+        colgc1, colgc2, colgc3 = st.columns([3,4,3])
         with colgc1:
             st.text(f'{t1} home')
             wh_d_wa1 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
@@ -58,13 +71,7 @@ with h2h:
             fig.add_annotation(x=1.9, y=(2 * beta) + 0.4, showarrow=False,text=f"W {t2}")
             fig.add_annotation(x=0, y=0.4, showarrow=False, text=f"{pareg} pareggi")
             st.plotly_chart(fig, use_container_width=True)
-            st.metric(label='Partite giocate in serie A', value=n_gio)
-            st.text('così ripartite:')
-            hbar = go.Figure()
-            for i,col in zip([wt1,pareg,wt2],['orange','gray','blue']):
-                hbar.add_trace(go.Bar(x=[i],y=['Bil'],orientation='h',marker=dict(color=[col]),text=[str(round(100*i/n_gio,2))+'%'],textposition='auto',textfont=dict(size=16)))
-            hbar.update_layout(barmode='stack',showlegend=False,yaxis=dict(showticklabels=False),bargap=0.7)
-            st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
+
         with colgc3:
             st.text(f'{t2} home')
             wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],

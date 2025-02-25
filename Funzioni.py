@@ -10,15 +10,12 @@ import requests
 from raceplotly.plots import barplot
 import plotly.graph_objects as go
 import plotly.express as px
+from Home import storico, marcatori
 
 conn_g=Github(st.secrets['TOKEN'])
 repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
 
-@st.cache_data(ttl=0)
-def load_data(n):
-    l_data = st.connection(n, type=GSheetsConnection)
-    l_data1 = l_data.read(worksheet="Foglio1")
-    return l_data1
+
 @st.cache_data
 def load_images(team,yyyy):
     stemmi_ava=repo_seriea.get_contents(f"/images/stemmi/{team}")
@@ -28,28 +25,19 @@ def load_images(team,yyyy):
     return url_stemma
 
 
-storico=load_data(n="gspartite")
-marcatori=load_data(n="gsmarcatori")
+
 penalita=pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/Penalizzazioni.csv",
                              sep=",", decimal=".", parse_dates=['Da','A'],dayfirst=True)
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')
 
-storico['Data']=pd.to_datetime(storico['Data'], dayfirst=True)
-storico['Giorno'] = storico['Data'].dt.strftime('%b %d, %Y')
-storico['Data']=[x.date() for x in storico['Data']]
-#storico['GC']=[int(x) for x in storico['GC']]
-#storico['GT']=[int(x) for x in storico['GT']]
-marcatori=marcatori[~marcatori['Minuto'].isna()]
-marcatori['Minuto']=[int(x) for x in marcatori['Minuto']]
-marcatori['Recupero']=[int(x) if not pd.isna(x) else np.nan for x in marcatori['Recupero'] ]
-marcatori['Recupero'] = marcatori['Recupero'].astype('Int64')
 penalita['Da']=[x.date() for x in penalita['Da']]
 penalita['A']=[x.date() for x in penalita['A']]
 
+
 seas_list = sorted(set(storico['Stagione']),reverse=True)
 lista_sq=sorted(set(list(storico['CASA'])+list(storico['TRAS'])))
-
+stagione_curr = str(seas_list[0])
 riep_part = pd.DataFrame({'Stagioni': list(storico['Stagione']) + list(storico['Stagione']),
                           'Squadre': list(storico['CASA']) + list(storico['TRAS'])})
 riep_part = riep_part.drop_duplicates()

@@ -16,7 +16,7 @@ repo_seriea=conn_g.get_user("tommyblasco").get_repo("SerieA_History")
 
 conn1 = st.connection("gspartite", type=GSheetsConnection)
 conn2 = st.connection("gsmarcatori", type=GSheetsConnection)
-@st.cache_data(ttl=0)
+
 def load_data(n):
     l_data = st.connection(n, type=GSheetsConnection)
     l_data1 = l_data.read(worksheet="Foglio1")
@@ -29,9 +29,14 @@ def load_images(team,yyyy):
     url_stemma=f"https://github.com/tommyblasco/SerieA_History/blob/main/images/stemmi/{team}/{yy_sel}.png?raw=True".replace(' ','%20')
     return url_stemma
 
+if "storico" not in st.session_state:
+    st.session_state.storico = load_data(n="gspartite")
 
-storico=load_data(n="gspartite")
-marcatori=load_data(n="gsmarcatori")
+if "marcatori" not in st.session_state:
+    st.session_state.marcatori = load_data(n="gsmarcatori")
+
+storico=st.session_state.storico.copy()
+marcatori=st.session_state.marcatori.copy()
 penalita=pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/Penalizzazioni.csv",
                              sep=",", decimal=".", parse_dates=['Da','A'],dayfirst=True)
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')

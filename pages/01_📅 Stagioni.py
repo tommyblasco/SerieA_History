@@ -2,10 +2,14 @@ import streamlit as st
 st.set_page_config(page_title="Serie A - Stagioni",layout='wide')
 from Funzioni import *
 
-
 st.header('Le stagioni')
-
-sea_sel=st.selectbox('Seleziona una stagione',seas_list)
+c1, c2= st.column([3,1])
+with c1:
+    sea_sel=st.selectbox('Seleziona una stagione',seas_list)
+with c2:
+    if st.button("Aggiorna Dati"):
+        st.session_state.storico = load_data(n="gspartite")
+        st.session_state.marcatori = load_data(n="gsmarcatori")
 
 df=storico[storico['Stagione']==sea_sel]
 start_sea=min(df['Data'])

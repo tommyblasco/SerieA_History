@@ -8,6 +8,7 @@ with c1:
     sea_sel=st.selectbox('Seleziona una stagione',seas_list)
 with c2:
     if st.button("Aggiorna Dati"):
+        st.session_state.clear()
         st.session_state.storico = load_data(n="gspartite")
         st.session_state.marcatori = load_data(n="gsmarcatori")
         st.rerun()

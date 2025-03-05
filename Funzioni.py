@@ -254,6 +254,59 @@ def prec(dati,t1,t2):
     cum_prec['CumPr'] = cum_prec['Prec cum'].cumsum()
     return [t1h_gr, t2h_gr, cum_prec]
 
+def prec_with_mr(dati,type,i1,i2):
+    if type=='MM':
+        t1h = dati[(dati['All CASA'] == i1) & (dati['All TRAS'] == i2)]
+        t2h = dati[(dati['All CASA'] == i2) & (dati['All TRAS'] == i1)]
+    else:
+        t1h = dati[(dati['All CASA'] == i1) & (dati['TRAS'] == i2)]
+        t2h = dati[(dati['CASA'] == i2) & (dati['All TRAS'] == i1)]
+    t1h['W1']=[1 if x>y else 0 for x,y in zip(t1h['GC'],t1h['GT'])]
+    t1h['N']=[1 if x == y else 0 for x, y in zip(t1h['GC'], t1h['GT'])]
+    t1h['W2'] = [1 if x < y else 0 for x, y in zip(t1h['GC'], t1h['GT'])]
+    t2h['W1'] = [1 if x < y else 0 for x, y in zip(t2h['GC'], t2h['GT'])]
+    t2h['N'] = [1 if x == y else 0 for x, y in zip(t2h['GC'], t2h['GT'])]
+    t2h['W2'] = [1 if x > y else 0 for x, y in zip(t2h['GC'], t2h['GT'])]
+    tot_gio = t1h.shape[0]+t2h.shape[0]
+    return [tot_gio, sum(t1h['W1'])+sum(t2h['W1']), sum(t1h['N'])+sum(t2h['N']), sum(t1h['W2'])+sum(t2h['W2'])]
+
+def riepilogo_prec(dati,type,i1):
+    if type=='TT':
+        df_tt1 = dati[(dati['CASA'] == i1) | (dati['TRAS'] == i1)]
+        df_tt1['Opponent'] = [x if x != i1 else y for x, y in zip(df_tt1['CASA'], df_tt1['TRAS'])]
+        df_tt1['W'] = [1 if ((x == i1) & (y > z) | (x != i1) & (z > y)) else 0 for x, y, z in
+                       zip(df_tt1['CASA'], df_tt1['GC'], df_tt1['GT'])]
+        df_tt1['D'] = [1 if x == y else 0 for x, y in zip(df_tt1['GC'], df_tt1['GT'])]
+        df_tt1['L'] = [1 if ((x == i1) & (y < z) | (x != i1) & (z < y)) else 0 for x, y, z in
+                       zip(df_tt1['CASA'], df_tt1['GC'], df_tt1['GT'])]
+        df_tt1_g = df_tt1.groupby('Opponent', as_index=False).agg(
+            {'CASA': 'count', 'W': 'sum', 'D': 'sum', 'L': 'sum'}).sort_values(['CASA', 'W'])
+        df_tt1_g['Bil'] = [x - y for x, y in zip(df_tt1_g['W'], df_tt1_g['L'])]
+    elif type=='MM':
+        df_tt1 = dati[(dati['All CASA'] == i1) | (dati['All TRAS'] == i1)]
+        df_tt1['Opponent'] = [x if x != i1 else y for x, y in zip(df_tt1['All CASA'], df_tt1['All TRAS'])]
+        df_tt1['W'] = [1 if ((x == i1) & (y > z) | (x != i1) & (z > y)) else 0 for x, y, z in
+                       zip(df_tt1['All CASA'], df_tt1['GC'], df_tt1['GT'])]
+        df_tt1['D'] = [1 if x == y else 0 for x, y in zip(df_tt1['GC'], df_tt1['GT'])]
+        df_tt1['L'] = [1 if ((x == i1) & (y < z) | (x != i1) & (z < y)) else 0 for x, y, z in
+                       zip(df_tt1['All CASA'], df_tt1['GC'], df_tt1['GT'])]
+        df_tt1_g = df_tt1.groupby('Opponent', as_index=False).agg(
+            {'All CASA': 'count', 'W': 'sum', 'D': 'sum', 'L': 'sum'}).sort_values(['All CASA', 'W'])
+        df_tt1_g['Bil'] = [x - y for x, y in zip(df_tt1_g['W'], df_tt1_g['L'])]
+    else:
+        df_tt1 = dati[(dati['All CASA'] == i1) | (dati['All TRAS'] == i1)]
+        df_tt1['Opponent'] = [z if x != i1 else w for x, z, w in zip(df_tt1['All CASA'], df_tt1['CASA'], df_tt1['TRAS'])]
+        df_tt1['W'] = [1 if ((x == i1) & (y > z) | (x != i1) & (z > y)) else 0 for x, y, z in
+                       zip(df_tt1['All CASA'], df_tt1['GC'], df_tt1['GT'])]
+        df_tt1['D'] = [1 if x == y else 0 for x, y in zip(df_tt1['GC'], df_tt1['GT'])]
+        df_tt1['L'] = [1 if ((x == i1) & (y < z) | (x != i1) & (z < y)) else 0 for x, y, z in
+                       zip(df_tt1['All CASA'], df_tt1['GC'], df_tt1['GT'])]
+        df_tt1_g = df_tt1.groupby('Opponent', as_index=False).agg(
+            {'All CASA': 'count', 'W': 'sum', 'D': 'sum', 'L': 'sum'}).sort_values(['All CASA', 'W'])
+        df_tt1_g['Bil'] = [x - y for x, y in zip(df_tt1_g['W'], df_tt1_g['L'])]
+    df_tt1_g.reset_index(drop=True, inplace=True)
+    return df_tt1_g
+
 def ris_parz(datis,datim):
     mar_arr=datim.merge(datis[['ID','CASA','TRAS']],on='ID',how='left')
     mar_arr['delta_gc']=[1 if x==y else 0 for x,y in zip(mar_arr['Squadra'],mar_arr['CASA'])]

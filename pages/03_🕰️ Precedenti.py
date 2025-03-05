@@ -4,11 +4,11 @@ from Funzioni import *
 storico=get_storico()
 marcatori=get_marcatori()
 lista_sq=sorted(set(list(storico['CASA'])+list(storico['TRAS'])))
-
+lista_mr=sorted(set(list(storico['All CASA'])+list(storico['All TRAS'])))
 
 st.title("Precedenti")
 
-h2h, riep = st.tabs(['Testa a testa','Riepilogo x squadra'])
+h2h, h2hmr, riep = st.tabs(['Testa a testa','H2H allenatori-team','Riepilogo x squadra'])
 
 with h2h:
     st.markdown("*Chi ha vinto di più in serie A tra le 2 squadre?*")
@@ -168,17 +168,109 @@ with h2h:
             else:
                 st.warning(f'Nessuna vittoria in trasferta per {t1}')
 
+with h2hmr:
+    st.markdown("*Chi ha vinto di più in serie A tra 2 mister o tra un mister e una squadra?*")
+    conf=st.pills("Scegli un confronto",['Mr vs Mr','Mr vs Team'])
+    colmr, colmr2 = st.columns(2)
+    if conf=="Mr vs Mr":
+        with colmr:
+            mr1 = st.selectbox('Seleziona il mister 1:', lista_mr)
+            mr_avail=[x if y==mr1 else y if x==mr1 else '' for x,y in zip(storico['All CASA'],storico['All TRAS'])]
+            mr_avail_fin=sorted(set([x for x in mr_avail if x!='']))
+            st.write(mr1)
+        with colmr2:
+            mr2 = st.selectbox('Seleziona il mister 2:', mr_avail_fin)
+            st.write(mr2)
+        mrgr1, mrgr2 = st.columns(2)
+        prec_mrs=prec_with_mr(dati=storico, type="MM", i1=mr1, i2=mr2)
+        with mrgr1:
+            st.metric(label='Precedenti in A',value=prec_mrs[0])
+            met1, met2, met3 = st.columns(3)
+            met1.metric(label=f"Vittorie {mr1}",value=prec_mrs[1])
+            met2.metric(label="Pareggi", value=prec_mrs[2])
+            met3.metric(label=f"Vittorie {mr2}", value=prec_mrs[3])
+        with mrgr2:
+            wh_d_wa_mrs = go.Pie(hole=0.5, sort=False, direction='clockwise',
+                              values=[prec_mrs[1], prec_mrs[2], prec_mrs[3]],
+                              labels=[f"W {mr1}", "Pari", f"W {mr2}"], marker=dict(colors=['orange', 'grey', 'blue']))
+            st.plotly_chart(go.FigureWidget(data=wh_d_wa_mrs), use_container_width=True)
+        st.divider()
+
+        st.subheader('Dettaglio partite')
+        dfmr = storico[((storico['All CASA'] == mr1) & (storico['All TRAS'] == mr2))|((storico['All CASA']==mr2) & (storico['All TRAS']==mr1))].sort_values('Data',ascending=False)
+        dfmr.reset_index(drop=True, inplace=True)
+        dfmr['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dfmr['GC'], dfmr['GT'])]
+        st.dataframe(dfmr[['All CASA','All TRAS','CASA', 'TRAS', 'Risultato', 'Stagione', 'Giorno']], hide_index=True)
+
+        with st.expander('Riepilogo allenatore vs allenatore'):
+            mrfin = st.selectbox('Seleziona un mister:', lista_mr)
+            df_mrfin = riepilogo_prec(dati=storico, type='MM', i1=mrfin)
+            hbarmm = go.Figure()
+            hbarmm.add_trace(go.Bar(x=df_mrfin['W'], y=df_mrfin['Opponent'], orientation='h', marker=dict(color='green'),
+                                   text=df_mrfin['W']))
+            hbarmm.add_trace(go.Bar(x=df_mrfin['D'], y=df_mrfin['Opponent'], orientation='h', marker=dict(color='gray'),
+                                   text=df_mrfin['D']))
+            hbarmm.add_trace(go.Bar(x=df_mrfin['L'], y=df_mrfin['Opponent'], orientation='h', marker=dict(color='red'),
+                                   text=df_mrfin['L']))
+            hbarmm.update_layout(barmode='stack', showlegend=False, height=1600)
+            hbarmm.update_traces(textangle=0)
+            hbarmm.update_xaxes(side='top')
+            st.plotly_chart(hbarmm)
+    else:
+        with colmr:
+            mr1 = st.selectbox('Seleziona il mister:', lista_mr)
+            t_avail = [y if x != mr1 else z if x == mr1 else '' for x, y, z in
+                        zip(storico['All CASA'], storico['CASA'], storico['TRAS'])]
+            t_avail_fin = sorted(set([x for x in t_avail if x != '']))
+            st.write(mr1)
+        with colmr2:
+            tm1 = st.selectbox('Seleziona il team:', t_avail_fin)
+            st.write(tm1)
+        mrgr1, mrgr2 = st.columns(2)
+        prec_mrs = prec_with_mr(dati=storico, type="MT", i1=mr1, i2=tm1)
+        with mrgr1:
+            st.metric(label='Precedenti in A', value=prec_mrs[0])
+            met1, met2, met3 = st.columns(3)
+            met1.metric(label=f"Vittorie {mr1}", value=prec_mrs[1])
+            met2.metric(label="Pareggi", value=prec_mrs[2])
+            met3.metric(label=f"Vittorie {tm1}", value=prec_mrs[3])
+        with mrgr2:
+            wh_d_wa_mrs = go.Pie(hole=0.5, sort=False, direction='clockwise',
+                                 values=[prec_mrs[1], prec_mrs[2], prec_mrs[3]],
+                                 labels=[f"W {mr1}", "Pari", f"W {tm1}"],
+                                 marker=dict(colors=['orange', 'grey', 'blue']))
+            st.plotly_chart(go.FigureWidget(data=wh_d_wa_mrs), use_container_width=True)
+        st.divider()
+
+        st.subheader('Dettaglio partite')
+        dfmr = storico[((storico['All CASA'] == mr1) & (storico['TRAS'] == tm1)) | (
+                    (storico['CASA'] == tm1) & (storico['All TRAS'] == mr1))].sort_values('Data', ascending=False)
+        dfmr.reset_index(drop=True, inplace=True)
+        dfmr['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dfmr['GC'], dfmr['GT'])]
+        st.dataframe(dfmr[['All CASA', 'All TRAS', 'CASA', 'TRAS', 'Risultato', 'Stagione', 'Giorno']], hide_index=True)
+
+        with st.expander('Riepilogo allenatore vs allenatore'):
+            mrfin = st.selectbox('Seleziona un mister:', lista_mr)
+            df_mrfin = riepilogo_prec(dati=storico, type='MT', i1=mrfin)
+            hbarmm = go.Figure()
+            hbarmm.add_trace(
+                go.Bar(x=df_mrfin['W'], y=df_mrfin['Opponent'], orientation='h', marker=dict(color='green'),
+                       text=df_mrfin['W']))
+            hbarmm.add_trace(go.Bar(x=df_mrfin['D'], y=df_mrfin['Opponent'], orientation='h', marker=dict(color='gray'),
+                                    text=df_mrfin['D']))
+            hbarmm.add_trace(go.Bar(x=df_mrfin['L'], y=df_mrfin['Opponent'], orientation='h', marker=dict(color='red'),
+                                    text=df_mrfin['L']))
+            hbarmm.update_layout(barmode='stack', showlegend=False, height=1600)
+            hbarmm.update_traces(textangle=0)
+            hbarmm.update_xaxes(side='top')
+            st.plotly_chart(hbarmm)
+
+
+
 with riep:
     tt1 = st.selectbox('Seleziona una squadra:', lista_sq)
     st.markdown("*Contro chi la squadra ha un bilancio tra vittorie e sconfitte più favorevole?*")
-    df_tt1 = storico[(storico['CASA'] == tt1) | (storico['TRAS'] == tt1)]
-    df_tt1['Opponent']=[x if x!=tt1 else y for x,y in zip(df_tt1['CASA'],df_tt1['TRAS'])]
-    df_tt1['W']=[1 if ((x==tt1) & (y>z) | (x!=tt1) & (z>y)) else 0 for x,y,z in zip(df_tt1['CASA'],df_tt1['GC'],df_tt1['GT'])]
-    df_tt1['D'] =[1 if x==y else 0 for x,y in zip(df_tt1['GC'],df_tt1['GT'])]
-    df_tt1['L']=[1 if ((x==tt1) & (y<z) | (x!=tt1) & (z<y)) else 0 for x,y,z in zip(df_tt1['CASA'],df_tt1['GC'],df_tt1['GT'])]
-    df_tt1_g=df_tt1.groupby('Opponent',as_index=False).agg({'CASA':'count','W':'sum','D':'sum','L':'sum'}).sort_values(['CASA','W'])
-    df_tt1_g['Bil']=[x-y for x,y in zip(df_tt1_g['W'],df_tt1_g['L'])]
-    df_tt1_g.reset_index(drop=True, inplace=True)
+    df_tt1_g = riepilogo_prec(dati=storico,type='TT',i1=tt1)
 
     colgg1, colgg2 = st.columns([3, 1])
     with colgg1:

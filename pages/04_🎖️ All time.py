@@ -38,7 +38,7 @@ with alb:
                              caption=f"{row['Vincitore']} ({row['Stagione']})", use_container_width=True)
 
 with perp:
-    perp1, perp2=st.columns(2)
+    perp1, perp2=st.columns([2,1])
     st.subheader('Classifica perpetua')
     st.markdown("*Quale squadra ha la maggiore media punti in Serie A?*")
     pclass=ranking(dati=storico,seas='All').drop('Rk',axis=1)

@@ -125,7 +125,7 @@ def class_ct(dati,seas):
 
 def mister_alltime(dati):
     dati_pt2 = dati[['ID','Stagione','Giornata','Data','TRAS','CASA','GT','GC','All TRAS','All CASA']]
-    dati=dati[['ID','Stagione','Giornata','Data','TRAS','CASA','GT','GC','All TRAS','All CASA']]
+    dati=dati[['ID','Stagione','Giornata','Data','CASA','TRAS','GC','GT','All CASA','All TRAS']]
     dati.columns=['ID','Stagione','Giornata','Data','Squadra','Opponent','GF','GS','Allenatore','All opponent']
     dati_pt2.columns = ['ID', 'Stagione', 'Giornata', 'Data', 'Squadra', 'Opponent', 'GF', 'GS', 'Allenatore',
                     'All opponent']

@@ -123,6 +123,23 @@ def class_ct(dati,seas):
     trasferta = trasferta.sort_values(by=['Punti', 'DR'], ascending=False)
     return [casa, trasferta]
 
+def mister_alltime(dati):
+    dati_pt2 = dati[['ID','Stagione','Giornata','Data','TRAS','CASA','GT','GC','All TRAS','All CASA']]
+    dati.columns=['ID','Stagione','Giornata','Data','Squadra','Opponent','GF','GS','Allenatore','All opponent']
+    dati_pt2.columns = ['ID', 'Stagione', 'Giornata', 'Data', 'Squadra', 'Opponent', 'GF', 'GS', 'Allenatore',
+                    'All opponent']
+    db=pd.concat([dati,dati_pt2])
+    db['W'] = [1 if x > y else 0 for x, y in zip(db['GF'], db['GS'])]
+    db['N'] = [1 if x == y else 0 for x, y in zip(db['GF'], db['GS'])]
+    db['L'] = [1 if x < y else 0 for x, y in zip(db['GF'], db['GS'])]
+    db['Pnt'] = [x * 3 + y  for x, y in zip(db['W'], db['N'])]
+    mrallt=db.groupby(['Allenatore'],as_index=False).agg({'Pnt':'mean','Squadra':list,'Data':'count','W':'sum','N':'sum','L':'sum'})
+    mrallt.columns=['Allenatore','Media Punti 3W','Squadre','Panchine','V','N','P']
+    mrallt['Squadre'] = [sorted(set(x)) for x in mrallt['Squadre']]
+    mrallt['Squadre'] = mrallt['Squadre'].apply(lambda x: ', '.join(map(str, x)))
+    mrallt = mrallt.sort_values(by=['Panchine'], ascending=False)
+    return mrallt
+
 def match_series(dati,team,c_t):
     db=dati[(dati[c_t] == team)].sort_values('Data')
     db['Risultato']=[str(x)+'-'+str(y) for x,y in zip(db['GC'],db['GT'])]

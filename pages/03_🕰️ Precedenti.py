@@ -177,10 +177,8 @@ with h2hmr:
             mr1 = st.selectbox('Seleziona il mister 1:', lista_mr)
             mr_avail=[x if y==mr1 else y if x==mr1 else '' for x,y in zip(storico['All CASA'],storico['All TRAS'])]
             mr_avail_fin=sorted(set([x for x in mr_avail if x!='']))
-            st.write(mr1)
         with colmr2:
             mr2 = st.selectbox('Seleziona il mister 2:', mr_avail_fin)
-            st.write(mr2)
         mrgr1, mrgr2 = st.columns(2)
         prec_mrs=prec_with_mr(dati=storico, type="MM", i1=mr1, i2=mr2)
         with mrgr1:
@@ -222,10 +220,8 @@ with h2hmr:
             t_avail = [y if x != mr1 else z if x == mr1 else '' for x, y, z in
                         zip(storico['All CASA'], storico['CASA'], storico['TRAS'])]
             t_avail_fin = sorted(set([x for x in t_avail if x != '']))
-            st.write(mr1)
         with colmr2:
             tm1 = st.selectbox('Seleziona il team:', t_avail_fin)
-            st.write(tm1)
         mrgr1, mrgr2 = st.columns(2)
         prec_mrs = prec_with_mr(dati=storico, type="MT", i1=mr1, i2=tm1)
         with mrgr1:
@@ -249,7 +245,7 @@ with h2hmr:
         dfmr['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dfmr['GC'], dfmr['GT'])]
         st.dataframe(dfmr[['All CASA', 'All TRAS', 'CASA', 'TRAS', 'Risultato', 'Stagione', 'Giorno']], hide_index=True)
 
-        with st.expander('Riepilogo allenatore vs allenatore'):
+        with st.expander('Riepilogo allenatore vs squadra'):
             mrfin = st.selectbox('Seleziona un mister:', lista_mr)
             df_mrfin = riepilogo_prec(dati=storico, type='MT', i1=mrfin)
             hbarmm = go.Figure()

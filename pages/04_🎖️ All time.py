@@ -38,12 +38,12 @@ with alb:
                              caption=f"{row['Vincitore']} ({row['Stagione']})", use_container_width=True)
 
 with perp:
-    perp1, perp2=st.columns([2,1])
     st.subheader('Classifica perpetua')
     st.markdown("*Quale squadra ha la maggiore media punti in Serie A?*")
     pclass=ranking(dati=storico,seas='All').drop('Rk',axis=1)
     st.dataframe(pclass, hide_index=True)
     st.divider()
+    perp1, perp2=st.columns([2,1])
     with perp1:
         st.subheader('Classifica marcatori all time')
         st.markdown('*Chi sono i bomber storici in Serie A?*')

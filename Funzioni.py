@@ -435,7 +435,7 @@ def min_advantage(datis,datim,seas):
     van_svan_par = van_svan.merge(pg_complet[['Squadre', 'Pareggio']], on='Squadre', how='left')
     van_svan_par['Tot'] = [x + y + z for x, y, z in
                            zip(van_svan_par['Vantaggio'], van_svan_par['Svantaggio'], van_svan_par['Pareggio'])]
-    van_svan_par['Vantaggio'] = [(x / y) * 90 for x, y in zip(van_svan_par['Vantaggio'], van_svan_par['Tot'])]
-    van_svan_par['Svantaggio'] = [(x / y) * 90 for x, y in zip(van_svan_par['Svantaggio'], van_svan_par['Tot'])]
-    van_svan_par['Pareggio'] = [(x / y) * 90 for x, y in zip(van_svan_par['Pareggio'], van_svan_par['Tot'])]
+    van_svan_par['Vantaggio'] = [round((x / y) * 90,2) for x, y in zip(van_svan_par['Vantaggio'], van_svan_par['Tot'])]
+    van_svan_par['Svantaggio'] = [round((x / y) * 90,2) for x, y in zip(van_svan_par['Svantaggio'], van_svan_par['Tot'])]
+    van_svan_par['Pareggio'] = [round((x / y) * 90,2) for x, y in zip(van_svan_par['Pareggio'], van_svan_par['Tot'])]
     return van_svan_par

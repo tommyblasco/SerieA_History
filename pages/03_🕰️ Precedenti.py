@@ -63,7 +63,7 @@ with h2h:
                 fig.add_trace(go.Scatter(x=[-2,0,2], y= np.asarray([-2,0,2])*beta, showlegend=False))
                 fig.add_trace(go.Scatter(x=[-2,2], y=[(-2*beta)+0.1, (2*beta)+0.1], mode='markers', showlegend=False,
                                          marker=dict(color=['orange','blue'],size=[wt1,wt2],sizemode='area',sizeref=2.*max(wt1,wt2)/(70.**2))))
-                fig.update_layout(xaxis=dict(showgrid=False,showticklabels=False), yaxis=dict(range=[-2,2],showgrid=False,showticklabels=False))
+                fig.update_layout(xaxis=dict(showgrid=False,showticklabels=False), yaxis=dict(range=[-3,3],showgrid=False,showticklabels=False))
                 fig.add_annotation(x=-1.9, y=(-2 * beta) + 0.7, showarrow=False,
                                    text=f"{wt1}",font=dict(size=25))
                 fig.add_annotation(x=-1.9, y=(-2*beta)+0.4, showarrow=False, text=f"W {t1}")

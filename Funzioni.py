@@ -421,7 +421,7 @@ def min_advantage(datis,datim,seas):
     pgfin = pd.concat([pg1fin, pg2fin])
     pgfin = pgfin.groupby('Squadre', as_index=False).agg({'Minuto': 'sum'})
 
-    zer_zer = datis[(datis['GC'] == 0) & (datis['GT'] == 0) & (datis['Stagione']==seas_select)]
+    zer_zer = datis[(datis['GC'] == 0) & (datis['GT'] == 0) & (datis['Stagione']==seas)]
     zer_zerh = zer_zer.groupby('CASA', as_index=False).agg({'Giornata': 'count'})
     zer_zera = zer_zer.groupby('TRAS', as_index=False).agg({'Giornata': 'count'})
     zer_zerh = zer_zerh.rename(columns={'CASA': 'Squadre'})

@@ -169,9 +169,8 @@ with ins:
                                 text=df_min_adv['Pareggio']))
         hbaradv.add_trace(go.Bar(x=df_min_adv['Svantaggio'], y=df_min_adv['Squadre'], orientation='h', marker=dict(color='red'),
                                 text=df_min_adv['Svantaggio']))
-        hbaradv.update_layout(barmode='stack', showlegend=False, height=1600)
+        hbaradv.update_layout(barmode='stack', showlegend=False, height=1600, xaxis=dict(side='top'), yaxis=dict(autorange='reversed'))
         hbaradv.update_traces(textangle=0)
-        hbaradv.update_xaxes(side='top')
         st.plotly_chart(hbaradv)
 
 with sm:

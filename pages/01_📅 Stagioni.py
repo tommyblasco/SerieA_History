@@ -152,12 +152,27 @@ with ins:
         st.plotly_chart(go.FigureWidget(data=res_gr), use_container_width=True)
 
     with st.expander('Andamento gol per giornata'):
-        st.markdown("Quanti gol in media sono stati segnati per giornata?")
+        st.markdown("*Quanti gol in media sono stati segnati per giornata?*")
         df['gol_match'] = [x + y for x, y in zip(df['GC'], df['GT'])]
         agg_gol_gio=df.groupby(['Giornata'],as_index=False).agg({'gol_match':'mean'})
         gol_gio_gr = px.line(agg_gol_gio, x="Giornata", y="gol_match", markers=True)
         gol_gio_gr.update_layout(xaxis_title="Giornata", yaxis_title="Media gol segnati")
         st.plotly_chart(gol_gio_gr)
+
+    with st.expander('Minuti in vantaggio'):
+        st.markdown("*Quanti minuti (riparametrati su 90') in media, le squadre hanno passato in vantaggio/svantaggio/pareggio?*")
+        df_min_adv = min_advantage(datis=storico,datim=marcatori,seas=sea_sel)
+        hbaradv = go.Figure()
+        hbaradv.add_trace(go.Bar(x=df_min_adv['Vantaggio'], y=df_min_adv['Squadre'], orientation='h', marker=dict(color='green'),
+                                text=df_min_adv['Vantaggio']))
+        hbaradv.add_trace(go.Bar(x=df_min_adv['Pareggio'], y=df_min_adv['Squadre'], orientation='h', marker=dict(color='gray'),
+                                text=df_min_adv['Pareggio']))
+        hbaradv.add_trace(go.Bar(x=df_min_adv['Svantaggio'], y=df_min_adv['Squadre'], orientation='h', marker=dict(color='red'),
+                                text=df_min_adv['Svantaggio']))
+        hbaradv.update_layout(barmode='stack', showlegend=False, height=1600)
+        hbaradv.update_traces(textangle=0)
+        hbaradv.update_xaxes(side='top')
+        st.plotly_chart(hbaradv)
 
 with sm:
     st.subheader('Ricerca partita:')

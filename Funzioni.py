@@ -329,8 +329,10 @@ def ris_parz(datis,datim):
     mar_arr=datim.merge(datis[['ID','CASA','TRAS']],on='ID',how='left')
     mar_arr['delta_gc']=[1 if x==y else 0 for x,y in zip(mar_arr['Squadra'],mar_arr['CASA'])]
     mar_arr['delta_gt']=[1 if x==y else 0 for x,y in zip(mar_arr['Squadra'],mar_arr['TRAS'])]
+    mar_arr=mar_arr.sort_values(['ID','Minuto','Recupero'],ascending=True)
     mar_arr['GC_parz'] = mar_arr.groupby('ID')['delta_gc'].cumsum()
     mar_arr['GT_parz'] = mar_arr.groupby('ID')['delta_gt'].cumsum()
+
     mar_1t = mar_arr[mar_arr['Minuto'] <= 45]
     mar_1t['min_tot'] = [x + y if not pd.isna(y) else x for x, y in zip(mar_1t['Minuto'], mar_1t['Recupero'])]
     mar_1t_max = mar_1t.groupby(['ID'], as_index=False).agg({'min_tot': 'max'})
@@ -340,10 +342,10 @@ def ris_parz(datis,datim):
     df_fin['GT_parz']=df_fin['GT_parz'].fillna(0)
     df_fin['GC_parz']=[int(x) for x in df_fin['GC_parz']]
     df_fin['GT_parz'] = [int(x) for x in df_fin['GT_parz']]
-    return df_fin
+    return [df_fin, mar_arr]
 
 def class_1t(datis,datim,seas):
-    db = ris_parz(datis,datim)
+    db = ris_parz(datis,datim)[0]
     db = db[(db['Stagione'] == seas)]
     db['H']=[1 if x>y else 0 for x,y in zip(db['GC_parz'],db['GT_parz'])]
     db['N']=[1 if x==y else 0 for x,y in zip(db['GC_parz'],db['GT_parz'])]
@@ -359,7 +361,7 @@ def class_1t(datis,datim,seas):
     return classifica
 
 def change_1t_2t(datis,datim,seas):
-    db=ris_parz(datis,datim)
+    db=ris_parz(datis,datim)[0]
     db = db[(db['Stagione'] == seas)]
     db['1t/2t H']=['V/V' if (x>y) & (x1>y1) else 'N/V' if (x>y) & (x1==y1) else 'P/V' if (x>y) & (x1<y1)
                    else 'V/N' if (x==y) & (x1>y1) else 'V/P' if (x<y) & (x1>y1) else 'N/P' if (x<y) & (x1==y1) else
@@ -375,3 +377,65 @@ def change_1t_2t(datis,datim,seas):
     df_pivot = df_pivot[['V/V','V/N','V/P','N/V','N/N','N/P','P/V','P/N','P/P']]
     df_pivot = df_pivot.fillna(0)
     return df_pivot
+
+def min_advantage(datis,datim,seas):
+    db = ris_parz(datis, datim)[1]
+    seas_select=[x for x in db['ID'] if x[:6]==seas.split('-')[0]+seas.split('-')[1]]
+    db = db[db['ID'].isin(seas_select)]
+    db['team_adv'] = [w if y > z else x if z > y else 'Pari' for w, x, y, z in
+                           zip(db['CASA'], db['TRAS'], db['GC_parz'], db['GT_parz'])]
+    min_diff_goal = []
+    db.reset_index(drop=True, inplace=True)
+    for r in list(range(db.shape[0] - 1)):
+        if db.loc[r, 'ID'] == db.loc[r + 1, 'ID']:
+            min_diff_goal.append(max(int(db.loc[r + 1, 'Minuto']) - int(db.loc[r, 'Minuto']), 1))
+        else:
+            min_diff_goal.append(max(90 - int(db.loc[r, 'Minuto']), 1))
+    min_diff_goal.append(max(90 - int(db.loc[r + 1, 'Minuto']), 1))
+    db['min_adv'] = min_diff_goal
+    db_adv = db.groupby(['ID', 'CASA', 'TRAS', 'team_adv'], as_index=False).agg({'min_adv': 'sum'})
+    h_adv = db_adv[db_adv['CASA'] == db_adv['team_adv']]
+    h_adv['team_sv'] = h_adv['TRAS']
+    a_adv = db_adv[db_adv['TRAS'] == db_adv['team_adv']]
+    a_adv['team_sv'] = a_adv['CASA']
+    db_fin = pd.concat([h_adv, a_adv])
+    db_fin_v = db_fin.groupby('team_adv', as_index=False).agg({'min_adv': 'sum'})
+    db_fin_v.columns = ['Squadre', 'Vantaggio']
+    db_fin_sv = db_fin.groupby('team_sv', as_index=False).agg({'min_adv': 'sum'})
+    db_fin_sv.columns = ['Squadre', 'Svantaggio']
+    van_svan = db_fin_v.merge(db_fin_sv, on='Squadre', how='left')
+
+    # parte pareggi
+    paregg = db_adv[db_adv['team_adv'] == 'Pari']
+    pg1 = paregg.groupby('CASA', as_index=False).agg({'min_adv': 'sum'})
+    pg1 = pg1.rename(columns={'min_adv': 'Minuto'})
+    pg2 = paregg.groupby('TRAS', as_index=False).agg({'min_adv': 'sum'})
+    pg2 = pg2.rename(columns={'min_adv': 'Minuto'})
+    pgmin = db.groupby(['CASA', 'TRAS'], as_index=False).agg({'Minuto': 'min'})
+    pgmin1 = pgmin.groupby('CASA', as_index=False).agg({'Minuto': 'sum'})
+    pgmin2 = pgmin.groupby('TRAS', as_index=False).agg({'Minuto': 'sum'})
+    pg1fin = pd.concat([pg1, pgmin1])
+    pg2fin = pd.concat([pg2, pgmin2])
+    pg1fin = pg1fin.rename(columns={'CASA': 'Squadre'})
+    pg2fin = pg2fin.rename(columns={'TRAS': 'Squadre'})
+    pgfin = pd.concat([pg1fin, pg2fin])
+    pgfin = pgfin.groupby('Squadre', as_index=False).agg({'Minuto': 'sum'})
+
+    zer_zer = datis[(datis['GC'] == 0) & (datis['GT'] == 0) & (datis['Stagione']==seas_select)]
+    zer_zerh = zer_zer.groupby('CASA', as_index=False).agg({'Giornata': 'count'})
+    zer_zera = zer_zer.groupby('TRAS', as_index=False).agg({'Giornata': 'count'})
+    zer_zerh = zer_zerh.rename(columns={'CASA': 'Squadre'})
+    zer_zera = zer_zera.rename(columns={'TRAS': 'Squadre'})
+    zer_zer_fin = pd.concat([zer_zerh, zer_zera]).groupby('Squadre', as_index=False).agg({'Giornata': 'sum'})
+    zer_zer_fin['min_par'] = [x * 90 for x in zer_zer_fin['Giornata']]
+    pg_complet = pgfin.merge(zer_zer_fin, on='Squadre', how='left')
+    pg_complet['Pareggio'] = [x + int(y) if not np.isnan(y) else x for x, y in
+                              zip(pg_complet['Minuto'], pg_complet['min_par'])]
+
+    van_svan_par = van_svan.merge(pg_complet[['Squadre', 'Pareggio']], on='Squadre', how='left')
+    van_svan_par['Tot'] = [x + y + z for x, y, z in
+                           zip(van_svan_par['Vantaggio'], van_svan_par['Svantaggio'], van_svan_par['Pareggio'])]
+    van_svan_par['Vantaggio'] = [(x / y) * 90 for x, y in zip(van_svan_par['Vantaggio'], van_svan_par['Tot'])]
+    van_svan_par['Svantaggio'] = [(x / y) * 90 for x, y in zip(van_svan_par['Svantaggio'], van_svan_par['Tot'])]
+    van_svan_par['Pareggio'] = [(x / y) * 90 for x, y in zip(van_svan_par['Pareggio'], van_svan_par['Tot'])]
+    return van_svan_par

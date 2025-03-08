@@ -55,22 +55,23 @@ with h2h:
             m3.metric(label=f'Gol fatti {t1}',value=df1['GC'].item())
             m4.metric(label=f'Gol fatti {t2}', value=df1['GT'].item())
         with colgc2:
-            st.subheader("      COMPLESSIVO")
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow"), showlegend=False))
-            beta=(wt1/wt2)-1
-            fig.add_trace(go.Scatter(x=[-2,0,2], y= np.asarray([-2,0,2])*beta, showlegend=False))
-            fig.add_trace(go.Scatter(x=[-2,2], y=[(-2*beta)+0.1, (2*beta)+0.1], mode='markers', showlegend=False,
-                                     marker=dict(color=['orange','blue'],size=[wt1,wt2],sizemode='area',sizeref=2.*max(wt1,wt2)/(70.**2))))
-            fig.update_layout(xaxis=dict(showgrid=False,showticklabels=False), yaxis=dict(range=[-2,2],showgrid=False,showticklabels=False))
-            fig.add_annotation(x=-1.9, y=(-2 * beta) + 0.7, showarrow=False,
-                               text=f"{wt1}",font=dict(size=25))
-            fig.add_annotation(x=-1.9, y=(-2*beta)+0.4, showarrow=False, text=f"W {t1}")
-            fig.add_annotation(x=1.9, y=(2 * beta) + 0.7, showarrow=False,
-                               text=f"{wt2}",font=dict(size=25))
-            fig.add_annotation(x=1.9, y=(2 * beta) + 0.4, showarrow=False,text=f"W {t2}")
-            fig.add_annotation(x=0, y=0.4, showarrow=False, text=f"{pareg} pareggi")
-            st.plotly_chart(fig, use_container_width=True)
+            if (wt1!=0) & (wt2!=0):
+                st.subheader("      COMPLESSIVO")
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow"), showlegend=False))
+                beta=(wt1/wt2)-1
+                fig.add_trace(go.Scatter(x=[-2,0,2], y= np.asarray([-2,0,2])*beta, showlegend=False))
+                fig.add_trace(go.Scatter(x=[-2,2], y=[(-2*beta)+0.1, (2*beta)+0.1], mode='markers', showlegend=False,
+                                         marker=dict(color=['orange','blue'],size=[wt1,wt2],sizemode='area',sizeref=2.*max(wt1,wt2)/(70.**2))))
+                fig.update_layout(xaxis=dict(showgrid=False,showticklabels=False), yaxis=dict(range=[-2,2],showgrid=False,showticklabels=False))
+                fig.add_annotation(x=-1.9, y=(-2 * beta) + 0.7, showarrow=False,
+                                   text=f"{wt1}",font=dict(size=25))
+                fig.add_annotation(x=-1.9, y=(-2*beta)+0.4, showarrow=False, text=f"W {t1}")
+                fig.add_annotation(x=1.9, y=(2 * beta) + 0.7, showarrow=False,
+                                   text=f"{wt2}",font=dict(size=25))
+                fig.add_annotation(x=1.9, y=(2 * beta) + 0.4, showarrow=False,text=f"W {t2}")
+                fig.add_annotation(x=0, y=0.4, showarrow=False, text=f"{pareg} pareggi")
+                st.plotly_chart(fig, use_container_width=True)
 
         with colgc3:
             st.text(f'{t2} home')

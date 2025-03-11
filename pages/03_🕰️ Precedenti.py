@@ -69,7 +69,7 @@ with h2h:
             tab_prec.add_trace(go.Scatter(x=[1.5], y=[0.5], text=t2, mode="text",
                                            textfont=dict(size=15, color='white', family='Arial Black'),
                                            textposition="middle right"))
-            tab_prec.add_trace(go.Scatter(x=[0.98], y=[0.5], text=str(pareg), mode="text",
+            tab_prec.add_trace(go.Scatter(x=[1], y=[0.5], text=str(pareg), mode="text",
                                           textfont=dict(size=30, color='white', family='Arial Black')))
             tab_prec.add_trace(go.Scatter(x=[1], y=[0.15], text='Pareggi', mode="text",
                                           textfont=dict(size=15, color='white', family='Arial Black')))

@@ -214,7 +214,7 @@ with sm:
         tabellino.add_trace(go.Scatter(x=[0.9], y=[0.5], text=str(search_match['GC'].item()), mode="text",
             textfont=dict(size=50, color='white', family='Arial Black')))
 
-        tabellino.add_trace(go.Scatter(x=[0.6], y=[0.5], text=search_match['CASA'].item(), mode="text",
+        tabellino.add_trace(go.Scatter(x=[0.4], y=[0.5], text=search_match['CASA'].item(), mode="text",
             textfont=dict(size=20, color='white', family='Arial Black')))
 
         tabellino.add_trace(go.Scatter(x=[1.1], y=[0.5], text=str(search_match['GT'].item()), mode="text",

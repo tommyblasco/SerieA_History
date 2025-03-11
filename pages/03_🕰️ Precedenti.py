@@ -115,7 +115,7 @@ with h2h:
             dft1 = storico[(storico['CASA']==t1) & (storico['TRAS']==t2)].sort_values('Data',ascending=False)
             dft1.reset_index(drop=True, inplace=True)
             dft1['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
-            st.dataframe(dft1[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding(c1=colr1,c2=colr2)), hide_index=True)
+            st.dataframe(dft1[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,c1=colr1,c2=colr2), hide_index=True)
         with detcol3:
             dft2 = storico[(storico['CASA']==t2) & (storico['TRAS']==t1)].sort_values('Data',ascending=False)
             dft2.reset_index(drop=True, inplace=True)

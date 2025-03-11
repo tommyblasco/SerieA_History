@@ -115,17 +115,17 @@ with h2h:
             dft1 = storico[(storico['CASA']==t1) & (storico['TRAS']==t2)].sort_values('Data',ascending=False)
             dft1.reset_index(drop=True, inplace=True)
             dft1['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
-            st.dataframe(dft1[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2)), hide_index=True)
+            st.dataframe(dft1[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
         with detcol3:
             dft2 = storico[(storico['CASA']==t2) & (storico['TRAS']==t1)].sort_values('Data',ascending=False)
             dft2.reset_index(drop=True, inplace=True)
             dft2['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft2['GC'], dft2['GT'])]
-            st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2)), hide_index=True)
+            st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
         with detcol2:
             dftot = pd.concat([dft1,dft2],ignore_index=True).sort_values('Data',ascending=False)
             dftot.reset_index(drop=True, inplace=True)
             dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]
-            st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2)), hide_index=True)
+            st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
 
     with st.expander('I mattatori della sfida'):
         st.markdown("*Chi è stato il bomber della sfida tra i 2 team in serie A?*")

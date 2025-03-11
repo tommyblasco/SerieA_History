@@ -442,12 +442,11 @@ def min_advantage(datis,datim,seas):
     van_svan_par['Pareggio'] = [round((x / y) * 90,2) for x, y in zip(van_svan_par['Pareggio'], van_svan_par['Tot'])]
     return van_svan_par
 
-def color_coding(row,c1,c2):
-    risultato = str(row['Risultato'])
+def color_coding(row,c1,c2,t1):
     score_home, score_away = map(int, risultato.split('-'))
-    if score_home>score_away:
+    if ((score_home>score_away) & (row['CASA']==t1)) | ((score_home<score_away) & (row['TRAS']==t1)):
         bg=[f'background-color:{c1}'] * len(row)
-    elif score_home<score_away:
+    elif ((score_home<score_away) & (row['CASA']==t1)) | ((score_home>score_away) & (row['TRAS']==t1)):
         bg=[f'background-color:{c2}'] * len(row)
     else:
         bg=['background-color:black']* len(row)

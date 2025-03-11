@@ -443,9 +443,10 @@ def min_advantage(datis,datim,seas):
     return van_svan_par
 
 def color_coding(c1,c2,row):
-    if int(row['Risultato'].split('-')[0])>int(row['Risultato'].split('-')[1]):
+    score_home, score_away = map(int, row['Risultato'].split('-'))
+    if score_home>score_away:
         bg=[f'background-color:{c1}'] * len(row)
-    elif int(row['Risultato'].split('-')[0])<int(row['Risultato'].split('-')[1]):
+    elif score_home<score_away:
         bg=[f'background-color:{c2}'] * len(row)
     else:
         bg=['background-color:black']* len(row)

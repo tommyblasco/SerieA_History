@@ -36,7 +36,7 @@ with h2h:
         tab_prec = go.Figure(
                 layout=go.Layout(
                     xaxis=dict(range=[0, 2], showgrid=False, zeroline=False, visible=False),
-                    yaxis=dict(range=[0, 1], showgrid=False, zeroline=False, visible=False),
+                    yaxis=dict(range=[0, 1.2], showgrid=False, zeroline=False, visible=False),
                     plot_bgcolor='black', showlegend=False,
                     shapes=[
                         dict(type="rect", x0=0, y0=0, x1=0.85, y1=1,
@@ -45,6 +45,8 @@ with h2h:
                              line=dict(width=2, color='white'), fillcolor=colr2, layer="below"),
                         dict(type="rect", x0=0.85, y0=0, x1=1.15, y1=1,
                              line=dict(width=2, color='white'), fillcolor='rgb(86, 86, 86)', layer="below"),
+                        dict(type="rect", x0=0, y0=1, x1=2, y1=1.2,
+                             line=dict(width=2, color='black'), fillcolor='white', layer="below"),
                     ]
                     , images=[
                         dict(source=f'data:image/png;base64,{logo1}', x=0.05, y=0.5, xref="x", yref="y",
@@ -54,6 +56,10 @@ with h2h:
                     ]
                 )
             )
+        tab_prec.add_trace(go.Scatter(x=[0.2], y=[1.1], text='Totale partite in serie A', mode="text",
+                                      textfont=dict(size=20, color='white', family='Arial Black')))
+        tab_prec.add_trace(go.Scatter(x=[1], y=[1.1], text=str(n_gio), mode="text",
+                                      textfont=dict(size=30, color='white', family='Arial Black')))
         tab_prec.add_trace(go.Scatter(x=[0.75], y=[0.5], text=str(wt1), mode="text",
                                            textfont=dict(size=30, color='white', family='Arial Black')))
 

@@ -118,13 +118,13 @@ with h2h:
             dft1['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
             st.dataframe(dft1[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
         with detcol3:
-            st.write('TOTALE')
+            st.write(f'{t2} home')
             dft2 = storico[(storico['CASA']==t2) & (storico['TRAS']==t1)].sort_values('Data',ascending=False)
             dft2.reset_index(drop=True, inplace=True)
             dft2['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft2['GC'], dft2['GT'])]
             st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
         with detcol2:
-            st.write(f'{t2} home')
+            st.write('TOTALE')
             dftot = pd.concat([dft1,dft2],ignore_index=True).sort_values('Data',ascending=False)
             dftot.reset_index(drop=True, inplace=True)
             dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]

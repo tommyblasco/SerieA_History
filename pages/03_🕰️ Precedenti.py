@@ -71,7 +71,7 @@ with h2h:
                                            textposition="middle right"))
             tab_prec.add_trace(go.Scatter(x=[0.98], y=[0.5], text=str(pareg), mode="text",
                                           textfont=dict(size=30, color='white', family='Arial Black')))
-            tab_prec.add_trace(go.Scatter(x=[0.95], y=[0.85], text='Pareggi', mode="text",
+            tab_prec.add_trace(go.Scatter(x=[1], y=[0.15], text='Pareggi', mode="text",
                                           textfont=dict(size=15, color='white', family='Arial Black')))
             st.plotly_chart(tab_prec)
 

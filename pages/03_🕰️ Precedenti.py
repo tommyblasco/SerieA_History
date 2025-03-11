@@ -28,15 +28,12 @@ with h2h:
         n_gio=df1['TRAS'].item()+df2['TRAS'].item()
         pareg=df1['N'].item() + df2['N'].item()
 
-        pretot1, pretot2 = st.columns([1,5])
-        with pretot1:
-            st.metric(label='Tot precedenti in serie A', value=n_gio)
-        with pretot2:
-            logo1 = base64.b64encode(BytesIO(requests.get(load_images(team=t1, yyyy='2999')).content).read()).decode()
-            logo2 = base64.b64encode(BytesIO(requests.get(load_images(team=t2, yyyy='2999')).content).read()).decode()
-            colr1 = colori_team.loc[colori_team['Squadra'] == t1, 'Colore'].item()
-            colr2 = colori_team.loc[colori_team['Squadra'] == t2, 'Colore'].item()
-            tab_prec = go.Figure(
+        st.metric(label='Tot precedenti in serie A', value=n_gio)
+        logo1 = base64.b64encode(BytesIO(requests.get(load_images(team=t1, yyyy='2999')).content).read()).decode()
+        logo2 = base64.b64encode(BytesIO(requests.get(load_images(team=t2, yyyy='2999')).content).read()).decode()
+        colr1 = colori_team.loc[colori_team['Squadra'] == t1, 'Colore'].item()
+        colr2 = colori_team.loc[colori_team['Squadra'] == t2, 'Colore'].item()
+        tab_prec = go.Figure(
                 layout=go.Layout(
                     xaxis=dict(range=[0, 2], showgrid=False, zeroline=False, visible=False),
                     yaxis=dict(range=[0, 1], showgrid=False, zeroline=False, visible=False),
@@ -57,23 +54,23 @@ with h2h:
                     ]
                 )
             )
-            tab_prec.add_trace(go.Scatter(x=[0.75], y=[0.5], text=str(wt1), mode="text",
+        tab_prec.add_trace(go.Scatter(x=[0.75], y=[0.5], text=str(wt1), mode="text",
                                            textfont=dict(size=30, color='white', family='Arial Black')))
 
-            tab_prec.add_trace(go.Scatter(x=[0.4], y=[0.5], text=t1, mode="text",
+        tab_prec.add_trace(go.Scatter(x=[0.4], y=[0.5], text=t1, mode="text",
                                            textfont=dict(size=15, color='white', family='Arial Black')))
 
-            tab_prec.add_trace(go.Scatter(x=[1.25], y=[0.5], text=str(wt2), mode="text",
+        tab_prec.add_trace(go.Scatter(x=[1.25], y=[0.5], text=str(wt2), mode="text",
                                            textfont=dict(size=30, color='white', family='Arial Black')))
 
-            tab_prec.add_trace(go.Scatter(x=[1.5], y=[0.5], text=t2, mode="text",
+        tab_prec.add_trace(go.Scatter(x=[1.5], y=[0.5], text=t2, mode="text",
                                            textfont=dict(size=15, color='white', family='Arial Black'),
                                            textposition="middle right"))
-            tab_prec.add_trace(go.Scatter(x=[1], y=[0.5], text=str(pareg), mode="text",
+        tab_prec.add_trace(go.Scatter(x=[1], y=[0.5], text=str(pareg), mode="text",
                                           textfont=dict(size=30, color='white', family='Arial Black')))
-            tab_prec.add_trace(go.Scatter(x=[1], y=[0.15], text='Pareggi', mode="text",
+        tab_prec.add_trace(go.Scatter(x=[1], y=[0.15], text='Pareggi', mode="text",
                                           textfont=dict(size=15, color='white', family='Arial Black')))
-            st.plotly_chart(tab_prec)
+        st.plotly_chart(tab_prec)
 
         colgc1, colgc3 = st.columns(2)
         with colgc1:

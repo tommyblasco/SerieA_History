@@ -3,6 +3,7 @@ import numpy as np
 from datetime import date, datetime, timedelta
 import streamlit as st
 from github import Github
+import base64
 from streamlit_gsheets import GSheetsConnection
 from PIL import Image
 from io import BytesIO

@@ -176,41 +176,96 @@ with ins:
 with sm:
     st.subheader('Ricerca partita:')
     st.markdown("*Conosci risultato e marcatori di qualsiasi partita in stagione*")
-    l1=sorted(list(classifica['Squadra']))
-    ht=st.selectbox('Seleziona la squadra in casa',l1)
-    l2=[x for x in l1 if x!=ht]
-    at=st.selectbox('Seleziona la squadra in trasferta',l2)
+    mat_cas, mat_tra=st.columns(2)
+    with mat_cas:
+        l1=sorted(list(classifica['Squadra']))
+        ht=st.selectbox('Seleziona la squadra in casa',l1)
+    with mat_tra:
+        l2=[x for x in l1 if x!=ht]
+        at=st.selectbox('Seleziona la squadra in trasferta',l2)
+
     search_match=df[(df['CASA']==ht) & (df['TRAS']==at)]
-    stcol, nomcol, riscol, infcol = st.columns([2,2,2,1])
+    #stcol, nomcol, riscol, infcol = st.columns([2,2,2,1])
+
     if search_match.shape[0]>0:
         st.write(f"{search_match['Giornata'].item()}° giornata - {search_match['Giorno'].item()} ")
-        with stcol:
-            st.image(Image.open(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content)))
-            st.image(Image.open(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content)))
-        with nomcol:
-            st.subheader(ht)
-            st.subheader('')
-            st.subheader(at)
-        with riscol:
-            st.subheader(search_match['GC'].item())
-            st.subheader('')
-            st.subheader(search_match['GT'].item())
-        with infcol:
-            if search_match['GC'].item()+search_match['GT'].item()>0:
-                idm=search_match['ID'].item()
-                scorers=marcatori[marcatori['ID']==idm]
-                for s in list(range(scorers.shape[0])):
-                    nome_scor=scorers.iloc[s,0]
-                    nome_split=nome_scor.split(' ')
-                    nome_fin = '. '.join([x if x.isupper() else x[:1] for x in nome_split])
-                    if (pd.notna(scorers.iloc[s,2])) & (pd.notna(scorers.iloc[s,3])):
-                        st.write(f"{scorers.iloc[s,1]}'+{scorers.iloc[s,2]} ({scorers.iloc[s,3]}) {nome_fin} ({scorers.iloc[s,5][:1]})")
-                    elif (pd.notna(scorers.iloc[s,2])) & (pd.isna(scorers.iloc[s,3])):
-                        st.write(f"{scorers.iloc[s,1]}'+{scorers.iloc[s,2]} {nome_fin} ({scorers.iloc[s,5][:1]})")
-                    elif (pd.isna(scorers.iloc[s,2])) & (pd.notna(scorers.iloc[s,3])):
-                        st.write(f"{scorers.iloc[s,1]}' ({scorers.iloc[s,3]}) {nome_fin} ({scorers.iloc[s,5][:1]})")
-                    else:
-                        st.write(f"{scorers.iloc[s, 1]}' {nome_fin} ({scorers.iloc[s, 5][:1]})")
+        logo1 = base64.b64encode(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content).read()).decode()
+        logo2 = base64.b64encode(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content).read()).decode()
+
+        tabellino = go.Figure(
+            layout=go.Layout(
+                xaxis=dict(range=[0, 2], showgrid=False, zeroline=False, visible=False),
+                yaxis=dict(range=[0, 1], showgrid=False, zeroline=False, visible=False),
+                plot_bgcolor='black',
+                shapes=[
+                    dict(type="rect", x0=0, y0=0, x1=1, y1=1,
+                         line=dict(width=2, color='white'), fillcolor='purple', layer="below"),
+                    dict(type="rect", x0=1, y0=0, x1=2, y1=1,
+                         line=dict(width=2, color='white'), fillcolor='yellow', layer="below"),
+                ]
+                ,images=[
+                    dict(source=f'data:image/png;base64,{logo1}', x=0.05, y=0.5, xref="x", yref="y",
+                         sizex=0.2, sizey=0.4, xanchor="left", yanchor="middle"),
+                    dict(source=f'data:image/png;base64,{logo2}', x=1.95, y=0.5, xref="x", yref="y",
+                         sizex=0.2, sizey=0.4, xanchor="right", yanchor="middle"),
+                ]
+            )
+        )
+        tabellino.add_trace(go.Scatter(x=[0.9], y=[0.5], text=str(search_match['GC']), mode="text",
+            textfont=dict(size=50, color='white', family='Arial Black')))
+
+        tabellino.add_trace(go.Scatter(x=[0.5], y=[0.5], text=search_match['CASA'], mode="text",
+            textfont=dict(size=20, color='white', family='Arial Black')))
+
+        tabellino.add_trace(go.Scatter(x=[1.1], y=[0.5], text=str(search_match['GT']), mode="text",
+            textfont=dict(size=50, color='white', family='Arial Black')))
+
+        tabellino.add_trace(go.Scatter(x=[1.5], y=[0.5], text=search_match['TRAS'], mode="text",
+            textfont=dict(size=20, color='white', family='Arial Black'), textposition="middle right"))
+        st.plotly_chart(tabellino)
+
+        if search_match['GC'].item() + search_match['GT'].item() > 0:
+            idm = search_match['ID'].item()
+            scorers = marcatori[marcatori['ID'] == idm]
+            scorers=scorers.sort_values(['Minuto','Recupero'])
+            scorers.reset_index(drop=True, inplace=True)
+            shome = scorers[scorers['Squadra'] == ht]
+            saway = scorers[scorers['Squadra'] == at]
+            mat_cas1, mat_tra1 = st.columns(2)
+            with mat_cas1:
+                if shome.shape[0]>0:
+                    for s in list(range(shome.shape[0])):
+                        nome_scor = shome.iloc[s, 0]
+                        nome_split = nome_scor.split(' ')
+                        nome_fin = '. '.join([x if x.isupper() else x[:1] for x in nome_split])
+                        if (pd.notna(shome.iloc[s, 2])) & (pd.notna(shome.iloc[s, 3])):
+                            st.write(
+                                f"{shome.iloc[s, 1]}'+{shome.iloc[s, 2]} ({shome.iloc[s, 3]}) {nome_fin} ({shome.iloc[s, 5][:1]})")
+                        elif (pd.notna(shome.iloc[s, 2])) & (pd.isna(shome.iloc[s, 3])):
+                            st.write(
+                                f"{shome.iloc[s, 1]}'+{shome.iloc[s, 2]} {nome_fin} ({shome.iloc[s, 5][:1]})")
+                        elif (pd.isna(shome.iloc[s, 2])) & (pd.notna(shome.iloc[s, 3])):
+                            st.write(
+                                f"{shome.iloc[s, 1]}' ({shome.iloc[s, 3]}) {nome_fin} ({shome.iloc[s, 5][:1]})")
+                        else:
+                            st.write(f"{shome.iloc[s, 1]}' {nome_fin} ({shome.iloc[s, 5][:1]})")
+            with mat_tra1:
+                if saway.shape[0]>0:
+                    for s in list(range(saway.shape[0])):
+                        nome_scor = saway.iloc[s, 0]
+                        nome_split = nome_scor.split(' ')
+                        nome_fin = '. '.join([x if x.isupper() else x[:1] for x in nome_split])
+                        if (pd.notna(saway.iloc[s, 2])) & (pd.notna(saway.iloc[s, 3])):
+                            st.write(
+                                f"{saway.iloc[s, 1]}'+{saway.iloc[s, 2]} ({saway.iloc[s, 3]}) {nome_fin} ({saway.iloc[s, 5][:1]})")
+                        elif (pd.notna(saway.iloc[s, 2])) & (pd.isna(saway.iloc[s, 3])):
+                            st.write(
+                                f"{saway.iloc[s, 1]}'+{saway.iloc[s, 2]} {nome_fin} ({saway.iloc[s, 5][:1]})")
+                        elif (pd.isna(saway.iloc[s, 2])) & (pd.notna(saway.iloc[s, 3])):
+                            st.write(
+                                f"{saway.iloc[s, 1]}' ({saway.iloc[s, 3]}) {nome_fin} ({saway.iloc[s, 5][:1]})")
+                        else:
+                            st.write(f"{saway.iloc[s, 1]}' {nome_fin} ({saway.iloc[s, 5][:1]})")
     else:
         st.error('Partita non ancora giocata')
 

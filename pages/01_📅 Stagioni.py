@@ -214,13 +214,13 @@ with sm:
         tabellino.add_trace(go.Scatter(x=[0.9], y=[0.5], text=str(search_match['GC'].item()), mode="text",
             textfont=dict(size=50, color='white', family='Arial Black')))
 
-        tabellino.add_trace(go.Scatter(x=[0.5], y=[0.5], text=search_match['CASA'].item(), mode="text",
+        tabellino.add_trace(go.Scatter(x=[0.6], y=[0.5], text=search_match['CASA'].item(), mode="text",
             textfont=dict(size=20, color='white', family='Arial Black')))
 
         tabellino.add_trace(go.Scatter(x=[1.1], y=[0.5], text=str(search_match['GT'].item()), mode="text",
             textfont=dict(size=50, color='white', family='Arial Black')))
 
-        tabellino.add_trace(go.Scatter(x=[1.3], y=[0.5], text=search_match['TRAS'].item(), mode="text",
+        tabellino.add_trace(go.Scatter(x=[1.4], y=[0.5], text=search_match['TRAS'].item(), mode="text",
             textfont=dict(size=20, color='white', family='Arial Black'), textposition="middle right"))
         st.plotly_chart(tabellino)
 

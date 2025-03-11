@@ -443,7 +443,7 @@ def min_advantage(datis,datim,seas):
     return van_svan_par
 
 def color_coding(row,c1,c2,t1):
-    score_home, score_away = map(int, risultato.split('-'))
+    score_home, score_away = map(int, row['Risultato'].split('-'))
     if ((score_home>score_away) & (row['CASA']==t1)) | ((score_home<score_away) & (row['TRAS']==t1)):
         bg=[f'background-color:{c1}'] * len(row)
     elif ((score_home<score_away) & (row['CASA']==t1)) | ((score_home>score_away) & (row['TRAS']==t1)):

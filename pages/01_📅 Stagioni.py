@@ -197,6 +197,7 @@ with sm:
                 xaxis=dict(range=[0, 2], showgrid=False, zeroline=False, visible=False),
                 yaxis=dict(range=[0, 1], showgrid=False, zeroline=False, visible=False),
                 plot_bgcolor='black',
+                showlegend=False,
                 shapes=[
                     dict(type="rect", x0=0, y0=0, x1=1, y1=1,
                          line=dict(width=2, color='white'), fillcolor='purple', layer="below"),
@@ -231,6 +232,7 @@ with sm:
             scorers.reset_index(drop=True, inplace=True)
             shome = scorers[scorers['Squadra'] == ht]
             saway = scorers[scorers['Squadra'] == at]
+            st.subheader('Marcatori:')
             mat_cas1, mat_tra1 = st.columns(2)
             with mat_cas1:
                 if shome.shape[0]>0:

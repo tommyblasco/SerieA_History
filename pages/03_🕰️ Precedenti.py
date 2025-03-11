@@ -12,14 +12,12 @@ h2h, h2hmr, riep = st.tabs(['Testa a testa','H2H allenatori-team','Riepilogo x s
 
 with h2h:
     st.markdown("*Chi ha vinto di più in serie A tra le 2 squadre?*")
-    colt1, colfake, colt2 = st.columns([3,4,3])
+    colt1, colt2 = st.columns(2)
     with colt1:
         t1=st.selectbox('Seleziona il team 1:',lista_sq)
-        st.image(Image.open(BytesIO(requests.get(load_images(team=t1, yyyy='2999')).content)))
     with colt2:
         lsq2 = [x for x in lista_sq if x != t1]
         t2=st.selectbox('Seleziona il team 2:',lsq2)
-        st.image(Image.open(BytesIO(requests.get(load_images(team=t2, yyyy='2999')).content)))
     df1 = prec(dati=storico,t1=t1, t2=t2)[0]
     df2 = prec(dati=storico,t1=t1, t2=t2)[1]
     if (df1.shape[0]==0) | (df2.shape[0]==0):
@@ -34,15 +32,50 @@ with h2h:
         with pretot1:
             st.metric(label='Tot precedenti in serie A', value=n_gio)
         with pretot2:
-            hbar = go.Figure()
-            for i, col in zip([wt1, pareg, wt2], ['orange', 'gray', 'blue']):
-                hbar.add_trace(go.Bar(x=[i], y=['Bil'], orientation='h', marker=dict(color=[col]),
-                                      text=[str(round(100 * i / n_gio, 2))], textposition='auto',
-                                      textfont=dict(size=20)))
-            hbar.update_layout(barmode='stack', showlegend=False,xaxis=dict(showticklabels=False), yaxis=dict(showticklabels=False), margin=dict(l=0,r=0,t=0,b=0),height=100)
-            st.plotly_chart(go.FigureWidget(data=hbar), use_container_width=True)
+            logo1 = base64.b64encode(BytesIO(requests.get(load_images(team=t1, yyyy='2999')).content).read()).decode()
+            logo2 = base64.b64encode(BytesIO(requests.get(load_images(team=t2, yyyy='2999')).content).read()).decode()
+            colr1 = colori_team.loc[colori_team['Squadra'] == t1, 'Colore'].item()
+            colr2 = colori_team.loc[colori_team['Squadra'] == t2, 'Colore'].item()
+            tab_prec = go.Figure(
+                layout=go.Layout(
+                    xaxis=dict(range=[0, 2], showgrid=False, zeroline=False, visible=False),
+                    yaxis=dict(range=[0, 1], showgrid=False, zeroline=False, visible=False),
+                    plot_bgcolor='black', showlegend=False,
+                    shapes=[
+                        dict(type="rect", x0=0, y0=0, x1=0.8, y1=1,
+                             line=dict(width=2, color='white'), fillcolor=colr1, layer="below"),
+                        dict(type="rect", x0=1.2, y0=0, x1=2, y1=1,
+                             line=dict(width=2, color='white'), fillcolor=colr2, layer="below"),
+                        dict(type="rect", x0=0.8, y0=0, x1=1.2, y1=1,
+                             line=dict(width=2, color='white'), fillcolor='rgb(86, 86, 86)', layer="below"),
+                    ]
+                    , images=[
+                        dict(source=f'data:image/png;base64,{logo1}', x=0.05, y=0.5, xref="x", yref="y",
+                             sizex=0.2, sizey=0.4, xanchor="left", yanchor="middle"),
+                        dict(source=f'data:image/png;base64,{logo2}', x=1.95, y=0.5, xref="x", yref="y",
+                             sizex=0.2, sizey=0.4, xanchor="right", yanchor="middle"),
+                    ]
+                )
+            )
+            tab_prec.add_trace(go.Scatter(x=[0.9], y=[0.5], text=str(wt1), mode="text",
+                                           textfont=dict(size=30, color='white', family='Arial Black')))
 
-        colgc1, colgc2, colgc3 = st.columns([3,4,3])
+            tab_prec.add_trace(go.Scatter(x=[0.4], y=[0.5], text=t1, mode="text",
+                                           textfont=dict(size=15, color='white', family='Arial Black')))
+
+            tab_prec.add_trace(go.Scatter(x=[1.1], y=[0.5], text=str(wt2), mode="text",
+                                           textfont=dict(size=30, color='white', family='Arial Black')))
+
+            tab_prec.add_trace(go.Scatter(x=[1.5], y=[0.5], text=t2, mode="text",
+                                           textfont=dict(size=15, color='white', family='Arial Black'),
+                                           textposition="middle right"))
+            tab_prec.add_trace(go.Scatter(x=[0.98], y=[0.5], text=str(pareg), mode="text",
+                                          textfont=dict(size=30, color='white', family='Arial Black')))
+            tab_prec.add_trace(go.Scatter(x=[0.95], y=[0.85], text='Pareggi', mode="text",
+                                          textfont=dict(size=15, color='white', family='Arial Black')))
+            st.plotly_chart(tab_prec)
+
+        colgc1, colgc3 = st.columns(2)
         with colgc1:
             st.text(f'{t1} home')
             wh_d_wa1 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
@@ -54,24 +87,6 @@ with h2h:
             m3, m4 = st.columns(2)
             m3.metric(label=f'Gol fatti {t1}',value=df1['GC'].item())
             m4.metric(label=f'Gol fatti {t2}', value=df1['GT'].item())
-        with colgc2:
-            if (wt1!=0) & (wt2!=0):
-                st.subheader("      COMPLESSIVO")
-                fig = go.Figure()
-                fig.add_trace(go.Scatter(x=[0], y=[-0.1], mode="markers", marker=dict(symbol="triangle-up", size=50, color="yellow"), showlegend=False))
-                beta=(wt1/wt2)-1
-                fig.add_trace(go.Scatter(x=[-2,0,2], y= np.asarray([-2,0,2])*beta, showlegend=False))
-                fig.add_trace(go.Scatter(x=[-2,2], y=[(-2*beta)+0.1, (2*beta)+0.1], mode='markers', showlegend=False,
-                                         marker=dict(color=['orange','blue'],size=[wt1,wt2],sizemode='area',sizeref=2.*max(wt1,wt2)/(70.**2))))
-                fig.update_layout(xaxis=dict(showgrid=False,showticklabels=False), yaxis=dict(range=[-3,3],showgrid=False,showticklabels=False))
-                fig.add_annotation(x=-1.9, y=(-2 * beta) + 0.7, showarrow=False,
-                                   text=f"{wt1}",font=dict(size=25))
-                fig.add_annotation(x=-1.9, y=(-2*beta)+0.4, showarrow=False, text=f"W {t1}")
-                fig.add_annotation(x=1.9, y=(2 * beta) + 0.7, showarrow=False,
-                                   text=f"{wt2}",font=dict(size=25))
-                fig.add_annotation(x=1.9, y=(2 * beta) + 0.4, showarrow=False,text=f"W {t2}")
-                fig.add_annotation(x=0, y=0.4, showarrow=False, text=f"{pareg} pareggi")
-                st.plotly_chart(fig, use_container_width=True)
 
         with colgc3:
             st.text(f'{t2} home')

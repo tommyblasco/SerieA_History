@@ -55,8 +55,8 @@ with h2h:
                     ]
                 )
             )
-        tab_prec.add_trace(go.Scatter(x=[0.2], y=[1.1], text='Totale partite in serie A', mode="text",
-                                      textfont=dict(size=20, color='black', family='Arial Black')))
+        tab_prec.add_trace(go.Scatter(x=[0.4], y=[1.1], text='Totale partite in serie A', mode="text",
+                                      textfont=dict(size=15, color='black', family='Arial Black')))
         tab_prec.add_trace(go.Scatter(x=[1], y=[1.1], text=str(n_gio), mode="text",
                                       textfont=dict(size=30, color='black', family='Arial Black')))
         tab_prec.add_trace(go.Scatter(x=[0.75], y=[0.5], text=str(wt1), mode="text",

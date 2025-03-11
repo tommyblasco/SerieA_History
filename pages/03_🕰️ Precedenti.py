@@ -127,15 +127,15 @@ with h2h:
         dftot.reset_index(drop=True, inplace=True)
         dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]
 
-        if sel_det=='Totale':
-            st.write('TOTALE')
-            st.dataframe(dftot[['CASA', 'TRAS', 'Risultato', 'Stagione', 'Giorno']].style.apply(color_coding, axis=1,args=(colr1, colr2, t1)),hide_index=True)
-        elif sel_det==f'In casa di {t1}':
+        if sel_det==f'In casa di {t1}':
             st.write(f'{t1} home')
-            st.dataframe(dft1[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
-        else:
+            st.dataframe(dft1[['CASA', 'TRAS', 'Risultato', 'Stagione', 'Giorno']].style.apply(color_coding, axis=1,args=(colr1, colr2, t1)),hide_index=True)
+        elif sel_det==f'In casa di {t2}':
             st.write(f'{t2} home')
             st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
+        else:
+            st.write('TOTALE')
+            st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
 
     with st.expander('I mattatori della sfida'):
         st.markdown("*Chi è stato il bomber della sfida tra i 2 team in serie A?*")

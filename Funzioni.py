@@ -448,5 +448,5 @@ def color_coding(c1,c2,row):
     elif int(row.Risultato.split('-')[0])<int(row.Risultato.split('-')[1]):
         bg=[f'background-color:{c2}'] * len(row)
     else:
-        bg=['background-color:black']
+        bg=['background-color:black']* len(row)
     return bg

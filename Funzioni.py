@@ -441,3 +441,12 @@ def min_advantage(datis,datim,seas):
     van_svan_par['Svantaggio'] = [round((x / y) * 90,2) for x, y in zip(van_svan_par['Svantaggio'], van_svan_par['Tot'])]
     van_svan_par['Pareggio'] = [round((x / y) * 90,2) for x, y in zip(van_svan_par['Pareggio'], van_svan_par['Tot'])]
     return van_svan_par
+
+def color_coding(c1,c2,row):
+    if int(row.Risultato.split('-')[0])>int(row.Risultato.split('-')[1]):
+        bg=[f'background-color:{c1}'] * len(row)
+    elif int(row.Risultato.split('-')[0])<int(row.Risultato.split('-')[1]):
+        bg=[f'background-color:{c2}'] * len(row)
+    else:
+        bg=['background-color:black']
+    return bg

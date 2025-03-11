@@ -449,5 +449,5 @@ def color_coding(row,c1,c2,t1):
     elif ((score_home<score_away) & (row['CASA']==t1)) | ((score_home>score_away) & (row['TRAS']==t1)):
         bg=[f'background-color:{c2}'] * len(row)
     else:
-        bg=['background-color:black']* len(row)
+        bg=['background-color:rgb(86, 86, 86)']* len(row)
     return bg

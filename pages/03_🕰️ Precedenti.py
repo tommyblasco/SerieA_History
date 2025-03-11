@@ -115,25 +115,27 @@ with h2h:
 
     with st.expander('Dettaglio partite'):
         st.markdown("*Scopri tutti i risultati dei precedenti tra i 2 team*")
-        detcol1, detcol2, detcol3 = st.columns(3)
-        with detcol1:
-            st.write(f'{t1} home')
-            dft1 = storico[(storico['CASA']==t1) & (storico['TRAS']==t2)].sort_values('Data',ascending=False)
-            dft1.reset_index(drop=True, inplace=True)
-            dft1['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
-            st.dataframe(dft1[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
-        with detcol3:
-            st.write(f'{t2} home')
-            dft2 = storico[(storico['CASA']==t2) & (storico['TRAS']==t1)].sort_values('Data',ascending=False)
-            dft2.reset_index(drop=True, inplace=True)
-            dft2['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft2['GC'], dft2['GT'])]
-            st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
-        with detcol2:
+        sel_det = st.pills("Scegli", ['Totale',f'In casa di {t1}', f'In casa di {t2}'])
+
+        dft1 = storico[(storico['CASA'] == t1) & (storico['TRAS'] == t2)].sort_values('Data', ascending=False)
+        dft1.reset_index(drop=True, inplace=True)
+        dft1['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
+        dft2 = storico[(storico['CASA'] == t2) & (storico['TRAS'] == t1)].sort_values('Data', ascending=False)
+        dft2.reset_index(drop=True, inplace=True)
+        dft2['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft2['GC'], dft2['GT'])]
+        dftot = pd.concat([dft1, dft2], ignore_index=True).sort_values('Data', ascending=False)
+        dftot.reset_index(drop=True, inplace=True)
+        dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]
+
+        if sel_det=='Totale':
             st.write('TOTALE')
-            dftot = pd.concat([dft1,dft2],ignore_index=True).sort_values('Data',ascending=False)
-            dftot.reset_index(drop=True, inplace=True)
-            dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]
-            st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
+            st.dataframe(dftot[['CASA', 'TRAS', 'Risultato', 'Stagione', 'Giorno']].style.apply(color_coding, axis=1,args=(colr1, colr2, t1)),hide_index=True)
+        elif sel_det==f'In casa di {t1}':
+            st.write(f'{t1} home')
+            st.dataframe(dft1[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
+        else:
+            st.write(f'{t2} home')
+            st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Giorno']].style.apply(color_coding,axis=1,args=(colr1,colr2,t1)), hide_index=True)
 
     with st.expander('I mattatori della sfida'):
         st.markdown("*Chi è stato il bomber della sfida tra i 2 team in serie A?*")

@@ -42,11 +42,11 @@ with h2h:
                     yaxis=dict(range=[0, 1], showgrid=False, zeroline=False, visible=False),
                     plot_bgcolor='black', showlegend=False,
                     shapes=[
-                        dict(type="rect", x0=0, y0=0, x1=0.8, y1=1,
+                        dict(type="rect", x0=0, y0=0, x1=0.85, y1=1,
                              line=dict(width=2, color='white'), fillcolor=colr1, layer="below"),
-                        dict(type="rect", x0=1.2, y0=0, x1=2, y1=1,
+                        dict(type="rect", x0=1.15, y0=0, x1=2, y1=1,
                              line=dict(width=2, color='white'), fillcolor=colr2, layer="below"),
-                        dict(type="rect", x0=0.8, y0=0, x1=1.2, y1=1,
+                        dict(type="rect", x0=0.85, y0=0, x1=1.15, y1=1,
                              line=dict(width=2, color='white'), fillcolor='rgb(86, 86, 86)', layer="below"),
                     ]
                     , images=[
@@ -57,13 +57,13 @@ with h2h:
                     ]
                 )
             )
-            tab_prec.add_trace(go.Scatter(x=[0.9], y=[0.5], text=str(wt1), mode="text",
+            tab_prec.add_trace(go.Scatter(x=[0.75], y=[0.5], text=str(wt1), mode="text",
                                            textfont=dict(size=30, color='white', family='Arial Black')))
 
             tab_prec.add_trace(go.Scatter(x=[0.4], y=[0.5], text=t1, mode="text",
                                            textfont=dict(size=15, color='white', family='Arial Black')))
 
-            tab_prec.add_trace(go.Scatter(x=[1.1], y=[0.5], text=str(wt2), mode="text",
+            tab_prec.add_trace(go.Scatter(x=[1.25], y=[0.5], text=str(wt2), mode="text",
                                            textfont=dict(size=30, color='white', family='Arial Black')))
 
             tab_prec.add_trace(go.Scatter(x=[1.5], y=[0.5], text=t2, mode="text",

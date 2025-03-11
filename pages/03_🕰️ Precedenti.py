@@ -76,7 +76,7 @@ with h2h:
         with colgc1:
             st.text(f'{t1} home')
             wh_d_wa1 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
-                                 labels=[f"W {t1}", "Pari", f"W {t2}"], marker=dict(colors=['orange','grey','blue']))
+                                 labels=[f"W {t1}", "Pari", f"W {t2}"], marker=dict(colors=[colr1,'rgb(86, 86, 86)',colr2]))
             st.plotly_chart(go.FigureWidget(data=wh_d_wa1), use_container_width=True)
             m1, m2 = st.columns(2)
             m1.metric(label='Partite giocate',value=df1['TRAS'].item())
@@ -88,7 +88,7 @@ with h2h:
         with colgc3:
             st.text(f'{t2} home')
             wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],
-                                 labels=[f"W {t2}", "Pari", f"W {t1}"],marker=dict(colors=['blue','grey','orange']))
+                                 labels=[f"W {t2}", "Pari", f"W {t1}"],marker=dict(colors=[colr2,'rgb(86, 86, 86)',colr1]))
             st.plotly_chart(go.FigureWidget(data=wh_d_wa2), use_container_width=True)
             m5, m6 = st.columns(2)
             m5.metric(label='Partite giocate',value=df2['TRAS'].item())

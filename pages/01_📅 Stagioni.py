@@ -191,7 +191,8 @@ with sm:
         st.write(f"{search_match['Giornata'].item()}° giornata - {search_match['Giorno'].item()} ")
         logo1 = base64.b64encode(BytesIO(requests.get(load_images(team=ht, yyyy=sea_sel)).content).read()).decode()
         logo2 = base64.b64encode(BytesIO(requests.get(load_images(team=at, yyyy=sea_sel)).content).read()).decode()
-
+        colr1 = colori_team.loc[colori_team['Squadra']==ht,'Colore'].item()
+        colr2 = colori_team.loc[colori_team['Squadra'] == at, 'Colore'].item()
         tabellino = go.Figure(
             layout=go.Layout(
                 xaxis=dict(range=[0, 2], showgrid=False, zeroline=False, visible=False),
@@ -200,9 +201,9 @@ with sm:
                 showlegend=False,
                 shapes=[
                     dict(type="rect", x0=0, y0=0, x1=1, y1=1,
-                         line=dict(width=2, color='white'), fillcolor='purple', layer="below"),
+                         line=dict(width=2, color='white'), fillcolor=colr1, layer="below"),
                     dict(type="rect", x0=1, y0=0, x1=2, y1=1,
-                         line=dict(width=2, color='white'), fillcolor='yellow', layer="below"),
+                         line=dict(width=2, color='white'), fillcolor=colr2, layer="below"),
                 ]
                 ,images=[
                     dict(source=f'data:image/png;base64,{logo1}', x=0.05, y=0.5, xref="x", yref="y",

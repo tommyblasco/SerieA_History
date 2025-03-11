@@ -51,6 +51,7 @@ penalita=pd.read_csv(f"https://raw.githubusercontent.com/tommyblasco/SerieA_Hist
                              sep=",", decimal=".", parse_dates=['Da','A'],dayfirst=True)
 albo=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_doro.csv',sep=";",decimal='.')
 clas_rbc=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/albo_cum.csv',sep=";",decimal='.')
+colori_team=pd.read_csv('https://raw.githubusercontent.com/tommyblasco/SerieA_History/refs/heads/main/Dati/Colors.csv',sep=";",decimal='.')
 
 penalita['Da']=[x.date() for x in penalita['Da']]
 penalita['A']=[x.date() for x in penalita['A']]

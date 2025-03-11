@@ -28,7 +28,6 @@ with h2h:
         n_gio=df1['TRAS'].item()+df2['TRAS'].item()
         pareg=df1['N'].item() + df2['N'].item()
 
-        st.metric(label='Tot precedenti in serie A', value=n_gio)
         logo1 = base64.b64encode(BytesIO(requests.get(load_images(team=t1, yyyy='2999')).content).read()).decode()
         logo2 = base64.b64encode(BytesIO(requests.get(load_images(team=t2, yyyy='2999')).content).read()).decode()
         colr1 = colori_team.loc[colori_team['Squadra'] == t1, 'Colore'].item()
@@ -57,9 +56,9 @@ with h2h:
                 )
             )
         tab_prec.add_trace(go.Scatter(x=[0.2], y=[1.1], text='Totale partite in serie A', mode="text",
-                                      textfont=dict(size=20, color='white', family='Arial Black')))
+                                      textfont=dict(size=20, color='black', family='Arial Black')))
         tab_prec.add_trace(go.Scatter(x=[1], y=[1.1], text=str(n_gio), mode="text",
-                                      textfont=dict(size=30, color='white', family='Arial Black')))
+                                      textfont=dict(size=30, color='black', family='Arial Black')))
         tab_prec.add_trace(go.Scatter(x=[0.75], y=[0.5], text=str(wt1), mode="text",
                                            textfont=dict(size=30, color='white', family='Arial Black')))
 

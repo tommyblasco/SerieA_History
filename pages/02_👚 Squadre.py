@@ -200,8 +200,8 @@ with mrtem:
     with mrtem2:
         st.write('Complessivo')
         mateam=mister_alltime(dati=storico, team=tea_sel)
-        m1=mateam.groupby('Allenatore',as_index=False).agg({'Pnt':'mean','Squadra':'count','W':'sum','N':'sum','L':'sum'})
-        m1.columns = ['Allenatore', 'Media Punti 3W', 'Panchine', 'V', 'N', 'P']
+        m1=mateam.groupby('Allenatore',as_index=False).agg({'Panchine':'sum','V':'sum','N':'sum','P':'sum'})
+        m1.insert(1,'Media Punti 3W',[(x*3+y)/z for x,y,z in zip(m1['V'],m1['N'],m1['Panchine'])])
         m1 = m1.sort_values(by=['Media Punti 3W'], ascending=False)
         st.dataframe(m1, hide_index=True)
 

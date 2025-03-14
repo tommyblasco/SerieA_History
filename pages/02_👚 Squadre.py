@@ -262,8 +262,8 @@ with rec:
         df_casa_filtc = df_casa[['Stagione', 'Data', 'GC', 'GT']].rename(columns={'GC': 'GF', 'GT': 'GS'})
         df_tras_filtc = df_tras[['Stagione', 'Data', 'GT', 'GC']].rename(columns={'GT': 'GF', 'GC': 'GS'})
         df_filtc = pd.concat([df_casa_filtc, df_tras_filtc], ignore_index=True)
-        df_filtc['Weekday']=df_filtc['Data'].strftime('%A')
-        df_filtc['Mese']=df_filtc['Data'].strftime('%B')
+        df_filtc['Weekday']=[x.strftime('%A') for x in df_filtc['Data']]
+        df_filtc['Mese']=[x.strftime('%B') for x in df_filtc['Data']]
         df_filtc['W']=[1 if x>y else 0 for x,y in zip(df_filtc['GF'],df_filtc['GS'])]
         df_filtc['N'] = [1 if x == y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
         df_filtc['L'] = [1 if x < y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]

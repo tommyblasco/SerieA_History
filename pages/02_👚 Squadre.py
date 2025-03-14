@@ -257,3 +257,35 @@ with rec:
             st.dataframe(df3[8],hide_index=True)
             st.metric(label='Più lunga striscia di clean sheets in totale', value=df3[11])
             st.dataframe(df3[10], hide_index=True)
+
+    with st.expander('Curiosità'):
+        df_casa_filtc = df_casa[['Stagione', 'Data', 'GC', 'GT']].rename(columns={'GC': 'GF', 'GT': 'GS'})
+        df_tras_filtc = df_tras[['Stagione', 'Data', 'GT', 'GC']].rename(columns={'GT': 'GF', 'GC': 'GS'})
+        df_filtc = pd.concat([df_casa_filtc, df_tras_filtc], ignore_index=True)
+        df_filtc['Weekday']=df_filtc['Data'].dt.strftime('%A')
+        df_filtc['Mese']=df_filtc['Data'].dt.strftime('%B')
+        df_filtc['W']=[1 if x>y else 0 for x,y in zip(df_filtc['GF'],df_filtc['GS'])]
+        df_filtc['N'] = [1 if x == y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
+        df_filtc['L'] = [1 if x < y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
+        wk_gr=df_filtc.groupby('Weekday',as_index=False).agg({'W':'sum','N':'sum','L':'sum'})
+        mn_gr = df_filtc.groupby('Mese', as_index=False).agg({'W': 'sum', 'N': 'sum', 'L': 'sum'})
+
+        wkbarmm = go.Figure()
+        wkbarmm.add_trace(go.Bar(x=wk_gr['Weekday'], y=wk_gr['W'], orientation='v', marker=dict(color='green'),
+                                text=wk_gr['W']))
+        wkbarmm.add_trace(go.Bar(x=wk_gr['Weekday'], y=wk_gr['D'], orientation='v', marker=dict(color='gray'),
+                                text=wk_gr['D']))
+        wkbarmm.add_trace(go.Bar(x=wk_gr['Weekday'], y=wk_gr['L'], orientation='v', marker=dict(color='red'),
+                                text=wk_gr['L']))
+        wkbarmm.update_layout(barmode='stack', showlegend=False)
+        st.plotly_chart(wkbarmm)
+
+        mnbarmm = go.Figure()
+        mnbarmm.add_trace(go.Bar(x=mn_gr['Mese'], y=mn_gr['W'], orientation='v', marker=dict(color='green'),
+                                 text=wk_gr['W']))
+        mnbarmm.add_trace(go.Bar(x=mn_gr['Mese'], y=mn_gr['D'], orientation='v', marker=dict(color='gray'),
+                                 text=wk_gr['D']))
+        mnbarmm.add_trace(go.Bar(x=mn_gr['Mese'], y=mn_gr['L'], orientation='v', marker=dict(color='red'),
+                                 text=mn_gr['L']))
+        mnbarmm.update_layout(barmode='stack', showlegend=False)
+        st.plotly_chart(mnbarmm)

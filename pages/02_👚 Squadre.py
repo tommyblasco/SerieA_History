@@ -264,15 +264,13 @@ with rec:
         df_filtc = pd.concat([df_casa_filtc, df_tras_filtc], ignore_index=True)
         df_filtc['Weekday']=[x.strftime('%A') for x in df_filtc['Data']]
         df_filtc['Mese']=[x.strftime('%B') for x in df_filtc['Data']]
+        df_filtc['n_wkd'] = [x.weekday() + 1 for x in df_filtc['Data']]
+        df_filtc['n_mn'] = [x.month for x in df_filtc['Data']]
         df_filtc['W']=[1 if x>y else 0 for x,y in zip(df_filtc['GF'],df_filtc['GS'])]
         df_filtc['D'] = [1 if x == y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
         df_filtc['L'] = [1 if x < y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
-        wk_gr=df_filtc.groupby('Weekday',as_index=False).agg({'W':'sum','D':'sum','L':'sum'})
-        wk_gr['n_wkd']=[x.weekday()+1 for x in wk_gr['Weekday']]
-        wk_gr=wk_gr.sort_values('n_wkd')
-        mn_gr = df_filtc.groupby('Mese', as_index=False).agg({'W': 'sum', 'D': 'sum', 'L': 'sum'})
-        mn_gr['n_mn'] = [x.month for x in mn_gr['Mese']]
-        mn_gr = mn_gr.sort_values('n_mn')
+        wk_gr=df_filtc.groupby(['n_wkd','Weekday'],as_index=False).agg({'W':'sum','D':'sum','L':'sum'})
+        mn_gr = df_filtc.groupby(['n_mn','Mese'], as_index=False).agg({'W': 'sum', 'D': 'sum', 'L': 'sum'})
 
         wkbarmm = go.Figure()
         wkbarmm.add_trace(go.Bar(x=wk_gr['Weekday'], y=wk_gr['W'], orientation='v', marker=dict(color='green'),

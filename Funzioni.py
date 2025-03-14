@@ -141,6 +141,7 @@ def mister_alltime(dati,team):
         mrallt.columns=['Allenatore','Media Punti 3W','Squadre','Panchine','V','N','P']
         mrallt['Squadre'] = [sorted(set(x)) for x in mrallt['Squadre']]
         mrallt['Squadre'] = mrallt['Squadre'].apply(lambda x: ', '.join(map(str, x)))
+        mrallt['Media Punti 3W'] = [round(x, 3) for x in mrallt['Media Punti 3W']]
         mrallt = mrallt.sort_values(by=['Panchine'], ascending=False)
     else:
         db=db[db['Squadra']==team].sort_values('Data')
@@ -148,6 +149,7 @@ def mister_alltime(dati,team):
         db['sessione']=(db['Allenatore']!=db['Allenatore'].shift()).cumsum()
         mrallt=db.groupby(['Allenatore','sessione'],as_index=False).agg({'Data':'min','Pnt':'mean','Squadra':'count','W':'sum','N':'sum','L':'sum'}).drop('sessione',axis=1)
         mrallt.columns = ['Allenatore', 'Esordio', 'Media Punti 3W', 'Panchine', 'V', 'N', 'P']
+        mrallt['Media Punti 3W']=[round(x,3) for x in mrallt['Media Punti 3W']]
         mrallt = mrallt.sort_values(by=['Esordio'], ascending=False)
     return mrallt
 

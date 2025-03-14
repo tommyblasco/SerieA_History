@@ -265,7 +265,7 @@ with rec:
         df_filtc['Weekday']=[x.strftime('%A') for x in df_filtc['Data']]
         df_filtc['Mese']=[x.strftime('%B') for x in df_filtc['Data']]
         df_filtc['W']=[1 if x>y else 0 for x,y in zip(df_filtc['GF'],df_filtc['GS'])]
-        df_filtc['N'] = [1 if x == y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
+        df_filtc['D'] = [1 if x == y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
         df_filtc['L'] = [1 if x < y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
         wk_gr=df_filtc.groupby('Weekday',as_index=False).agg({'W':'sum','N':'sum','L':'sum'})
         mn_gr = df_filtc.groupby('Mese', as_index=False).agg({'W': 'sum', 'N': 'sum', 'L': 'sum'})

@@ -267,8 +267,8 @@ with rec:
         df_filtc['W']=[1 if x>y else 0 for x,y in zip(df_filtc['GF'],df_filtc['GS'])]
         df_filtc['D'] = [1 if x == y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
         df_filtc['L'] = [1 if x < y else 0 for x, y in zip(df_filtc['GF'], df_filtc['GS'])]
-        wk_gr=df_filtc.groupby('Weekday',as_index=False).agg({'W':'sum','N':'sum','L':'sum'})
-        mn_gr = df_filtc.groupby('Mese', as_index=False).agg({'W': 'sum', 'N': 'sum', 'L': 'sum'})
+        wk_gr=df_filtc.groupby('Weekday',as_index=False).agg({'W':'sum','D':'sum','L':'sum'})
+        mn_gr = df_filtc.groupby('Mese', as_index=False).agg({'W': 'sum', 'D': 'sum', 'L': 'sum'})
 
         wkbarmm = go.Figure()
         wkbarmm.add_trace(go.Bar(x=wk_gr['Weekday'], y=wk_gr['W'], orientation='v', marker=dict(color='green'),

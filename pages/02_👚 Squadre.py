@@ -282,9 +282,9 @@ with rec:
 
         mnbarmm = go.Figure()
         mnbarmm.add_trace(go.Bar(x=mn_gr['Mese'], y=mn_gr['W'], orientation='v', marker=dict(color='green'),
-                                 text=wk_gr['W']))
+                                 text=mn_gr['W']))
         mnbarmm.add_trace(go.Bar(x=mn_gr['Mese'], y=mn_gr['D'], orientation='v', marker=dict(color='gray'),
-                                 text=wk_gr['D']))
+                                 text=mn_gr['D']))
         mnbarmm.add_trace(go.Bar(x=mn_gr['Mese'], y=mn_gr['L'], orientation='v', marker=dict(color='red'),
                                  text=mn_gr['L']))
         mnbarmm.update_layout(barmode='stack', showlegend=False)

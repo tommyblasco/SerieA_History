@@ -70,7 +70,7 @@ with perp:
         st.dataframe(autogols, hide_index=True)
     st.divider()
     st.subheader('Classifica allenatori all time')
-    st.dataframe(mister_alltime(dati=storico), hide_index=True)
+    st.dataframe(mister_alltime(dati=storico,team='All'), hide_index=True)
 
     with st.expander('Media gol stagionale'):
         st.markdown("*E' vero che negli anni 70 e 80 si segnava di meno?*")

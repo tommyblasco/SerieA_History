@@ -23,7 +23,7 @@ with titcol1:
 with titcol2:
     st.image(Image.open(BytesIO(requests.get(load_images(team=tea_sel,yyyy='2999')).content)))
 
-ov, inst, rec = st.tabs(['Overview','Insights','Record'])
+ov, inst, mrtem, rec = st.tabs(['Overview','Insights','Allenatori','Record'])
 
 with ov:
     st.subheader('Partecipazioni e pos finale:')
@@ -190,6 +190,20 @@ with inst:
         mar_tot_fin['Gol+Ass']=[x+y for x,y in zip(mar_tot_fin['Gol'],mar_tot_fin['Assist'])]
         mar_tot_fin=mar_tot_fin.sort_values('Gol',ascending=False)
         st.dataframe(mar_tot_fin,hide_index=True)
+
+with mrtem:
+    st.subheader('Gli allenatori nella storia')
+    mrtem1, mrtem2 = st.columns(2)
+    with mrtem1:
+        st.write('Cronistoria')
+        st.dataframe(mister_alltime(dati=storico,team=tea_sel),hide_index=True)
+    with mrtem2:
+        st.write('Complessivo')
+        mateam=mister_alltime(dati=storico, team=tea_sel)
+        m1=mateam.groupby('Allenatore',as_index=False).agg({'Pnt':'mean','Squadra':'count','W':'sum','N':'sum','L':'sum'})
+        m1.columns = ['Allenatore', 'Media Punti 3W', 'Panchine', 'V', 'N', 'P']
+        m1 = m1.sort_values(by=['Media Punti 3W'], ascending=False)
+        st.dataframe(m1, hide_index=True)
 
 with rec:
     st.markdown("*Quali sono i record consecutivi per vittorie, sconfitte e molto altro della squadra in Serie A?*")

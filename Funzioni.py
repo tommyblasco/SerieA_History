@@ -125,7 +125,7 @@ def class_ct(dati,seas):
     trasferta = trasferta.sort_values(by=['Punti', 'DR'], ascending=False)
     return [casa, trasferta]
 
-def mister_alltime(dati):
+def mister_alltime(dati,team):
     dati_pt2 = dati[['ID','Stagione','Giornata','Data','TRAS','CASA','GT','GC','All TRAS','All CASA']]
     dati=dati[['ID','Stagione','Giornata','Data','CASA','TRAS','GC','GT','All CASA','All TRAS']]
     dati.columns=['ID','Stagione','Giornata','Data','Squadra','Opponent','GF','GS','Allenatore','All opponent']
@@ -136,11 +136,19 @@ def mister_alltime(dati):
     db['N'] = [1 if x == y else 0 for x, y in zip(db['GF'], db['GS'])]
     db['L'] = [1 if x < y else 0 for x, y in zip(db['GF'], db['GS'])]
     db['Pnt'] = [x * 3 + y  for x, y in zip(db['W'], db['N'])]
-    mrallt=db.groupby(['Allenatore'],as_index=False).agg({'Pnt':'mean','Squadra':list,'Data':'count','W':'sum','N':'sum','L':'sum'})
-    mrallt.columns=['Allenatore','Media Punti 3W','Squadre','Panchine','V','N','P']
-    mrallt['Squadre'] = [sorted(set(x)) for x in mrallt['Squadre']]
-    mrallt['Squadre'] = mrallt['Squadre'].apply(lambda x: ', '.join(map(str, x)))
-    mrallt = mrallt.sort_values(by=['Panchine'], ascending=False)
+    if team=='All':
+        mrallt=db.groupby(['Allenatore'],as_index=False).agg({'Pnt':'mean','Squadra':list,'Data':'count','W':'sum','N':'sum','L':'sum'})
+        mrallt.columns=['Allenatore','Media Punti 3W','Squadre','Panchine','V','N','P']
+        mrallt['Squadre'] = [sorted(set(x)) for x in mrallt['Squadre']]
+        mrallt['Squadre'] = mrallt['Squadre'].apply(lambda x: ', '.join(map(str, x)))
+        mrallt = mrallt.sort_values(by=['Panchine'], ascending=False)
+    else:
+        db=db[db['Squadra']==team].sort_values('Data')
+        db.reset_index(drop=True, inplace=True)
+        db['sessione']=(db['Allenatore']!=db['Allenatore'].shift()).cumsum()
+        mrallt=db.groupby(['Allenatore','sessione'],as_index=False).agg({'Data':'min','Pnt':'mean','Squadra':'count','W':'sum','N':'sum','L':'sum'}).drop('sessione',axis=1)
+        mrallt.columns = ['Allenatore', 'Esordio', 'Media Punti 3W', 'Panchine', 'V', 'N', 'P']
+        mrallt = mrallt.sort_values(by=['Esordio'], ascending=False)
     return mrallt
 
 def match_series(dati,team,c_t):
@@ -326,6 +334,7 @@ def riepilogo_prec(dati,type,i1):
         df_tt1_g['Bil'] = [x - y for x, y in zip(df_tt1_g['W'], df_tt1_g['L'])]
     df_tt1_g.reset_index(drop=True, inplace=True)
     return df_tt1_g
+
 
 def ris_parz(datis,datim):
     mar_arr=datim.merge(datis[['ID','CASA','TRAS']],on='ID',how='left')

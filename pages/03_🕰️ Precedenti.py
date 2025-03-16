@@ -80,8 +80,8 @@ with h2h:
         colgc1, colgc3 = st.columns(2)
         with colgc1:
             st.text(f'{t1} home')
-            wh_d_wa1 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
-                                 labels=[f"W {t1}", "Pari", f"W {t2}"], marker=dict(colors=[colr1,'rgb(86, 86, 86)',colr2]))
+            wh_d_wa1 = go.Figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
+                                 labels=[f"W {t1}", "Pari", f"W {t2}"], marker=dict(colors=[colr1,'rgb(86, 86, 86)',colr2])))
             wh_d_wa1.update_layout(annotations=[
                 dict(text=f'{df1['WH'].item() + df1['WA'].item()+ df1['N'].item()} match', x=0.5, y=0.5, font_size=15, showarrow=False, xanchor='center')])
 
@@ -93,8 +93,8 @@ with h2h:
 
         with colgc3:
             st.text(f'{t2} home')
-            wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],
-                                 labels=[f"W {t2}", "Pari", f"W {t1}"],marker=dict(colors=[colr2,'rgb(86, 86, 86)',colr1]))
+            wh_d_wa2 = go.Figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],
+                                 labels=[f"W {t2}", "Pari", f"W {t1}"],marker=dict(colors=[colr2,'rgb(86, 86, 86)',colr1])))
             wh_d_wa2.update_layout(annotations=[
                 dict(text=f'{df2['WH'].item() + df2['WA'].item() + df2['N'].item()} match', x=0.5, y=0.5, font_size=15,
                      showarrow=False, xanchor='center')])

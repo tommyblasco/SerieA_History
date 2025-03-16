@@ -82,10 +82,11 @@ with h2h:
             st.text(f'{t1} home')
             wh_d_wa1 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
                                  labels=[f"W {t1}", "Pari", f"W {t2}"], marker=dict(colors=[colr1,'rgb(86, 86, 86)',colr2]))
+            wh_d_wa1.update_layout(annotations=[
+                dict(text=f'{df1['WH'].item() + df1['WA'].item()+ df1['N'].item()} match', x=0.5, y=0.5, font_size=15, showarrow=False, xanchor='center')])
+
             st.plotly_chart(go.FigureWidget(data=wh_d_wa1), use_container_width=True)
-            m1, m2 = st.columns(2)
-            m1.metric(label='Partite giocate',value=df1['TRAS'].item())
-            m2.metric(label='Bilancio POV Home', value=df1['WH'].item()-df1['WA'].item(),border=True)
+            st.metric(label=f'Bilancio POV {t1}', value=df1['WH'].item()-df1['WA'].item(),border=True)
             m3, m4 = st.columns(2)
             m3.metric(label=f'Gol fatti {t1}',value=df1['GC'].item())
             m4.metric(label=f'Gol fatti {t2}', value=df1['GT'].item())
@@ -94,10 +95,12 @@ with h2h:
             st.text(f'{t2} home')
             wh_d_wa2 = go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],
                                  labels=[f"W {t2}", "Pari", f"W {t1}"],marker=dict(colors=[colr2,'rgb(86, 86, 86)',colr1]))
+            wh_d_wa2.update_layout(annotations=[
+                dict(text=f'{df2['WH'].item() + df2['WA'].item() + df2['N'].item()} match', x=0.5, y=0.5, font_size=15,
+                     showarrow=False, xanchor='center')])
+
             st.plotly_chart(go.FigureWidget(data=wh_d_wa2), use_container_width=True)
-            m5, m6 = st.columns(2)
-            m5.metric(label='Partite giocate',value=df2['TRAS'].item())
-            m6.metric(label='Bilancio POV Home', value=df2['WH'].item()-df2['WA'].item(),border=True)
+            st.metric(label=f'Bilancio POV {t2}', value=df2['WH'].item()-df2['WA'].item(),border=True)
             m7, m8 = st.columns(2)
             m7.metric(label=f'Gol fatti {t2}', value=df2['GC'].item())
             m8.metric(label=f'Gol fatti {t1}', value=df2['GT'].item())

@@ -83,7 +83,8 @@ with h2h:
             wh_d_wa1 = go.Figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df1['WH'].item(), df1['N'].item() ,df1['WA'].item()],
                                  labels=[f"W {t1}", "Pari", f"W {t2}"], marker=dict(colors=[colr1,'rgb(86, 86, 86)',colr2])))
             wh_d_wa1.update_layout(annotations=[
-                dict(text=f'{df1['WH'].item() + df1['WA'].item()+ df1['N'].item()} match', x=0.5, y=0.5, font_size=15, showarrow=False, xanchor='center')])
+                dict(text=f'{df1['WH'].item() + df1['WA'].item()+ df1['N'].item()}', x=0.5, y=0.6, font_size=18, showarrow=False, xanchor='center'),
+                dict(text='match',x=0.5, y=0.45, font_size=10, showarrow=False, xanchor='center')])
 
             st.plotly_chart(go.FigureWidget(data=wh_d_wa1), use_container_width=True)
             st.metric(label=f'Bilancio POV {t1}', value=df1['WH'].item()-df1['WA'].item(),border=True)
@@ -96,8 +97,8 @@ with h2h:
             wh_d_wa2 = go.Figure(go.Pie(hole=0.5, sort=False, direction='clockwise', values=[df2['WH'].item(), df2['N'].item() ,df2['WA'].item()],
                                  labels=[f"W {t2}", "Pari", f"W {t1}"],marker=dict(colors=[colr2,'rgb(86, 86, 86)',colr1])))
             wh_d_wa2.update_layout(annotations=[
-                dict(text=f'{df2['WH'].item() + df2['WA'].item() + df2['N'].item()} match', x=0.5, y=0.5, font_size=15,
-                     showarrow=False, xanchor='center')])
+                dict(text=f'{df2['WH'].item() + df2['WA'].item() + df2['N'].item()}', x=0.5, y=0.6, font_size=18, showarrow=False, xanchor='center'),
+                dict(text='match',x=0.5, y=0.45, font_size=10, showarrow=False, xanchor='center')])
 
             st.plotly_chart(go.FigureWidget(data=wh_d_wa2), use_container_width=True)
             st.metric(label=f'Bilancio POV {t2}', value=df2['WH'].item()-df2['WA'].item(),border=True)

@@ -16,7 +16,7 @@ with h2h:
     with colt1:
         t1=st.selectbox('Seleziona il team 1:',lista_sq)
     with colt2:
-        lsq2 = [x for x in lista_sq if x != t1]
+        lsq2 = sorted(set(list(storico.loc[storico['CASA']==t1,'TRAS'])+list(storico.loc[storico['TRAS']==t1,'CASA'])))
         t2=st.selectbox('Seleziona il team 2:',lsq2)
     df1 = prec(dati=storico,t1=t1, t2=t2)[0]
     df2 = prec(dati=storico,t1=t1, t2=t2)[1]

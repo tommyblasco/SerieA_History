@@ -76,6 +76,7 @@ with det_tea:
         id_eligibles = [x for x in marcatori['ID'] if x[:4] == sea_sel[:4]]
         marcatori_team = marcatori[
             (marcatori['ID'].isin(id_eligibles)) & (marcatori['Squadra']==tm_det) & ((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
+        marcatori_team['Rig'] = [1 if x == 'R' else 0 for x in marcatori_team['Note']]
         mts = marcatori_team.groupby('Marcatori', as_index=False).agg({'ID': 'count', 'Rig': 'sum'})
         mts.columns = ['Marcatori', 'Gol', 'di cui Rig']
         mts = mts.sort_values('Gol', ascending=False)

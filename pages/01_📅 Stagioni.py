@@ -70,7 +70,7 @@ with det_tea:
         part_team=df[(df['CASA']==tm_det) | (df['TRAS']==tm_det)]
         part_team['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(part_team['GC'], part_team['GT'])]
         part_team=part_team.sort_values('Data',ascending=False)
-        st.dataframe(part_team[['Giorno','Giornata','CASA','TRAS','Risultato']].style.apply(color_coding_vnp, axis=1, args=(tm_det)),hide_index=True)
+        st.dataframe(part_team[['Giorno','Giornata','CASA','TRAS','Risultato']].style.apply(color_coding_vnp, axis=1, args=(tm_det,)),hide_index=True)
     with p2:
         st.subheader('I marcatori della stagione')
         id_eligibles = [x for x in marcatori['ID'] if x[:4] == sea_sel[:4]]

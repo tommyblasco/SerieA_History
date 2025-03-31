@@ -462,3 +462,13 @@ def color_coding(row,c1,c2,t1):
     else:
         bg=['background-color:rgb(86, 86, 86)']* len(row)
     return bg
+
+def color_coding_vnp(row,t1):
+    score_home, score_away = map(int, row['Risultato'].split('-'))
+    if ((score_home>score_away) & (row['CASA']==t1)) | ((score_home<score_away) & (row['TRAS']==t1)):
+        bg=[f'background-color:rgb(44, 160, 44)'] * len(row)
+    elif ((score_home<score_away) & (row['CASA']==t1)) | ((score_home>score_away) & (row['TRAS']==t1)):
+        bg=[f'background-color:rgb(214, 39, 40)'] * len(row)
+    else:
+        bg=['background-color:rgb(86, 86, 86)']* len(row)
+    return bg

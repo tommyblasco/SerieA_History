@@ -16,7 +16,7 @@ start_sea=min(df['Data'])
 end_sea=max(df['Data'])
 n_gio=max(df['Giornata'])
 
-rc, mgol, ins, sm = st.tabs(['Risultati e classifica','Marcatori & gol stats','Insights','Special matches'])
+rc, det_tea, mgol, ins, sm = st.tabs(['Risultati e classifica','Dettaglio squadre','Marcatori & gol stats','Insights','Special matches'])
 with rc:
     class_c, ris_c = st.columns([2, 1])
     with class_c:
@@ -59,9 +59,32 @@ with rc:
             st.markdown("*Il risultato del primo tempo è cambiato o rimasto invariato nel secondo?*")
             st.dataframe(change_1t_2t(datis=storico,datim=marcatori,seas=sea_sel))
 
+with det_tea:
+    tm_det=st.selectbox('Seleziona una squadra:',sorted(set(list(df['CASA'])+list(df['TRAS']))))
+    titcol3, titcol4 = st.columns([2, 1])
+    titcol3.header(tm_det)
+    titcol4.image(Image.open(BytesIO(requests.get(load_images(team=tm_det, yyyy=sea_sel[:4])).content)))
+    p1, p2 = st.columns(2)
+    with p1:
+        st.subheader('Le partite della stagione')
+        part_team=df[(df['CASA']==tm_det) | (df['TRAS']==tm_det)]
+        part_team['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(part_team['GC'], part_team['GT'])]
+        part_team=part_team.sort_values('Data',ascending=False)
+        st.dataframe(part_team[['Giorno','Giornata','CASA','TRAS','Risultato']].style.apply(color_coding_vnp, axis=1, args=(tm_det)),hide_index=True)
+    with p2:
+        st.subheader('I marcatori della stagione')
+        id_eligibles = [x for x in marcatori['ID'] if x[:4] == sea_sel[:4]]
+        marcatori_team = marcatori[
+            (marcatori['ID'].isin(id_eligibles)) & (marcatori['Squadra']==tm_det) & ((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
+        mts = marcatori_team.groupby('Marcatori', as_index=False).agg({'ID': 'count', 'Rig': 'sum'})
+        mts.columns = ['Marcatori', 'Gol', 'di cui Rig']
+        mts = mts.sort_values('Gol', ascending=False)
+        st.dataframe(mts, hide_index=True)
+
 with mgol:
-    id_eligibles = [x for x in marcatori['ID'] if x[:4]==sea_sel[:4]]
-    marcatori_st = marcatori[(marcatori['ID'].isin(id_eligibles)) & ((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
+    id_eligibles = [x for x in marcatori['ID'] if x[:4] == sea_sel[:4]]
+    marcatori_st = marcatori[
+        (marcatori['ID'].isin(id_eligibles)) & ((marcatori['Note'] != 'A') | pd.isna(marcatori['Note']))]
     marcatori_st['Rig'] = [1 if x == 'R' else 0 for x in marcatori_st['Note']]
     m1 = marcatori_st.groupby('Marcatori', as_index=False).agg({'Squadra':list,'ID': 'count', 'Rig': 'sum'})
     m1.columns = ['Marcatori', 'Squadra','Gol', 'di cui Rig']

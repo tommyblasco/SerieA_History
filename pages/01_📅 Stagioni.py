@@ -130,7 +130,7 @@ with mgol:
         marcatori_st['Tempo'] = ['1T' if x <= 45 else '2T' for x in marcatori_st['Minuto']]
         marcatori_st['Q_Tempo'] = ['0-15' if (0 < x <= 15) | (45 < x <= 60) else '16-30' if (15 < x <= 30) | (60 < x <= 75) else '31-45' for x in marcatori_st['Minuto']]
         df_pivot = marcatori_st.pivot_table(index='Tempo', columns='Q_Tempo', values='Marcatori', aggfunc='count')
-        df_freq = df_pivot * 100 / df.shape[0]
+        df_freq = df_pivot * 100 / marcatori_st.shape[0]
         time_gr = go.Figure(data=go.Heatmap(z=df_freq.values, x=df_freq.columns, y=df_freq.index,
                                            text=df_freq.round(1).astype(str) + '%', texttemplate="%{text}",
                                            colorscale="oranges", showscale=True))

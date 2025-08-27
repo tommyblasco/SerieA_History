@@ -387,7 +387,7 @@ def change_1t_2t(datis,datim,seas):
     db_tras.columns = ['Squadre', '1t/2t']
     db_fin=pd.concat([db_casa,db_tras])
     df_pivot = db_fin.pivot_table(index='Squadre', columns='1t/2t',aggfunc='size')
-    df_pivot = df_pivot[['V/V','V/N','V/P','N/V','N/N','N/P','P/V','P/N','P/P']]
+    #df_pivot = df_pivot[['V/V','V/N','V/P','N/V','N/N','N/P','P/V','P/N','P/P']]
     df_pivot = df_pivot.fillna(0)
     return df_pivot
 

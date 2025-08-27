@@ -28,7 +28,10 @@ with rc:
         classifica.insert(1,"Badge",stem)
         st.dataframe(classifica,column_config={"Badge":st.column_config.ImageColumn()},hide_index=True)
     with ris_c:
-        sel_gio = st.slider("Seleziona la giornata:",1,n_gio,n_gio)
+        if n_gio==1:
+            sel_gio = st.slider("Seleziona la giornata:",1,2,n_gio)
+        else:
+            sel_gio = st.slider("Seleziona la giornata:", 1, n_gio, n_gio)
         df['Risultato']=[str(x)+'-'+str(y) for x,y in zip(df['GC'],df['GT'])]
         df_fil_gio=df[df['Giornata']==sel_gio]
         df_fil_gio=df_fil_gio.sort_values(['Data','CASA'])

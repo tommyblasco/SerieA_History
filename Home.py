@@ -64,59 +64,64 @@ if st.button("🔄 Aggiorna Dati"):
 scorers = st.session_state.marcatori.copy()
 all_matches = st.session_state.storico.copy()
 
-with st.form("Nuove partite"):
-    st.subheader("Nuova partita")
+with st.expander("Updates"):
     st.text("Info generali")
     col1, col2, col3 = st.columns(3)
     new_stag=col1.text_input("Stagione")
     new_data=col2.date_input("Data")
     new_gio=col3.number_input("Giornata",min_value=1,max_value=38,step=1)
+
     st.text("Partita")
     col4, col5 = st.columns(2)
     curr_seas_match = all_matches[all_matches['Stagione'] == new_stag]
-    check1g=len(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS'])))
+    check1g = len(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS'])))
     with col4:
-        if check1g!=20:
-            new_ht=st.text_input("Squadra casa")
-            new_allh=st.text_input("Allenatore casa")
+        if check1g != 20:
+            new_ht = st.text_input("Squadra casa")
+            new_allh = st.text_input("Allenatore casa")
         else:
-            new_ht=st.selectbox('Squadra casa', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
-            last_allh=curr_seas_match[curr_seas_match['CASA']==new_ht].tail(1)['All CASA'].item()
+            new_ht = st.selectbox('Squadra casa',
+                                  sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
+            last_allh = curr_seas_match[curr_seas_match['CASA'] == new_ht].tail(1)['All CASA'].item()
             new_allh = st.text_input("Allenatore casa", value=last_allh)
-        new_golh = st.number_input("Gol",min_value=0,step=1,key='home_goal')
     with col5:
-        if check1g!=20:
-            new_at=st.text_input("Squadra trasferta")
-            new_alla=st.text_input("Allenatore trasferta")
+        if check1g != 20:
+            new_at = st.text_input("Squadra trasferta")
+            new_alla = st.text_input("Allenatore trasferta")
         else:
-            new_at=st.selectbox('Squadra trasferta', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
-            last_alla=curr_seas_match[curr_seas_match['TRAS']==new_at].tail(1)['All TRAS'].item()
+            new_at = st.selectbox('Squadra trasferta',
+                                  sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
+            last_alla = curr_seas_match[curr_seas_match['TRAS'] == new_at].tail(1)['All TRAS'].item()
             new_alla = st.text_input("Allenatore trasferta", value=last_alla)
-        new_gola = st.number_input("Gol",min_value=0,step=1,key='away_goal')
-    id_match=new_stag[:4]+new_stag[5:7]+str(new_gio).zfill(2)+new_ht[:3]+new_at[:3]
-    st.text(f"ID partita: {id_match}")
-    submit_button = st.form_submit_button("Salva")
 
-if submit_button:
-    try:
-        with create_engine(st.secrets["DATABASE_URL"]).connect() as conn:
-            query = text("""
-                    INSERT INTO "Partite" ("ID", "Stagione", "Giornata", "Data", "CASA", "TRAS", "GC", "GT", "All CASA", "All TRAS")
-                    VALUES (:id, :stag, :gio, :data, :casa, :tras, :gc, :gt, :all_casa, :all_tras)
-                """)
-            conn.execute(query, {
-                    "id": id_match,
-                    "stag": new_stag,
-                    "gio": new_gio,
-                    "data": new_data,
-                    "casa": new_ht,
-                    "tras": new_at,
-                    "gc":new_golh,
-                    "gt":new_gola,
-                    "all_casa":new_allh,
-                    "all_tras":new_alla
-                })
-            conn.commit()
-        st.success(f"✅ ID {id_match} aggiunto con successo!")
-    except Exception as e:
-        st.error(f"Errore durante il salvataggio: {e}")
+    with st.form("Risultato"):
+        st.subheader("Risultato")
+        new_golh = st.number_input("Gol",min_value=0,step=1,key='home_goal')
+        new_gola = st.number_input("Gol",min_value=0,step=1,key='away_goal')
+        id_match=new_stag[:4]+new_stag[5:7]+str(new_gio).zfill(2)+new_ht[:3]+new_at[:3]
+        st.text(f"ID partita: {id_match}")
+        submit_button = st.form_submit_button("Salva")
+
+    if submit_button:
+        try:
+            with create_engine(st.secrets["DATABASE_URL"]).connect() as conn:
+                query = text("""
+                        INSERT INTO "Partite" ("ID", "Stagione", "Giornata", "Data", "CASA", "TRAS", "GC", "GT", "All CASA", "All TRAS")
+                        VALUES (:id, :stag, :gio, :data, :casa, :tras, :gc, :gt, :all_casa, :all_tras)
+                    """)
+                conn.execute(query, {
+                        "id": id_match,
+                        "stag": new_stag,
+                        "gio": new_gio,
+                        "data": new_data,
+                        "casa": new_ht,
+                        "tras": new_at,
+                        "gc":new_golh,
+                        "gt":new_gola,
+                        "all_casa":new_allh,
+                        "all_tras":new_alla
+                    })
+                conn.commit()
+            st.success(f"✅ ID {id_match} aggiunto con successo!")
+        except Exception as e:
+            st.error(f"Errore durante il salvataggio: {e}")

@@ -80,7 +80,7 @@ with st.form("Inserisci nuove partite"):
             new_allh=st.text_input("Allenatore casa")
         else:
             new_ht=st.selectbox('Squadra casa', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
-            last_allh=curr_seas_match[curr_seas_match['CASA']==new_ht].tail(1)['All CASA']
+            last_allh=curr_seas_match[curr_seas_match['CASA']==new_ht].tail(1)['All CASA'].item()
             new_allh = st.text_input("Allenatore casa", value=last_allh)
         new_golh = st.number_input("Gol",min_value=0,step=1,key='home_goal')
     with col5:
@@ -89,7 +89,7 @@ with st.form("Inserisci nuove partite"):
             new_alla=st.text_input("Allenatore trasferta")
         else:
             new_at=st.selectbox('Squadra trasferta', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
-            last_alla=curr_seas_match[curr_seas_match['TRAS']==new_at].tail(1)['All TRAS']
+            last_alla=curr_seas_match[curr_seas_match['TRAS']==new_at].tail(1)['All TRAS'].item()
             new_alla = st.text_input("Allenatore trasferta", value=last_alla)
         new_gola = st.number_input("Gol",min_value=0,step=1,key='away_goal')
 

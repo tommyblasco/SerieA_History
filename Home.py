@@ -45,16 +45,16 @@ def load_data(n):
 
 if "storico" not in st.session_state:
     #st.session_state.storico = load_data(n="gspartite")
-    st.session_state.storico = load_data(n="Partite")
+    st.session_state.storico = load_data(n="partite")
 
 if "marcatori" not in st.session_state:
     #st.session_state.marcatori = load_data(n="gsmarcatori")
-    st.session_state.marcatori = load_data(n="Marcatori")
+    st.session_state.marcatori = load_data(n="marcatori")
 
 if st.button("🔄 Aggiorna Dati"):
     with st.spinner("🔃 Aggiornamento in corso..."):
         st.cache_data.clear()  # 🔥 Forza il ricaricamento della cache
         #st.session_state.storico = load_data(n="gspartite")
         #st.session_state.marcatori = load_data(n="gsmarcatori")
-        st.session_state.storico = load_data(n="Partite")
-        st.session_state.marcatori = load_data(n="Marcatori")
+        st.session_state.storico = load_data(n="partite")
+        st.session_state.marcatori = load_data(n="marcatori")

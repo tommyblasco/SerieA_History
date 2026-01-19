@@ -59,3 +59,38 @@ if st.button("🔄 Aggiorna Dati"):
 
         st.session_state.storico = load_data(n='"Partite"')
         st.session_state.marcatori = load_data(n='"Marcatori"')
+
+
+scorers = st.session_state.marcatori.copy()
+all_matches = st.session_state.storico.copy()
+
+with st.form("Inserisci nuove partite"):
+    st.text("Info generali")
+    col1, col2, col3 = st.columns(3)
+    new_stag=col1.text_input("Stagione")
+    new_data=col2.date_input("Data")
+    new_gio=col3.number_input("Giornata",min_value=1,max_value=38,step=1)
+    st.text("Partita")
+    col4, col5 = st.columns(2)
+    curr_seas_match = all_matches[all_matches['Stagione'] == new_stag]
+    check1g=len(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS'])))
+    with col4:
+        if check1g!=20:
+            new_ht=st.text_input("Squadra casa")
+            new_allh=st.text_input("Allenatore casa")
+        else:
+            new_ht=st.selectbox('Squadra casa', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
+            last_allh=curr_seas_match[curr_seas_match['CASA']==new_ht].tail(1)['All CASA']
+            new_allh = st.text_input("Allenatore casa", value=last_allh)
+        new_golh = st.number_input("Gol",min_value=0,step=1)
+    with col5:
+        if check1g!=20:
+            new_at=st.text_input("Squadra trasferta")
+            new_alla=st.text_input("Allenatore trasferta")
+        else:
+            new_at=st.selectbox('Squadra trasferta', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
+            last_alla=curr_seas_match[curr_seas_match['TRAS']==new_at].tail(1)['All TRAS']
+            new_alla = st.text_input("Allenatore trasferta", value=last_alla)
+        new_gola = st.number_input("Gol",min_value=0,step=1)
+
+        submit_button = st.form_submit_button("Salva")

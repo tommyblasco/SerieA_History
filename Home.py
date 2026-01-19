@@ -96,8 +96,9 @@ with st.expander("Updates"):
 
     with st.form("Risultato"):
         st.subheader("Risultato")
-        new_golh = st.number_input("Gol",min_value=0,step=1,key='home_goal')
-        new_gola = st.number_input("Gol",min_value=0,step=1,key='away_goal')
+        col6, col7 = st.columns(2)
+        new_golh = col6.number_input(f"Gol {new_ht}",min_value=0,step=1,key='home_goal')
+        new_gola = col7.number_input(f"Gol {new_at}",min_value=0,step=1,key='away_goal')
         id_match=new_stag[:4]+new_stag[5:7]+str(new_gio).zfill(2)+new_ht[:3]+new_at[:3]
         st.text(f"ID partita: {id_match}")
         submit_button = st.form_submit_button("Salva")

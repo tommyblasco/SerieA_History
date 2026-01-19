@@ -56,5 +56,6 @@ if st.button("🔄 Aggiorna Dati"):
         st.cache_data.clear()  # 🔥 Forza il ricaricamento della cache
         #st.session_state.storico = load_data(n="gspartite")
         #st.session_state.marcatori = load_data(n="gsmarcatori")
+
         st.session_state.storico = load_data(n='"Partite"')
         st.session_state.marcatori = load_data(n='"Marcatori"')

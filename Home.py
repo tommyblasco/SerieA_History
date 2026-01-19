@@ -6,7 +6,7 @@ from PIL import Image
 from io import BytesIO
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
 st.title("Serie A")
 
@@ -64,7 +64,8 @@ if st.button("🔄 Aggiorna Dati"):
 scorers = st.session_state.marcatori.copy()
 all_matches = st.session_state.storico.copy()
 
-with st.form("Inserisci nuove partite"):
+with st.form("Nuove partite"):
+    st.subheader("Nuova partita")
     st.text("Info generali")
     col1, col2, col3 = st.columns(3)
     new_stag=col1.text_input("Stagione")
@@ -92,5 +93,30 @@ with st.form("Inserisci nuove partite"):
             last_alla=curr_seas_match[curr_seas_match['TRAS']==new_at].tail(1)['All TRAS'].item()
             new_alla = st.text_input("Allenatore trasferta", value=last_alla)
         new_gola = st.number_input("Gol",min_value=0,step=1,key='away_goal')
+    id_match=new_stag[:4]+new_stag[5:7]+str(new_gio).zfill(2)+new_ht[:3]+new_at[:3]
+    st.text(f"ID partita: {id_match}")
+    submit_button = st.form_submit_button("Salva")
 
-        submit_button = st.form_submit_button("Salva")
+if submit_button:
+    try:
+        with create_engine(st.secrets["DATABASE_URL"]).connect() as conn:
+            query = text("""
+                    INSERT INTO "Partite" ("ID", "Stagione", "Giornata", "Data", "CASA", "TRAS", "GC", "GT", "All CASA", "All TRAS")
+                    VALUES (:id, :stag, :gio, :data, :casa, :tras, :gc, :gt, :all_casa, :all_tras)
+                """)
+            conn.execute(query, {
+                    "id": id_match,
+                    "stag": new_stag,
+                    "gio": new_gio,
+                    "data": new_data,
+                    "casa": new_ht,
+                    "tras": new_at,
+                    "gc":new_golh,
+                    "gt":new_gola,
+                    "all_casa":new_allh,
+                    "all_tras":new_alla
+                })
+            conn.commit()
+        st.success(f"✅ ID {id_match} aggiunto con successo!")
+    except Exception as e:
+        st.error(f"Errore durante il salvataggio: {e}")

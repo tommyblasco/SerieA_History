@@ -10,3 +10,4 @@ beautifulsoup4
 Pillow
 raceplotly
 anywidget
+sqlalchemy

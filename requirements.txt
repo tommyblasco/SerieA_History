@@ -11,3 +11,4 @@ Pillow
 raceplotly
 anywidget
 sqlalchemy
+psycopg2-binary

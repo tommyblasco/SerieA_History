@@ -5,6 +5,8 @@ import requests
 from PIL import Image
 from io import BytesIO
 from streamlit_gsheets import GSheetsConnection
+import pandas as pd
+from sqlalchemy import create_engine
 
 st.title("Serie A")
 
@@ -35,18 +37,24 @@ with cd4:
 
 
 def load_data(n):
-    l_data = st.connection(n, type=GSheetsConnection)
-    l_data1 = l_data.read(worksheet="Foglio1")
-    return l_data1
+    #l_data = st.connection(n, type=GSheetsConnection)
+    #l_data1 = l_data.read(worksheet="Foglio1")
+    #return l_data1
+    engine=create_engine(st.secrets["DATABASE_URL"])
+    return pd.read_sql(f"SELECT * FROM {n}", engine)
 
 if "storico" not in st.session_state:
-    st.session_state.storico = load_data(n="gspartite")
+    #st.session_state.storico = load_data(n="gspartite")
+    st.session_state.storico = load_data(n="Partite")
 
 if "marcatori" not in st.session_state:
-    st.session_state.marcatori = load_data(n="gsmarcatori")
+    #st.session_state.marcatori = load_data(n="gsmarcatori")
+    st.session_state.marcatori = load_data(n="Marcatori")
 
 if st.button("🔄 Aggiorna Dati"):
     with st.spinner("🔃 Aggiornamento in corso..."):
         st.cache_data.clear()  # 🔥 Forza il ricaricamento della cache
-        st.session_state.storico = load_data(n="gspartite")
-        st.session_state.marcatori = load_data(n="gsmarcatori")
+        #st.session_state.storico = load_data(n="gspartite")
+        #st.session_state.marcatori = load_data(n="gsmarcatori")
+        st.session_state.storico = load_data(n="Partite")
+        st.session_state.marcatori = load_data(n="Marcatori")

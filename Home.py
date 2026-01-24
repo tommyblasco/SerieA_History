@@ -131,8 +131,8 @@ with (st.expander("Updates marcatori")):
     st.text("Info generali")
     col1, col2, col3 = st.columns(3)
     mnew_stag = col1.text_input("Stagione",key='stag_marc')
-    mnew_data = col2.date_input("Data")
-    mnew_gio = col3.number_input("Giornata", min_value=1, max_value=38, step=1)
+    mnew_data = col2.date_input("Data",key='data_marc')
+    mnew_gio = col3.number_input("Giornata", min_value=1, max_value=38, step=1,key='gio_marc')
 
     st.text("Partita")
     col4, col5 = st.columns(2)

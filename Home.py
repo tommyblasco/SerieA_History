@@ -143,7 +143,7 @@ with (st.expander("Updates marcatori")):
         else:
             mnew_ht = st.selectbox('Squadra casa', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))),key='ht_marc')
     with col5:
-        if check1g != 20:
+        if mcheck1g != 20:
             mnew_at = st.text_input("Squadra trasferta",key='away_marc')
         else:
             mnew_at = st.selectbox('Squadra trasferta', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))),key='away_marc')

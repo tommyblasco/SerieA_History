@@ -154,16 +154,17 @@ with (st.expander("Updates marcatori")):
         col6, col7, col8, col9 = st.columns(4)
         last20ysco=scorers[scorers['ID'].str[:4].astype(int)>=int(mnew_stag[:4])-20]
         assist_list=[x for x in last20ysco['Assist'] if x is not None]
+        marc_list = [x for x in last20ysco['Marcatori'] if x is not None]
         last_id = max(scorers['id_marc'])
         with col6:
             st.text('Marcatore')
-            scor1 = st.selectbox("Seleziona il marcatore:", ["➕ New Scorer"]+sorted(set(list(last20ysco['Marcatori'])+assist_list)))
+            scor1 = st.selectbox("Seleziona il marcatore:", ["➕ New Scorer"]+sorted(set(marc_list+assist_list)))
             if scor1=="➕ New Scorer":
                 new_scorer = st.text_input("Nuovo marcatore:")
             else:
                 new_scorer=scor1
             st.text('Assist-man')
-            ass1 = st.selectbox("Seleziona il marcatore:", ["➕ New Assistman","No Assist"]+sorted(set(list(last20ysco['Marcatori'])+assist_list)))
+            ass1 = st.selectbox("Seleziona il marcatore:", ["➕ New Assistman","No Assist"]+sorted(set(marc_list+assist_list)))
             if ass1=="➕ New Assistman":
                 new_assist = st.text_input("Nuovo assistman:")
             elif ass1=="No Assist":

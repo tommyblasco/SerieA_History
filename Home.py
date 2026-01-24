@@ -64,7 +64,7 @@ if st.button("🔄 Aggiorna Dati"):
 scorers = st.session_state.marcatori.copy()
 all_matches = st.session_state.storico.copy()
 
-with st.expander("Updates"):
+with st.expander("Updates partite"):
     st.text("Info generali")
     col1, col2, col3 = st.columns(3)
     new_stag=col1.text_input("Stagione")
@@ -126,3 +126,78 @@ with st.expander("Updates"):
             st.success(f"✅ ID {id_match} aggiunto con successo!")
         except Exception as e:
             st.error(f"Errore durante il salvataggio: {e}")
+
+with (st.expander("Updates marcatori")):
+    st.text("Info generali")
+    col1, col2, col3 = st.columns(3)
+    mnew_stag = col1.text_input("Stagione")
+    mnew_data = col2.date_input("Data")
+    mnew_gio = col3.number_input("Giornata", min_value=1, max_value=38, step=1)
+
+    st.text("Partita")
+    col4, col5 = st.columns(2)
+    mcurr_seas_match = all_matches[all_matches['Stagione'] == mnew_stag]
+    mcheck1g = len(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS'])))
+    with col4:
+        if mcheck1g != 20:
+            mnew_ht = st.text_input("Squadra casa")
+        else:
+            mnew_ht = st.selectbox('Squadra casa', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))))
+    with col5:
+        if check1g != 20:
+            mnew_at = st.text_input("Squadra trasferta")
+        else:
+            mnew_at = st.selectbox('Squadra trasferta', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))))
+
+    with st.form("Marcatori"):
+        st.subheader("Marcatori")
+        col6, col7, col8, col9 = st.columns(4)
+        last20ysco=scorers[scorers['ID'].str[:4].astype(int)>=int(mnew_stag[:4])-20]
+        last_id = max(scorers['id_marc'])
+        with col6:
+            st.text('Marcatore')
+            scor1 = st.selectbox("Seleziona il marcatore:", ["➕ New Scorer"]+sorted(set(list(last20ysco['Marcatori'])+list(last20ysco['Assist']))))
+            if scor1=="➕ New Scorer":
+                new_scorer = st.text_input("Nuovo marcatore:")
+            else:
+                new_scorer=scor1
+            st.text('Assist-man')
+            ass1 = st.selectbox("Seleziona il marcatore:", ["➕ New Assistman","No Assist"]+sorted(set(list(last20ysco['Marcatori'])+list(last20ysco['Assist']))))
+            if ass1=="➕ New Assistman":
+                new_assist = st.text_input("Nuovo assistman:")
+            elif ass1=="No Assist":
+                new_assist=None
+            else:
+                new_assist=ass1
+        with col7:
+            st.text('Squadra')
+            team_sco = st.selectbox("Seleziona la squadra:",[mnew_ht,mnew_at])
+        min_sco = col8.number_input("Minuto",min_value=1,max_value=90,step=1,key='min_scor')
+        with col9:
+            min_rec_sco = st.number_input("Recupero",value=None,step=1,key='min_rec_scor')
+            note=st.radio("Note",["R","A"],captions=['Rigore','Autogol'],index=None)
+            note_sql = None if note is None else note
+
+        mid_match=mnew_stag[:4]+mnew_stag[5:7]+str(mnew_gio).zfill(2)+mnew_ht[:3]+mnew_at[:3]
+        submit_button_marc = st.form_submit_button("Salva")
+        if submit_button_marc:
+            try:
+                with create_engine(st.secrets["DATABASE_URL"]).connect() as conn:
+                    query = text("""
+                            INSERT INTO "Marcatori" ("id_marc", "Marcatori", "Minuto", "Recupero", "Note", "Assist", "Squadra", "ID")
+                            VALUES (:id_marc, :marcatore, :minuto, :recupero, :note, :assist, :squadra, :id)
+                            """)
+                    conn.execute(query, {
+                        "id_marc": last_id+1,
+                        "marcatore": new_scorer,
+                        "minuto": min_sco,
+                        "recupero": min_rec_sco,
+                        "note": note_sql,
+                        "assist": new_assist,
+                        "squadra": team_sco,
+                        "id": mid_match
+                    })
+                    conn.commit()
+                st.success(f"✅ id_match n: {last_id+1}, ID: {mid_match} aggiunto con successo!")
+            except Exception as e:
+                st.error(f"Errore durante il salvataggio: {e}")

@@ -157,7 +157,6 @@ with (st.expander("Updates marcatori")):
         marc_list = [x for x in last20ysco['Marcatori'] if x is not None]
         last_id = max(scorers['id_marc'])
         with col6:
-            st.text('Marcatore')
             scor1 = st.selectbox("Seleziona il marcatore:", ["➕ New Scorer"]+sorted(set(marc_list+assist_list)))
             if scor1=="➕ New Scorer":
                 new_scorer = st.text_input("Nuovo marcatore:")
@@ -171,9 +170,7 @@ with (st.expander("Updates marcatori")):
                 new_assist=None
             else:
                 new_assist=ass1
-        with col7:
-            st.text('Squadra')
-            team_sco = st.selectbox("Seleziona la squadra:",[mnew_ht,mnew_at])
+        team_sco = col7.selectbox("Seleziona la squadra:",[mnew_ht,mnew_at])
         min_sco = col8.number_input("Minuto",min_value=1,max_value=90,step=1,key='min_scor')
         with col9:
             min_rec_sco = st.number_input("Recupero",value=None,step=1,key='min_rec_scor')

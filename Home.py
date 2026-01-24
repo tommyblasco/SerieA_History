@@ -130,7 +130,7 @@ with st.expander("Updates partite"):
 with (st.expander("Updates marcatori")):
     st.text("Info generali")
     col1, col2, col3 = st.columns(3)
-    mnew_stag = col1.text_input("Stagione")
+    mnew_stag = col1.text_input("Stagione",key='stag_marc')
     mnew_data = col2.date_input("Data")
     mnew_gio = col3.number_input("Giornata", min_value=1, max_value=38, step=1)
 
@@ -140,12 +140,12 @@ with (st.expander("Updates marcatori")):
     mcheck1g = len(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS'])))
     with col4:
         if mcheck1g != 20:
-            mnew_ht = st.text_input("Squadra casa")
+            mnew_ht = st.text_input("Squadra casa",key='ht_marc')
         else:
             mnew_ht = st.selectbox('Squadra casa', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))))
     with col5:
         if check1g != 20:
-            mnew_at = st.text_input("Squadra trasferta")
+            mnew_at = st.text_input("Squadra trasferta",key='away_marc')
         else:
             mnew_at = st.selectbox('Squadra trasferta', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))))
 

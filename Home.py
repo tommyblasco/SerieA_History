@@ -163,7 +163,7 @@ with (st.expander("Updates marcatori")):
             else:
                 new_scorer=scor1
             st.text('Assist-man')
-            ass1 = st.selectbox("Seleziona il marcatore:", ["➕ New Assistman","No Assist"]+sorted(set(marc_list+assist_list)))
+            ass1 = st.selectbox("Seleziona l'assistman:", ["➕ New Assistman","No Assist"]+sorted(set(marc_list+assist_list)))
             if ass1=="➕ New Assistman":
                 new_assist = st.text_input("Nuovo assistman:")
             elif ass1=="No Assist":

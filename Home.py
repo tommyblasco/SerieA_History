@@ -174,8 +174,8 @@ with (st.expander("Updates marcatori")):
         min_sco = col8.number_input("Minuto",min_value=1,max_value=90,step=1,key='min_scor')
         with col9:
             min_rec_sco = st.number_input("Recupero",value=None,step=1,key='min_rec_scor')
-            note=st.radio("Note",["R","A"],captions=['Rigore','Autogol'],index=None,key='radio_form')
-            note_sql = None if note is None else note
+            note=st.radio("Note",["R","A","0"],captions=['Rigore','Autogol','None'],index=None,key='radio_form')
+            note_sql = None if note is None or note=="0" else note
 
         mid_match=mnew_stag[:4]+mnew_stag[5:7]+str(mnew_gio).zfill(2)+mnew_ht[:3]+mnew_at[:3]
         submit_button_marc = st.form_submit_button("Salva")

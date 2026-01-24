@@ -142,12 +142,12 @@ with (st.expander("Updates marcatori")):
         if mcheck1g != 20:
             mnew_ht = st.text_input("Squadra casa",key='ht_marc')
         else:
-            mnew_ht = st.selectbox('Squadra casa', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))))
+            mnew_ht = st.selectbox('Squadra casa', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))),key='ht_marc')
     with col5:
         if check1g != 20:
             mnew_at = st.text_input("Squadra trasferta",key='away_marc')
         else:
-            mnew_at = st.selectbox('Squadra trasferta', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))))
+            mnew_at = st.selectbox('Squadra trasferta', sorted(set(list(mcurr_seas_match['CASA']) + list(mcurr_seas_match['TRAS']))),key='away_marc')
 
     with st.form("Marcatori"):
         st.subheader("Marcatori")
@@ -157,24 +157,24 @@ with (st.expander("Updates marcatori")):
         marc_list = [x for x in last20ysco['Marcatori'] if x is not None]
         last_id = max(scorers['id_marc'])
         with col6:
-            scor1 = st.selectbox("Seleziona il marcatore:", ["➕ New Scorer"]+sorted(set(marc_list+assist_list)))
+            scor1 = st.selectbox("Seleziona il marcatore:", ["➕ New Scorer"]+sorted(set(marc_list+assist_list)),key='marc_form')
             if scor1=="➕ New Scorer":
-                new_scorer = st.text_input("Nuovo marcatore:")
+                new_scorer = st.text_input("Nuovo marcatore:",key='marc_form1')
             else:
                 new_scorer=scor1
             st.text('Assist-man')
-            ass1 = st.selectbox("Seleziona l'assistman:", ["➕ New Assistman","No Assist"]+sorted(set(marc_list+assist_list)))
+            ass1 = st.selectbox("Seleziona l'assistman:", ["➕ New Assistman","No Assist"]+sorted(set(marc_list+assist_list)),key='ass_form')
             if ass1=="➕ New Assistman":
-                new_assist = st.text_input("Nuovo assistman:")
+                new_assist = st.text_input("Nuovo assistman:",key='ass_form1')
             elif ass1=="No Assist":
                 new_assist=None
             else:
                 new_assist=ass1
-        team_sco = col7.selectbox("Seleziona la squadra:",[mnew_ht,mnew_at])
+        team_sco = col7.selectbox("Seleziona la squadra:",[mnew_ht,mnew_at],key='team_form')
         min_sco = col8.number_input("Minuto",min_value=1,max_value=90,step=1,key='min_scor')
         with col9:
             min_rec_sco = st.number_input("Recupero",value=None,step=1,key='min_rec_scor')
-            note=st.radio("Note",["R","A"],captions=['Rigore','Autogol'],index=None)
+            note=st.radio("Note",["R","A"],captions=['Rigore','Autogol'],index=None,key='radio_form')
             note_sql = None if note is None else note
 
         mid_match=mnew_stag[:4]+mnew_stag[5:7]+str(mnew_gio).zfill(2)+mnew_ht[:3]+mnew_at[:3]

@@ -154,7 +154,6 @@ with (st.expander("Updates marcatori")):
         last20ysco=scorers[scorers['ID'].str[:4].astype(int)>=int(mnew_stag[:4])-20]
         assist_list=[x for x in last20ysco['Assist'] if x is not None]
         marc_list = [x for x in last20ysco['Marcatori'] if x is not None]
-        last_id = max(scorers['id_marc'])
         with col6:
             scor1 = st.selectbox("Seleziona il marcatore:", ["➕ New Scorer"]+sorted(set(marc_list+assist_list)),key='marc_form')
             if scor1=="➕ New Scorer":
@@ -182,11 +181,10 @@ with (st.expander("Updates marcatori")):
             try:
                 with create_engine(st.secrets["DATABASE_URL"]).connect() as conn:
                     query = text("""
-                            INSERT INTO "Marcatori" ("id_marc", "Marcatori", "Minuto", "Recupero", "Note", "Assist", "Squadra", "ID")
-                            VALUES (:id_marc, :marcatore, :minuto, :recupero, :note, :assist, :squadra, :id)
+                            INSERT INTO "Marcatori" ("Marcatori", "Minuto", "Recupero", "Note", "Assist", "Squadra", "ID")
+                            VALUES (:marcatore, :minuto, :recupero, :note, :assist, :squadra, :id)
                             """)
                     conn.execute(query, {
-                        "id_marc": last_id+1,
                         "marcatore": new_scorer,
                         "minuto": min_sco,
                         "recupero": min_rec_sco,
@@ -196,6 +194,6 @@ with (st.expander("Updates marcatori")):
                         "id": mid_match
                     })
                     conn.commit()
-                st.success(f"✅ id_match n: {last_id+1}, ID: {mid_match} aggiunto con successo!")
+                st.success(f"✅ ID: {mid_match} aggiunto con successo!")
             except Exception as e:
                 st.error(f"Errore durante il salvataggio: {e}")

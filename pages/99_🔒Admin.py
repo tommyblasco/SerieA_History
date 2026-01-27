@@ -190,25 +190,25 @@ st.subheader("Campionati Europei")
 with st.expander("Updates Partite"):
     st.text("Info generali")
     col1, col2, col3, col4 = st.columns(4)
-    new_league=col1.selectbox("Seleziona la lega:",['Premier League','La Liga','Bundesliga','Ligue 1'])
-    new_stag=col2.text_input("Stagione")
-    new_data=col3.date_input("Data")
-    new_gio=col4.number_input("Giornata",min_value=1,max_value=38,step=1)
+    new_league_eu=col1.selectbox("Seleziona la lega:",['Premier League','La Liga','Bundesliga','Ligue 1'])
+    new_stag_eu=col2.text_input("Stagione")
+    new_data_eu=col3.date_input("Data")
+    new_gio_eu=col4.number_input("Giornata",min_value=1,max_value=38,step=1)
 
     st.text("Partita")
     col4, col5 = st.columns(2)
     db_lega = {'Premier League':premierleague,'La Liga':laliga,'Bundesliga':bundesliga,'Ligue 1':ligue1}
     lega_gg = {'Premier League': 20, 'La Liga': 20, 'Bundesliga': 18, 'Ligue 1': 18}
     lega_table = {'Premier League': 'PremierLeague', 'La Liga': 'LaLiga', 'Bundesliga': 'Bundesliga', 'Ligue 1': 'Ligue1'}
-    curr_seas_match = db_lega[new_league][db_lega[new_league]['Stagione'] == new_stag]
+    curr_seas_match = db_lega[new_league_eu][db_lega[new_league_eu]['Stagione'] == new_stag_eu]
     check1g = len(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS'])))
     with col4:
-        if check1g != lega_gg[new_league]:
+        if check1g != lega_gg[new_league_eu]:
             new_ht = st.text_input("Squadra casa")
         else:
             new_ht = st.selectbox('Squadra casa',sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
     with col5:
-        if check1g != lega_gg[new_league]:
+        if check1g != lega_gg[new_league_eu]:
             new_at = st.text_input("Squadra trasferta")
         else:
             new_at = st.selectbox('Squadra trasferta', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
@@ -224,13 +224,13 @@ with st.expander("Updates Partite"):
         try:
             with create_engine(st.secrets["DATABASE1_URL"]).connect() as conn:
                 query = text(f"""
-                        INSERT INTO "{lega_table[new_league]}" ("Stagione", "Giornata", "Data", "CASA", "TRAS", "GC", "GT")
+                        INSERT INTO "{lega_table[new_league_eu]}" ("Stagione", "Giornata", "Data", "CASA", "TRAS", "GC", "GT")
                         VALUES (:stag, :gio, :data, :casa, :tras, :gc, :gt)
                     """)
                 conn.execute(query, {
-                        "stag": new_stag,
-                        "gio": new_gio,
-                        "data": new_data,
+                        "stag": new_stag_eu,
+                        "gio": new_gio_eu,
+                        "data": new_data_eu,
                         "casa": new_ht,
                         "tras": new_at,
                         "gc":new_golh,

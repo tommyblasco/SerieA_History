@@ -252,12 +252,12 @@ with st.expander("Updates Partite"):
         new_stag_ceu=st.text_input("Stagione",key='new_s2')
         new_data_ceu=st.date_input("Data",key='new_date2')
     db_coppe = {'Champions League': champions, 'Europa League': eu_league, 'Conference League': conf_league}
-    curr_seas_match = db_coppe[new_league_ceu][db_coppe[new_league_ceu]['Stagione'] == new_stag_ceu]
+   # curr_seas_match = db_coppe[new_league_ceu][db_coppe[new_league_ceu]['Stagione'] == new_stag_ceu]
     coppe_table = {'Champions League': 'ChampionsLeague', 'Europa League': 'EuropaLeague', 'Conference League': 'ConferenceLeague'}
     with col2:
-        new_fase1=st.selectbox("Fase 1",sorted(set(list(curr_seas_match['Fase_1']))),key='fase1')
-        new_fase2 = st.selectbox("Fase 2", sorted(set(list(curr_seas_match['Fase_2']))), key='fase2')
-        new_fase3 = st.selectbox("And/Rit", sorted(set(list(curr_seas_match['Fase_3']))), key='fase3')
+        new_fase1=st.selectbox("Fase 1",sorted(set(list(db_coppe[new_league_ceu]['Fase_1']))),key='fase1')
+        new_fase2 = st.selectbox("Fase 2", sorted(set(list(db_coppe[new_league_ceu]['Fase_2']))), key='fase2')
+        new_fase3 = st.selectbox("And/Rit", sorted(set(list(db_coppe[new_league_ceu]['Fase_3']))), key='fase3')
 
     st.text("Partita")
     col3, col4, col5, col6 = st.columns([3,1,3,1])

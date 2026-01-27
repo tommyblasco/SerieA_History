@@ -275,12 +275,12 @@ with st.expander("Updates Partite"):
     with st.form("Risultato Coppe"):
         st.subheader("Risultato")
         col7, col8, col9, col10, col11, col12 = st.columns([2,2,1,1,1,1])
-        new_golh = col7.number_input(f"Gol al 90 {new_ht}",min_value=0,step=1,key='home_goal2')
-        new_gola = col8.number_input(f"Gol al 90 {new_at}",min_value=0,step=1,key='away_goal2')
-        new_sup_golh = col9.number_input(f"Supp {new_ht}",value=None,step=1,key='sup_home_goal')
-        new_sup_gola = col10.number_input(f"Supp {new_at}",value=None,step=1,key='sup_away_goal')
-        new_rig_golh = col11.number_input(f"Rigori {new_ht}",value=None,step=1,key='rig_home_goal')
-        new_rig_gola = col12.number_input(f"Rigori {new_at}",value=None,step=1,key='rig_away_goal')
+        new_golh = col7.number_input(f"Gol al 90 {ht_final}",min_value=0,step=1,key='home_goal2')
+        new_gola = col8.number_input(f"Gol al 90 {at_final}",min_value=0,step=1,key='away_goal2')
+        new_sup_golh = col9.number_input(f"Supp {ht_final}",value=None,step=1,key='sup_home_goal')
+        new_sup_gola = col10.number_input(f"Supp {at_final}",value=None,step=1,key='sup_away_goal')
+        new_rig_golh = col11.number_input(f"Rigori {ht_final}",value=None,step=1,key='rig_home_goal')
+        new_rig_gola = col12.number_input(f"Rigori {at_final}",value=None,step=1,key='rig_away_goal')
         submit_button = st.form_submit_button("Salva")
 
     if submit_button:
@@ -299,6 +299,6 @@ with st.expander("Updates Partite"):
                     "rigc": new_rig_golh, "rigt": new_rig_gola
                     })
                 conn.commit()
-            st.success(f"✅ {new_ht}-{new_at} aggiunto con successo!")
+            st.success(f"✅ {ht_final}-{at_final} aggiunto con successo!")
         except Exception as e:
             st.error(f"Errore durante il salvataggio: {e}")

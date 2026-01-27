@@ -204,14 +204,14 @@ with st.expander("Updates Partite"):
     check1g = len(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS'])))
     with col4:
         if check1g != lega_gg[new_league_eu]:
-            new_ht = st.text_input("Squadra casa")
+            new_ht = st.text_input("Squadra casa",key='new_ht1')
         else:
-            new_ht = st.selectbox('Squadra casa',sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
+            new_ht = st.selectbox('Squadra casa',sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))),key='new_ht1')
     with col5:
         if check1g != lega_gg[new_league_eu]:
-            new_at = st.text_input("Squadra trasferta")
+            new_at = st.text_input("Squadra trasferta",key='new_at1')
         else:
-            new_at = st.selectbox('Squadra trasferta', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
+            new_at = st.selectbox('Squadra trasferta', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))),key='new_at1')
 
     with st.form("Risultato"):
         st.subheader("Risultato")

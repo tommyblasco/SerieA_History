@@ -216,8 +216,8 @@ with st.expander("Updates Partite"):
     with st.form("Risultato"):
         st.subheader("Risultato")
         col6, col7 = st.columns(2)
-        new_golh = col6.number_input(f"Gol {new_ht}",min_value=0,step=1,key='home_goal')
-        new_gola = col7.number_input(f"Gol {new_at}",min_value=0,step=1,key='away_goal')
+        new_golh = col6.number_input(f"Gol {new_ht}",min_value=0,step=1,key='home_goal1')
+        new_gola = col7.number_input(f"Gol {new_at}",min_value=0,step=1,key='away_goal1')
         submit_button = st.form_submit_button("Salva")
 
     if submit_button:

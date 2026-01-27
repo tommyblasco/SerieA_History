@@ -213,7 +213,7 @@ with st.expander("Updates Partite"):
         else:
             new_at = st.selectbox('Squadra trasferta', sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))),key='new_at1')
 
-    with st.form("Risultato"):
+    with st.form("Risultato Campionati Europei"):
         st.subheader("Risultato")
         col6, col7 = st.columns(2)
         new_golh = col6.number_input(f"Gol {new_ht}",min_value=0,step=1,key='home_goal1')

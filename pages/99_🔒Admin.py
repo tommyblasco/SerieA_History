@@ -263,12 +263,12 @@ with st.expander("Updates Partite"):
     col3, col4, col5, col6 = st.columns([3,1,3,1])
     with col3:
         ht_select = st.selectbox('Squadra casa',sorted(set(list(db_coppe[new_league_ceu]['CASA']) + list(db_coppe[new_league_ceu]['TRAS']))),key='sel_ht')
-        ht_new = st.text_input("Inserisci nuova squadra", key='new_ht1')
+        ht_new = st.text_input("Inserisci nuova squadra", key='new_ht2')
         ht_final = ht_select if ht_new=='' else ht_new
     naz_ht = col4.text_input("Nazione casa",key='naz_casa')
     with col5:
         at_select = st.selectbox('Squadra trasferta',sorted(set(list(db_coppe[new_league_ceu]['CASA']) + list(db_coppe[new_league_ceu]['TRAS']))),key='sel_at')
-        at_new = st.text_input("Inserisci nuova squadra", key='new_at1')
+        at_new = st.text_input("Inserisci nuova squadra", key='new_at2')
         at_final = at_select if at_new=='' else at_new
     naz_at = col6.text_input("Nazione tras",key='naz_tras')
 

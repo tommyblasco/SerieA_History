@@ -191,9 +191,9 @@ with st.expander("Updates Partite"):
     st.text("Info generali")
     col1, col2, col3, col4 = st.columns(4)
     new_league_eu=col1.selectbox("Seleziona la lega:",['Premier League','La Liga','Bundesliga','Ligue 1'])
-    new_stag_eu=col2.text_input("Stagione")
-    new_data_eu=col3.date_input("Data")
-    new_gio_eu=col4.number_input("Giornata",min_value=1,max_value=38,step=1)
+    new_stag_eu=col2.text_input("Stagione",key='new_s1')
+    new_data_eu=col3.date_input("Data",key='new_date1')
+    new_gio_eu=col4.number_input("Giornata",min_value=1,max_value=38,step=1,key='new_gio1')
 
     st.text("Partita")
     col4, col5 = st.columns(2)

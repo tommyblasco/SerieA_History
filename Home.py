@@ -155,19 +155,19 @@ with (st.expander("Updates marcatori")):
         assist_list=[x for x in last20ysco['Assist'] if x is not None]
         marc_list = [x for x in last20ysco['Marcatori'] if x is not None]
         with col6:
-            scor1 = st.selectbox("Seleziona il marcatore:", ["➕ New Scorer"]+sorted(set(marc_list+assist_list)),key='marc_form')
-            if scor1=="➕ New Scorer":
-                new_scorer = st.text_input("Nuovo marcatore:",key='marc_form1')
-            else:
-                new_scorer=scor1
+            scor1 = st.selectbox("Seleziona il marcatore:", sorted(set(marc_list+assist_list)),key='marc_form')
+            new_scorer = st.text_input("Nuovo marcatore:", key='marc_form1')
+            final_scorer = scor1 if new_scorer=='' else new_scorer
+
             st.text('Assist-man')
-            ass1 = st.selectbox("Seleziona l'assistman:", ["➕ New Assistman","No Assist"]+sorted(set(marc_list+assist_list)),key='ass_form')
-            if ass1=="➕ New Assistman":
-                new_assist = st.text_input("Nuovo assistman:",key='ass_form1')
-            elif ass1=="No Assist":
-                new_assist=None
+            ass1 = st.selectbox("Seleziona l'assistman:", ["No Assist"]+sorted(set(marc_list+assist_list)),key='ass_form')
+            new_assist = st.text_input("Nuovo assistman:", key='ass_form1')
+            if ass1=="No Assist":
+                final_assist = None
+            elif new_assist=="":
+                final_assist=ass1
             else:
-                new_assist=ass1
+                final_assist=new_assist
         team_sco = col7.selectbox("Seleziona la squadra:",[mnew_ht,mnew_at],key='team_form')
         min_sco = col8.number_input("Minuto",min_value=1,max_value=90,step=1,key='min_scor')
         with col9:
@@ -185,15 +185,15 @@ with (st.expander("Updates marcatori")):
                             VALUES (:marcatore, :minuto, :recupero, :note, :assist, :squadra, :id)
                             """)
                     conn.execute(query, {
-                        "marcatore": new_scorer,
+                        "marcatore": final_scorer,
                         "minuto": min_sco,
                         "recupero": min_rec_sco,
                         "note": note_sql,
-                        "assist": new_assist,
+                        "assist": final_assist,
                         "squadra": team_sco,
                         "id": mid_match
                     })
                     conn.commit()
-                st.success(f"✅ ID: {mid_match} aggiunto con successo!")
+                st.success(f"✅ {final_scorer} at {str(min_sco)} aggiunto con successo!")
             except Exception as e:
                 st.error(f"Errore durante il salvataggio: {e}")

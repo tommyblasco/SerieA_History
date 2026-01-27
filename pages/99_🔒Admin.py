@@ -69,7 +69,8 @@ with st.expander("Updates Partite"):
         else:
             new_ht = st.selectbox('Squadra casa',
                                   sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
-            last_allh = curr_seas_match[curr_seas_match['CASA'] == new_ht].tail(1)['All CASA'].item()
+            lista_all=[x if z==new_ht else y if aa==new_ht else '' for x,y,z,aa in zip(curr_seas_match['All CASA'],curr_seas_match['All TRAS'],curr_seas_match['CASA'],curr_seas_match['TRAS'])]
+            last_allh = [x for x in lista_all if x!=''][-1]
             new_allh = st.text_input("Allenatore casa", value=last_allh)
     with col5:
         if check1g != 20:
@@ -78,7 +79,8 @@ with st.expander("Updates Partite"):
         else:
             new_at = st.selectbox('Squadra trasferta',
                                   sorted(set(list(curr_seas_match['CASA']) + list(curr_seas_match['TRAS']))))
-            last_alla = curr_seas_match[curr_seas_match['TRAS'] == new_at].tail(1)['All TRAS'].item()
+            lista_all=[x if z==new_at else y if aa==new_at else '' for x,y,z,aa in zip(curr_seas_match['All CASA'],curr_seas_match['All TRAS'],curr_seas_match['CASA'],curr_seas_match['TRAS'])]
+            last_alla = [x for x in lista_all if x!=''][-1]
             new_alla = st.text_input("Allenatore trasferta", value=last_alla)
 
     with st.form("Risultato"):
@@ -235,6 +237,66 @@ with st.expander("Updates Partite"):
                         "tras": new_at,
                         "gc":new_golh,
                         "gt":new_gola
+                    })
+                conn.commit()
+            st.success(f"✅ {new_ht}-{new_at} aggiunto con successo!")
+        except Exception as e:
+            st.error(f"Errore durante il salvataggio: {e}")
+
+st.subheader("Coppe Europei")
+with st.expander("Updates Partite"):
+    st.text("Info generali")
+    col1, col2 = st.columns(2)
+    with col1:
+        new_league_ceu=st.selectbox("Seleziona la coppa:",['Champions League','Europa League','Conference League'],key='sel_cup')
+        new_stag_ceu=st.text_input("Stagione",key='new_s2')
+        new_data_ceu=st.date_input("Data",key='new_date2')
+    db_coppe = {'Champions League': champions, 'Europa League': eu_league, 'Conference League': conf_league}
+    curr_seas_match = db_coppe[new_league_ceu][db_coppe[new_league_ceu]['Stagione'] == new_stag_ceu]
+    coppe_table = {'Champions League': 'ChampionsLeague', 'Europa League': 'EuropaLeague', 'Conference League': 'ConferenceLeague'}
+    with col2:
+        new_fase1=st.selectbox("Fase 1",sorted(set(list(curr_seas_match['Fase_1']))),key='fase1')
+        new_fase2 = st.selectbox("Fase 2", sorted(set(list(curr_seas_match['Fase_2']))), key='fase2')
+        new_fase3 = st.selectbox("And/Rit", sorted(set(list(curr_seas_match['Fase_3']))), key='fase3')
+
+    st.text("Partita")
+    col3, col4, col5, col6 = st.columns([3,1,3,1])
+    with col3:
+        ht_select = st.selectbox('Squadra casa',sorted(set(list(db_coppe[new_league_ceu]['CASA']) + list(db_coppe[new_league_ceu]['TRAS']))),key='sel_ht')
+        ht_new = st.text_input("Inserisci nuova squadra", key='new_ht1')
+        ht_final = ht_select if ht_new=='' else ht_new
+    naz_ht = col4.text_input("Nazione casa",key='naz_casa')
+    with col5:
+        at_select = st.selectbox('Squadra trasferta',sorted(set(list(db_coppe[new_league_ceu]['CASA']) + list(db_coppe[new_league_ceu]['TRAS']))),key='sel_at')
+        at_new = st.text_input("Inserisci nuova squadra", key='new_at1')
+        at_final = at_select if at_new=='' else at_new
+    naz_at = col6.text_input("Nazione tras",key='naz_tras')
+
+    with st.form("Risultato Coppe"):
+        st.subheader("Risultato")
+        col7, col8, col9, col10, col11, col12 = st.columns([2,2,1,1,1,1])
+        new_golh = col7.number_input(f"Gol al 90 {new_ht}",min_value=0,step=1,key='home_goal2')
+        new_gola = col8.number_input(f"Gol al 90 {new_at}",min_value=0,step=1,key='away_goal2')
+        new_sup_golh = col9.number_input(f"Supplementari {new_ht}",value=None,step=1,key='sup_home_goal')
+        new_sup_gola = col10.number_input(f"Supplementari {new_at}",value=None,step=1,key='sup_away_goal')
+        new_rig_golh = col11.number_input(f"Rigori {new_ht}",value=None,step=1,key='rig_home_goal')
+        new_rig_gola = col12.number_input(f"Rigori {new_at}",value=None,step=1,key='rig_away_goal')
+        submit_button = st.form_submit_button("Salva")
+
+    if submit_button:
+        try:
+            with create_engine(st.secrets["DATABASE1_URL"]).connect() as conn:
+                query = text(f"""
+                        INSERT INTO "{coppe_table[new_league_ceu]}" ("Stagione", "Fase_1", "Fase_2", "Fase_3", "Data", "CASA", "NazC" "TRAS", "NazT", "GC", "GT", "GCS", "GTS", "RigC","RigT")
+                        VALUES (:stag, :f1,:f2,:f3, :data, :casa, :nazc, :tras, :nazt, :gc, :gt, :gcs, :gts, :rigc, :rigt)
+                    """)
+                conn.execute(query, {
+                        "stag": new_stag_ceu,
+                        "f1": new_fase1, "f2": new_fase2, "f3": new_fase3,
+                        "casa":ht_final, "nazc":naz_ht, "tras": at_final, "nazt":naz_at,
+                        "gc":new_golh, "gt":new_gola,
+                        "gcs": new_sup_golh, "gts": new_sup_gola,
+                    "rigc": new_rig_golh, "rigt": new_rig_gola
                     })
                 conn.commit()
             st.success(f"✅ {new_ht}-{new_at} aggiunto con successo!")

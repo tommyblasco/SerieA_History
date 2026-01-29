@@ -287,7 +287,7 @@ with st.expander("Updates Partite"):
         try:
             with create_engine(st.secrets["DATABASE1_URL"]).connect() as conn:
                 query = text(f"""
-                        INSERT INTO "{coppe_table[new_league_ceu]}" ("Stagione", "Fase_1", "Fase_2", "Fase_3", "Data", "CASA", "NazC" "TRAS", "NazT", "GC", "GT", "GCS", "GTS", "RigC","RigT")
+                        INSERT INTO "{coppe_table[new_league_ceu]}" ("Stagione", "Fase_1", "Fase_2", "Fase_3", "Data", "CASA", "NazC", "TRAS", "NazT", "GC", "GT", "GCS", "GTS", "RigC","RigT")
                         VALUES (:stag, :f1,:f2,:f3, :data, :casa, :nazc, :tras, :nazt, :gc, :gt, :gcs, :gts, :rigc, :rigt)
                     """)
                 conn.execute(query, {

@@ -292,7 +292,7 @@ with st.expander("Updates Partite"):
                     """)
                 conn.execute(query, {
                         "stag": new_stag_ceu,
-                        "f1": new_fase1, "f2": new_fase2, "f3": new_fase3,
+                        "f1": new_fase1, "f2": new_fase2, "f3": new_fase3, "data":new_data_ceu,
                         "casa":ht_final, "nazc":naz_ht, "tras": at_final, "nazt":naz_at,
                         "gc":new_golh, "gt":new_gola,
                         "gcs": new_sup_golh, "gts": new_sup_gola,

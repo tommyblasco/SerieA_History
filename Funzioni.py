@@ -96,6 +96,7 @@ def ranking(dati,seas,st_date=date(1800,1,1),en_date=date.today()):
     return new_class
 
 def ranking_short(db,league_name,seas):
+    db = db[(db['Stagione'] == seas)]
     db['H']=[1 if x>y else 0 for x,y in zip(db['GC'],db['GT'])]
     db['N']=[1 if x==y else 0 for x,y in zip(db['GC'],db['GT'])]
     db['A']=[1 if x<y else 0 for x,y in zip(db['GC'],db['GT'])]

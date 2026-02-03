@@ -58,7 +58,7 @@ penalita['A']=[x.date() for x in penalita['A']]
 
 #classifica x tutte le stagioni
 
-def ranking(dati,seas,st_date=date(1900,1,1),en_date=date.today()):
+def ranking(dati,seas,st_date=date(1800,1,1),en_date=date.today()):
     if seas=='All':
         db=dati
     else:
@@ -93,6 +93,24 @@ def ranking(dati,seas,st_date=date(1900,1,1),en_date=date.today()):
         new_class.insert(1,"Med Pnt 3W",[round((x*3+y)/z,3) for x,y,z in zip(new_class['V'],new_class['N'],new_class['Gio'])])
         new_class = new_class.sort_values(by=['Med Pnt 3W'], ascending=False)
     new_class.insert(0,'Rk',range(1,new_class.shape[0]+1))
+    return new_class
+
+def ranking_short(db,league_name,seas):
+    db['H']=[1 if x>y else 0 for x,y in zip(db['GC'],db['GT'])]
+    db['N']=[1 if x==y else 0 for x,y in zip(db['GC'],db['GT'])]
+    db['A']=[1 if x<y else 0 for x,y in zip(db['GC'],db['GT'])]
+    pt_threshold={'Premier League':'1981-82','La Liga':'1995-96','Bundesliga':'1995-96','Ligue 1':'1994-95'}
+    db['PH']=[x*3+y if z>=pt_threshold[league_name] else x*2+y for x,y,z in zip(db['H'],db['N'],db['Stagione'])]
+    db['PA']=[x*3+y if z>=pt_threshold[league_name] else x*2+y for x,y,z in zip(db['A'],db['N'],db['Stagione'])]
+    casa=db.groupby(['CASA'],as_index=False).agg({'PH':'sum','Data':'count','H':'sum','N':'sum','A':'sum','GC':'sum','GT':'sum'})
+    trasferta=db.groupby(['TRAS'],as_index=False).agg({'PA':'sum','Data':'count','A':'sum','N':'sum','H':'sum','GT':'sum','GC':'sum'})
+    casa['DRC']=[x-y for x,y in zip(casa['GC'],casa['GT'])]
+    trasferta['DRT']=[x-y for x,y in zip(trasferta['GT'],trasferta['GC'])]
+    casa.columns=['Squadra','Punti','Gio','V','N','P','GF','GS','DR']
+    trasferta.columns=['Squadra','Punti','Gio','V','N','P','GF','GS','DR']
+    classifica=pd.concat([casa,trasferta],ignore_index=True).groupby(['Squadra'],as_index=False).agg({'Punti':'sum','Gio':'sum','V':'sum','N':'sum','P':'sum','GF':'sum','GS':'sum','DR':'sum'})
+    new_class=classifica[['Squadra','Pnt','Gio','V','N','P','GF','GS','DR']]
+    new_class = new_class.sort_values(by=['Pnt', 'DR'], ascending=False)
     return new_class
 
 #prossima giornata avendo anche il rif alla posizione della squadra

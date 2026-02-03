@@ -15,7 +15,7 @@ lista_sq=sorted(set(list(db['CASA'])+list(db['TRAS'])))
 
 risclass, prec = st.tabs(['Risultati e classifica','Precedenti'])
 with risclass:
-    class_c, ris_c = st.columns([3, 2])
+    class_c, ris_c = st.columns(2)
     stagione_sel = st.selectbox('Seleziona una stagione', sorted(set(list(db['Stagione'])), reverse=True))
     db_stag=db[db['Stagione']==stagione_sel]
     n_gio = max(db_stag['Giornata'])

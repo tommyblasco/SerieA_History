@@ -41,8 +41,8 @@ with prec:
         lsq2 = sorted(
             set(list(db.loc[db['CASA'] == t1, 'TRAS']) + list(db.loc[db['TRAS'] == t1, 'CASA'])))
         t2 = st.selectbox('Seleziona il team 2:', lsq2)
-#    df1 = prec(dati=db, t1=t1, t2=t2)[0]
-#    df2 = prec(dati=db, t1=t1, t2=t2)[1]
+    df1 = prec(dati=db, t1=t1, t2=t2)[0]
+    df2 = prec(dati=db, t1=t1, t2=t2)[1]
 #    if (df1.shape[0] == 0) | (df2.shape[0] == 0):
 #        st.error('Nessun precedente trovato')
 #    else:

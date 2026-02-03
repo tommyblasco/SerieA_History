@@ -83,10 +83,10 @@ with prec_tab:
         dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]
         if sel_det==f'In casa di {t1}':
             st.write(f'{t1} home')
-            st.dataframe(dft1[['CASA', 'TRAS', 'Risultato', 'Stagione', 'Giorno']],hide_index=True)
+            st.dataframe(dft1[['CASA', 'TRAS', 'Risultato', 'Stagione', 'Data']],hide_index=True)
         elif sel_det==f'In casa di {t2}':
             st.write(f'{t2} home')
-            st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)
+            st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Data']], hide_index=True)
         else:
             st.write('TOTALE')
-            st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)
+            st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Data']], hide_index=True)

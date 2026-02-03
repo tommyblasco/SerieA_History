@@ -29,7 +29,7 @@ with risclass:
         db['Risultato']=[str(x)+'-'+str(y) for x,y in zip(db['GC'],db['GT'])]
         df_fil_gio=db[db['Giornata']==sel_gio]
         df_fil_gio=df_fil_gio.sort_values(['Data','CASA'])
-        df_fil_gio['Giorno'] = df_fil_gio['Data'].dt.strftime('%b %d, %Y')
+        df_fil_gio['Giorno'] = df_fil_gio['Data'].strftime('%b %d, %Y')
         st.dataframe(df_fil_gio[['Giorno','CASA','TRAS','Risultato']],hide_index=True)
 
 with prec:

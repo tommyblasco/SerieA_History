@@ -13,7 +13,7 @@ db_lega = {'Premier League':premierleague,'La Liga':laliga,'Bundesliga':bundesli
 db=db_lega[league_sel]
 lista_sq=sorted(set(list(db['CASA'])+list(db['TRAS'])))
 
-risclass, prec = st.tabs(['Risultati e classifica','Precedenti'])
+risclass, prec_tab = st.tabs(['Risultati e classifica','Precedenti'])
 with risclass:
     class_c, ris_c = st.columns(2)
     with class_c:
@@ -32,7 +32,7 @@ with risclass:
         df_fil_gio=df_fil_gio.sort_values(['Data','CASA'])
         st.dataframe(df_fil_gio[['Data','CASA','TRAS','Risultato']],hide_index=True)
 
-with prec:
+with prec_tab:
     st.markdown(f"*Chi ha vinto di più in {league_sel} tra le 2 squadre?*")
     colt1, colt2 = st.columns(2)
     with colt1:
@@ -43,19 +43,19 @@ with prec:
         t2 = st.selectbox('Seleziona il team 2:', lsq2)
     df1 = prec(dati=db, t1=t1, t2=t2)[0]
     df2 = prec(dati=db, t1=t1, t2=t2)[1]
-#    if (df1.shape[0] == 0) | (df2.shape[0] == 0):
-#        st.error('Nessun precedente trovato')
-#    else:
-#        wt1 = df1['WH'].item() + df2['WA'].item()
-#        wt2 = df2['WH'].item() + df1['WA'].item()
-#        n_gio = df1['TRAS'].item() + df2['TRAS'].item()
-#        pareg = df1['N'].item() + df2['N'].item()
-#        st.dataframe(pd.DataFrame({
-#            'Squadra':[f'home {t1}',f'home {t2}','Totale'],
-#            'Giocate':[df1['TRAS'].item(), df2['TRAS'].item(), n_gio],
-#            f'W {t1}':[df1['WH'].item(),df2['WA'].item(),wt1],
-#            'N':[df1['N'].item(),df2['N'].item(),pareg],
-#            f'W {t2}':[df2['WH'].item(),df1['WA'].item(),wt2]}),hide_index=True)
+    if (df1.shape[0] == 0) | (df2.shape[0] == 0):
+        st.error('Nessun precedente trovato')
+    else:
+        wt1 = df1['WH'].item() + df2['WA'].item()
+        wt2 = df2['WH'].item() + df1['WA'].item()
+        n_gio = df1['TRAS'].item() + df2['TRAS'].item()
+        pareg = df1['N'].item() + df2['N'].item()
+        st.dataframe(pd.DataFrame({
+            'Squadra':[f'home {t1}',f'home {t2}','Totale'],
+            'Giocate':[df1['TRAS'].item(), df2['TRAS'].item(), n_gio],
+            f'W {t1}':[df1['WH'].item(),df2['WA'].item(),wt1],
+            'N':[df1['N'].item(),df2['N'].item(),pareg],
+            f'W {t2}':[df2['WH'].item(),df1['WA'].item(),wt2]}),hide_index=True)
 
     st.subheader('Andamento precedenti nel tempo')
     st.markdown("*Chi era solito vincere nel passato tra i 2 team?*")

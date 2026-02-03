@@ -110,8 +110,8 @@ def ranking_short(db,league_name,seas):
     casa.columns=['Squadra','Punti','Gio','V','N','P','GF','GS','DR']
     trasferta.columns=['Squadra','Punti','Gio','V','N','P','GF','GS','DR']
     classifica=pd.concat([casa,trasferta],ignore_index=True).groupby(['Squadra'],as_index=False).agg({'Punti':'sum','Gio':'sum','V':'sum','N':'sum','P':'sum','GF':'sum','GS':'sum','DR':'sum'})
-    new_class=classifica[['Squadra','Pnt','Gio','V','N','P','GF','GS','DR']]
-    new_class = new_class.sort_values(by=['Pnt', 'DR'], ascending=False)
+    new_class=classifica[['Squadra','Punti','Gio','V','N','P','GF','GS','DR']]
+    new_class = new_class.sort_values(by=['Punti', 'DR'], ascending=False)
     return new_class
 
 #prossima giornata avendo anche il rif alla posizione della squadra

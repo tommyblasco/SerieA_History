@@ -41,21 +41,21 @@ with prec:
         lsq2 = sorted(
             set(list(db.loc[db['CASA'] == t1, 'TRAS']) + list(db.loc[db['TRAS'] == t1, 'CASA'])))
         t2 = st.selectbox('Seleziona il team 2:', lsq2)
-    df1 = prec(dati=db, t1=t1, t2=t2)[0]
-    df2 = prec(dati=db, t1=t1, t2=t2)[1]
-    if (df1.shape[0] == 0) | (df2.shape[0] == 0):
-        st.error('Nessun precedente trovato')
-    else:
-        wt1 = df1['WH'].item() + df2['WA'].item()
-        wt2 = df2['WH'].item() + df1['WA'].item()
-        n_gio = df1['TRAS'].item() + df2['TRAS'].item()
-        pareg = df1['N'].item() + df2['N'].item()
-        st.dataframe(pd.DataFrame({
-            'Squadra':[f'home {t1}',f'home {t2}','Totale'],
-            'Giocate':[df1['TRAS'].item(), df2['TRAS'].item(), n_gio],
-            f'W {t1}':[df1['WH'].item(),df2['WA'].item(),wt1],
-            'N':[df1['N'].item(),df2['N'].item(),pareg],
-            f'W {t2}':[df2['WH'].item(),df1['WA'].item(),wt2]}),hide_index=True)
+#    df1 = prec(dati=db, t1=t1, t2=t2)[0]
+#    df2 = prec(dati=db, t1=t1, t2=t2)[1]
+#    if (df1.shape[0] == 0) | (df2.shape[0] == 0):
+#        st.error('Nessun precedente trovato')
+#    else:
+#        wt1 = df1['WH'].item() + df2['WA'].item()
+#        wt2 = df2['WH'].item() + df1['WA'].item()
+#        n_gio = df1['TRAS'].item() + df2['TRAS'].item()
+#        pareg = df1['N'].item() + df2['N'].item()
+#        st.dataframe(pd.DataFrame({
+#            'Squadra':[f'home {t1}',f'home {t2}','Totale'],
+#            'Giocate':[df1['TRAS'].item(), df2['TRAS'].item(), n_gio],
+#            f'W {t1}':[df1['WH'].item(),df2['WA'].item(),wt1],
+#            'N':[df1['N'].item(),df2['N'].item(),pareg],
+#            f'W {t2}':[df2['WH'].item(),df1['WA'].item(),wt2]}),hide_index=True)
 
     st.subheader('Andamento precedenti nel tempo')
     st.markdown("*Chi era solito vincere nel passato tra i 2 team?*")

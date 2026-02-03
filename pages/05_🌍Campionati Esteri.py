@@ -29,8 +29,7 @@ with risclass:
         db['Risultato']=[str(x)+'-'+str(y) for x,y in zip(db['GC'],db['GT'])]
         df_fil_gio=db[db['Giornata']==sel_gio]
         df_fil_gio=df_fil_gio.sort_values(['Data','CASA'])
-        df_fil_gio['Giorno'] = df_fil_gio['Data'].strftime('%b %d, %Y')
-        st.dataframe(df_fil_gio[['Giorno','CASA','TRAS','Risultato']],hide_index=True)
+        st.dataframe(df_fil_gio[['Data','CASA','TRAS','Risultato']],hide_index=True)
 
 with prec:
     st.markdown(f"*Chi ha vinto di più in {league_sel} tra le 2 squadre?*")
@@ -67,3 +66,26 @@ with prec:
     cump_gr.add_annotation(x=-0.2, y=min(pre_cum["CumPr"]), showarrow=False,
                            text=f"{t2}", yref="y")
     st.plotly_chart(cump_gr)
+
+    with st.expander('Dettaglio partite'):
+        st.markdown("*Scopri tutti i risultati dei precedenti tra i 2 team*")
+        sel_det = st.pills("Scegli", ['Totale',f'In casa di {t1}', f'In casa di {t2}'])
+
+        dft1 = db[(db['CASA'] == t1) & (db['TRAS'] == t2)].sort_values('Data', ascending=False)
+        dft1.reset_index(drop=True, inplace=True)
+        dft1['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft1['GC'], dft1['GT'])]
+        dft2 = db[(db['CASA'] == t2) & (db['TRAS'] == t1)].sort_values('Data', ascending=False)
+        dft2.reset_index(drop=True, inplace=True)
+        dft2['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dft2['GC'], dft2['GT'])]
+        dftot = pd.concat([dft1, dft2], ignore_index=True).sort_values('Data', ascending=False)
+        dftot.reset_index(drop=True, inplace=True)
+        dftot['Risultato'] = [str(x) + '-' + str(y) for x, y in zip(dftot['GC'], dftot['GT'])]
+        if sel_det==f'In casa di {t1}':
+            st.write(f'{t1} home')
+            st.dataframe(dft1[['CASA', 'TRAS', 'Risultato', 'Stagione', 'Giorno']],hide_index=True)
+        elif sel_det==f'In casa di {t2}':
+            st.write(f'{t2} home')
+            st.dataframe(dft2[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)
+        else:
+            st.write('TOTALE')
+            st.dataframe(dftot[['CASA','TRAS','Risultato','Stagione','Giorno']], hide_index=True)

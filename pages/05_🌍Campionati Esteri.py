@@ -11,7 +11,6 @@ st.header("In giro per l'Europa")
 league_sel=st.selectbox('Seleziona una lega',["Premier League","La Liga","Bundesliga","Ligue 1"])
 db_lega = {'Premier League':premierleague,'La Liga':laliga,'Bundesliga':bundesliga,'Ligue 1':ligue1}
 db=db_lega[league_sel]
-n_gio = max(db['Giornata'])
 lista_sq=sorted(set(list(db['CASA'])+list(db['TRAS'])))
 
 risclass, prec = st.tabs(['Risultati e classifica','Precedenti'])
@@ -19,6 +18,7 @@ with risclass:
     class_c, ris_c = st.columns([2, 1])
     stagione_sel = st.selectbox('Seleziona una stagione', sorted(set(list(db['Stagione'])), reverse=True))
     db_stag=db[db['Stagione']==stagione_sel]
+    n_gio = max(db_stag['Giornata'])
     with class_c:
         classifica = ranking_short(db=db, league_name=league_sel, seas=stagione_sel)
         st.dataframe(classifica,hide_index=True)

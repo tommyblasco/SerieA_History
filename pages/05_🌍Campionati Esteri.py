@@ -17,8 +17,9 @@ lista_sq=sorted(set(list(db['CASA'])+list(db['TRAS'])))
 risclass, prec = st.tabs(['Risultati e classifica','Precedenti'])
 with risclass:
     class_c, ris_c = st.columns([2, 1])
+    stagione_sel = st.selectbox('Seleziona una stagione', sorted(set(list(db['Stagione'])), reverse=True))
+    db_stag=db[db['Stagione']==stagione_sel]
     with class_c:
-        stagione_sel = st.selectbox('Seleziona una stagione', sorted(set(list(db['Stagione'])), reverse=True))
         classifica = ranking_short(db=db, league_name=league_sel, seas=stagione_sel)
         st.dataframe(classifica,hide_index=True)
     with ris_c:
@@ -26,8 +27,8 @@ with risclass:
             sel_gio = st.slider("Seleziona la giornata:",1,2,n_gio)
         else:
             sel_gio = st.slider("Seleziona la giornata:", 1, n_gio, n_gio)
-        db['Risultato']=[str(x)+'-'+str(y) for x,y in zip(db['GC'],db['GT'])]
-        df_fil_gio=db[db['Giornata']==sel_gio]
+        db_stag['Risultato']=[str(x)+'-'+str(y) for x,y in zip(db_stag['GC'],db_stag['GT'])]
+        df_fil_gio=db_stag[db_stag['Giornata']==sel_gio]
         df_fil_gio=df_fil_gio.sort_values(['Data','CASA'])
         st.dataframe(df_fil_gio[['Data','CASA','TRAS','Risultato']],hide_index=True)
 

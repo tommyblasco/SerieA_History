@@ -55,7 +55,7 @@ with prec_tab:
             'Giocate':[df1['TRAS'].item(), df2['TRAS'].item(), n_gio],
             f'W {t1}':[df1['WH'].item(),df2['WA'].item(),wt1],
             'N':[df1['N'].item(),df2['N'].item(),pareg],
-            f'W {t2}':[df2['WH'].item(),df1['WA'].item(),wt2]}),hide_index=True)
+            f'W {t2}':[df1['WA'].item(),df2['WH'].item(),wt2]}),hide_index=True)
 
     st.subheader('Andamento precedenti nel tempo')
     st.markdown("*Chi era solito vincere nel passato tra i 2 team?*")

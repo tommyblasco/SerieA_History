@@ -35,7 +35,7 @@ with cd4:
     st.image(load_images_varie(img='Alltime'),
             caption='All time', use_container_width=True)
 
-
+@st.cache_data
 def load_data(n, eng):
     #l_data = st.connection(n, type=GSheetsConnection)
     #l_data1 = l_data.read(worksheet="Foglio1")
